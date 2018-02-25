@@ -10,9 +10,9 @@
         //    (new ContextInitializer());
         //}
 
-        public BookStoreContext() : base("BookStoreConnection")
+        public BookStoreContext(string connection) : base(connection)
         {
-            Database.SetInitializer<BookStoreContext>(new DropCreateDatabaseAlways<BookStoreContext>());
+            Database.SetInitializer(new DropCreateDatabaseAlways<BookStoreContext>());
 
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = true;
