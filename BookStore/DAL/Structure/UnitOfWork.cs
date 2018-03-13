@@ -16,9 +16,9 @@
         private IGenericRepository<LiteratureForm> _literatureFormRepository;
         private IGenericRepository<User> _userRepository;
 
-        public UnitOfWork(string connection)
+        public UnitOfWork()
         {
-            context = new BookStoreContext(connection);
+            context = new BookStoreContext("BookStoreConnection");
         }
 
         public IGenericRepository<Author> GetAuthorRepository()

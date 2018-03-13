@@ -9,11 +9,11 @@
     using System.Linq;
     using System.Data.Entity;
 
-    public abstract class GenericRepository<T> : IGenericRepository<T> where T : Entity
+    public class GenericRepository<T> : IGenericRepository<T> where T : Entity
     {
         private readonly BookStoreContext _db;
 
-        protected GenericRepository(BookStoreContext context)
+        public GenericRepository(BookStoreContext context)
         {
             _db = context;
         }

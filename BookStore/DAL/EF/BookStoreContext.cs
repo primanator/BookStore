@@ -5,14 +5,9 @@
 
     public class BookStoreContext : DbContext 
     {
-        //static OnlineGameStoreContext()
-        //{
-        //    (new ContextInitializer());
-        //}
-
         public BookStoreContext(string connection) : base(connection)
         {
-            Database.SetInitializer(new DropCreateDatabaseAlways<BookStoreContext>());
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<BookStoreContext>());
 
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = true;
@@ -24,6 +19,6 @@
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Library> Libraries { get; set; }
         public DbSet<LiteratureForm> LiteratureForms { get; set; }
-        public DbSet<User> Usres { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
