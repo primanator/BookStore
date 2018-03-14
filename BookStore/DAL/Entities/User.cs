@@ -8,10 +8,10 @@
         public bool Admin { get; set; }
         public int Age { get; set; }
 
-        public virtual int? CountryId { get; set; }
+        public virtual int CountryId { get; set; }
         public virtual Country Country { get; set; } 
 
-        public virtual int? LibraryId { get; set; }
+        public virtual int LibraryId { get; set; }
         public virtual Library Library { get; set; }
     }
 }

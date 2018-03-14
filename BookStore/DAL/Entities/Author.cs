@@ -16,8 +16,8 @@
         public DateTime? BirthDate { get; set; }
         public DateTime? DeathDate { get; set; }
 
-        public int? CountryId { get; set; }
-        public Country Nationality { get; set; }
+        public int CountryId { get; set; }
+        public Country Country { get; set; }
 
         public virtual ICollection<LiteratureForm> LiteratureForms { get; set; }
 
