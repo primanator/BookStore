@@ -14,9 +14,9 @@
         public DbSet<LiteratureForm> LiteratureForms { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public BookStoreContext(string connection) : base(connection)
+        public BookStoreContext() : base("BookStoreConnection")
         {
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<BookStoreContext>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<BookStoreContext, Migrations.Configuration>());
 
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = true;

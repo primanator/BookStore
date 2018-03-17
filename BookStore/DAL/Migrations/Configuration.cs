@@ -1,15 +1,28 @@
-﻿namespace DAL.EF
+﻿namespace DAL.Migrations
 {
+    using DAL.Entities;
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
-    using DAL.Entities;
+    using System.Data.Entity.Migrations;
     using System.Linq;
 
-    public class ContextInitializer : DropCreateDatabaseIfModelChanges<BookStoreContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<DAL.EF.BookStoreContext>
     {
-        protected override void Seed(BookStoreContext dbContext)
+        public Configuration()
         {
+            AutomaticMigrationsEnabled = false;
+        }
+
+        protected override void Seed(DAL.EF.BookStoreContext context)
+        {
+            //  This method will be called after migrating to the latest version.
+
+            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+            //  to avoid creating duplicate seed data.
+
+            if (context.Countries.FirstOrDefault() == null)
+                return;
+
             IEnumerable<Country> countries = new[]
             {
                 new Country() { Name = "China" },
@@ -217,7 +230,7 @@
                     Gender = "Male",
                     BirthDate = new DateTime(1899, 7, 21),
                     DeathDate = new DateTime(1961, 7, 2),
-                    Nationality = countries.FirstOrDefault(c => c.Name == "United States of America"),
+                    Country = countries.FirstOrDefault(c => c.Name == "United States of America"),
                     CountryId = countries.FirstOrDefault(c => c.Name == "United States of America").Id
                 },
                 new Author()
@@ -226,7 +239,7 @@
                     Gender = "Male",
                     BirthDate = new DateTime(1876, 1, 12),
                     DeathDate = new DateTime(1916, 11, 22),
-                    Nationality = countries.FirstOrDefault(c => c.Name == "United States of America"),
+                    Country = countries.FirstOrDefault(c => c.Name == "United States of America"),
                     CountryId = countries.FirstOrDefault(c => c.Name == "United States of America").Id
                 },
                 new Author()
@@ -235,7 +248,7 @@
                     Gender = "Female",
                     BirthDate = new DateTime(1890, 9, 15),
                     DeathDate = new DateTime(1976, 1, 12),
-                    Nationality = countries.FirstOrDefault(c => c.Name == "United Kingdom"),
+                    Country = countries.FirstOrDefault(c => c.Name == "United Kingdom"),
                     CountryId = countries.FirstOrDefault(c => c.Name == "United Kingdom").Id
                 }
             };
@@ -406,15 +419,15 @@
             authors.FirstOrDefault(a => a.Name == "Dame Agatha Mary Clarissa Christie")
                 .Books.Add(books.FirstOrDefault(b => b.Title == "Murder on the Orient Express"));
 
-            dbContext.Books.AddRange(books);
-            dbContext.LiteratureForms.AddRange(literatureForms);
-            dbContext.Genres.AddRange(genres);
-            dbContext.Libraries.AddRange(libraries);
-            dbContext.Users.AddRange(users);
-            dbContext.Countries.AddRange(countries);
-            dbContext.Authors.AddRange(authors);
+            context.Books.AddRange(books);
+            context.LiteratureForms.AddRange(literatureForms);
+            context.Genres.AddRange(genres);
+            context.Libraries.AddRange(libraries);
+            context.Users.AddRange(users);
+            context.Countries.AddRange(countries);
+            context.Authors.AddRange(authors);
 
-            dbContext.SaveChanges();
+            context.SaveChanges();
         }
     }
 }

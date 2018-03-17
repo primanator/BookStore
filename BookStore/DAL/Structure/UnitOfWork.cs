@@ -18,7 +18,7 @@
 
         public UnitOfWork()
         {
-            context = new BookStoreContext("BookStoreConnection");
+            context = new BookStoreContext();
         }
 
         public IGenericRepository<Author> GetAuthorRepository()
