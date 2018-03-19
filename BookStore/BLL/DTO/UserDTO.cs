@@ -1,7 +1,8 @@
-﻿namespace DAL.Entities
+﻿namespace BLL.DTO
 {
-    public class User : Entity
+    public class UserDTO
     {
+        public int Id { get; set; }
         public string FullName { get; set; }
         public string Nickname { get; set; }
         public string Password { get; set; }
@@ -9,9 +10,9 @@
         public int Age { get; set; }
 
         public int CountryId { get; set; }
-        public virtual Country Country { get; set; } 
+        public CountryDTO Country { get; set; }
 
         public int LibraryId { get; set; }
-        public virtual Library Library { get; set; }
+        public LibraryDTO Library { get; set; }
     }
 }
