@@ -80,6 +80,14 @@
     <Compile Include="Migrations\201803171220318_BookStore-v1.1.Designer.cs">
       <DependentUpon>201803171220318_BookStore-v1.1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803222247203_NewColumn-Name.cs" />
+    <Compile Include="Migrations\201803222247203_NewColumn-Name.Designer.cs">
+      <DependentUpon>201803222247203_NewColumn-Name.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803222315158_Dummy0.2.cs" />
+    <Compile Include="Migrations\201803222315158_Dummy0.2.Designer.cs">
+      <DependentUpon>201803222315158_Dummy0.2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\Repository\GenericRepository.cs" />
@@ -95,6 +103,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803171220318_BookStore-v1.1.resx">
       <DependentUpon>201803171220318_BookStore-v1.1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803222247203_NewColumn-Name.resx">
+      <DependentUpon>201803222247203_NewColumn-Name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803222315158_Dummy0.2.resx">
+      <DependentUpon>201803222315158_Dummy0.2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

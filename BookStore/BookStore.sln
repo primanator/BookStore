@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{2636707F-7473-436C-9195-3589A7B9F754}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{6D598529-1240-4E88-96D8-397859F25440}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{A294F788-780D-43AA-95A8-811BB62D112A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2636707F-7473-436C-9195-3589A7B9F754}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2636707F-7473-436C-9195-3589A7B9F754}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2636707F-7473-436C-9195-3589A7B9F754}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D598529-1240-4E88-96D8-397859F25440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D598529-1240-4E88-96D8-397859F25440}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D598529-1240-4E88-96D8-397859F25440}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D598529-1240-4E88-96D8-397859F25440}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A294F788-780D-43AA-95A8-811BB62D112A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A294F788-780D-43AA-95A8-811BB62D112A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A294F788-780D-43AA-95A8-811BB62D112A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A294F788-780D-43AA-95A8-811BB62D112A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

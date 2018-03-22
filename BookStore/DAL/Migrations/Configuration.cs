@@ -6,21 +6,21 @@
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<DAL.EF.BookStoreContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<EF.BookStoreContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(DAL.EF.BookStoreContext context)
+        protected override void Seed(EF.BookStoreContext context)
         {
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
-            if (context.Countries.FirstOrDefault() == null)
+            if (context.Countries.FirstOrDefault() != null)
                 return;
 
             IEnumerable<Country> countries = new[]
