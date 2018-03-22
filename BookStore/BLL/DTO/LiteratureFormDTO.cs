@@ -2,12 +2,8 @@
 {
     using System.Collections.Generic;
 
-    public class LiteratureFormDTO
+    public class LiteratureFormDto : Dto
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public ICollection<AuthorDTO> Authors { get; set; }
+        public ICollection<AuthorDto> Authors { get; set; }
     }
 }

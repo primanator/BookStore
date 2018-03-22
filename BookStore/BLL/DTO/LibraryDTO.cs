@@ -2,12 +2,10 @@
 {
     using System.Collections.Generic;
 
-    public class LibraryDTO
+    public class LibraryDto : Dto
     {
-        public int Id { get; set; }
+        public ICollection<UserDto> Users { get; set; }
 
-        public ICollection<UserDTO> Users { get; set; }
-
-        public ICollection<BookDTO> Books { get; set; }
+        public ICollection<BookDto> Books { get; set; }
     }
 }

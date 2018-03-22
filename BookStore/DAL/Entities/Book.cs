@@ -11,7 +11,6 @@
             Genres = new HashSet<Genre>();
         }
 
-        public string Title { get; set; }
         public string Isbn { get; set; }
         public int Pages { get; set; }
         public bool LimitedEdition { get; set; }

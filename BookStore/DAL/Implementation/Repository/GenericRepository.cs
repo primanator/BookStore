@@ -1,13 +1,13 @@
-﻿namespace DAL.Structure
+﻿namespace DAL.Implementation.Repository
 {
     using System;
-    using DAL.Entities;
-    using DAL.Interfaces;
-    using DAL.EF;
+    using Entities;
+    using EF;
     using System.Collections.Generic;
     using System.Linq.Expressions;
     using System.Linq;
     using System.Data.Entity;
+    using Interfaces.Repository;
 
     public class GenericRepository<T> : IGenericRepository<T> where T : Entity
     {

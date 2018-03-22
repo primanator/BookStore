@@ -11,13 +11,12 @@
             LiteratureForms = new HashSet<LiteratureForm>();
         }
 
-        public string Name { get; set; }
         public string Gender { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? DeathDate { get; set; }
 
         public int CountryId { get; set; }
-        public Country Country { get; set; }
+        public virtual Country Country { get; set; }
 
         public virtual ICollection<LiteratureForm> LiteratureForms { get; set; }
 

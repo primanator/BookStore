@@ -36,12 +36,12 @@
 
             modelBuilder.Entity<Author>().Property(a => a.Name).HasMaxLength(50);
             modelBuilder.Entity<Author>().Property(a => a.Gender).HasMaxLength(50);
-            modelBuilder.Entity<Book>().Property(b => b.Title).HasMaxLength(50);
+            modelBuilder.Entity<Book>().Property(b => b.Name).HasMaxLength(50);
             modelBuilder.Entity<Book>().Property(b => b.Isbn).HasMaxLength(50);
             modelBuilder.Entity<Country>().Property(c => c.Name).HasMaxLength(50);
             modelBuilder.Entity<Genre>().Property(g => g.Name).HasMaxLength(50);
             modelBuilder.Entity<LiteratureForm>().Property(lf => lf.Name).HasMaxLength(50);
-            modelBuilder.Entity<User>().Property(u => u.FullName).HasMaxLength(50);
+            modelBuilder.Entity<User>().Property(u => u.Name).HasMaxLength(50);
             modelBuilder.Entity<User>().Property(u => u.Nickname).HasMaxLength(50);
             modelBuilder.Entity<User>().Property(u => u.Password).HasMaxLength(50);
 

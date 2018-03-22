@@ -285,7 +285,7 @@
             {
                 new Book()
                 {
-                    Title = "Son of the Wolf",
+                    Name = "Son of the Wolf",
                     Isbn = "0891906541",
                     Pages = 99,
                     LimitedEdition = false,
@@ -303,7 +303,7 @@
                 },
                 new Book()
                 {
-                    Title = "The Old Man and the Sea",
+                    Name = "The Old Man and the Sea",
                     Isbn = "0684801221",
                     Pages = 127,
                     LimitedEdition = false,
@@ -321,7 +321,7 @@
                 },
                 new Book()
                 {
-                    Title = "Murder on the Orient Express",
+                    Name = "Murder on the Orient Express",
                     Isbn = "0062073508",
                     Pages = 255,
                     LimitedEdition = false,
@@ -343,7 +343,7 @@
             {
                 new User()
                 {
-                    FullName = "Oleksii Prymolonnyi",
+                    Name = "Oleksii Prymolonnyi",
                     Nickname = "primanator",
                     Password = "1234",
                     Admin = true,
@@ -355,7 +355,7 @@
                 },
                 new User()
                 {
-                    FullName = "John Smith",
+                    Name = "John Smith",
                     Nickname = "johny",
                     Password = "4321",
                     Admin = false,
@@ -385,13 +385,13 @@
 
 
             genres.FirstOrDefault(g => g.Name == "Adventure")
-                 .Books.Add(books.FirstOrDefault(b => b.Title == "Son of the Wolf"));
+                 .Books.Add(books.FirstOrDefault(b => b.Name == "Son of the Wolf"));
 
             genres.FirstOrDefault(g => g.Name == "Adventure")
-                .Books.Add(books.FirstOrDefault(b => b.Title == "The Old Man and the Sea"));
+                .Books.Add(books.FirstOrDefault(b => b.Name == "The Old Man and the Sea"));
 
             genres.FirstOrDefault(g => g.Name == "Drama")
-                .Books.Add(books.FirstOrDefault(b => b.Title == "Murder on the Orient Express"));
+                .Books.Add(books.FirstOrDefault(b => b.Name == "Murder on the Orient Express"));
 
 
             countries.FirstOrDefault(c => c.Name == "United States of America")
@@ -404,20 +404,20 @@
                 .Authors.Add(authors.FirstOrDefault(a => a.Name == "Dame Agatha Mary Clarissa Christie"));
 
             countries.FirstOrDefault(c => c.Name == "Ukraine")
-                .Users.Add(users.FirstOrDefault(u => u.FullName == "Oleksii Prymolonnyi"));
+                .Users.Add(users.FirstOrDefault(u => u.Name == "Oleksii Prymolonnyi"));
 
             countries.FirstOrDefault(c => c.Name == "Canada")
-                .Users.Add(users.FirstOrDefault(u => u.FullName == "John Smith"));
+                .Users.Add(users.FirstOrDefault(u => u.Name == "John Smith"));
 
 
             authors.FirstOrDefault(a => a.Name == "Ernest Miller Hemingway")
-                .Books.Add(books.FirstOrDefault(b => b.Title == "The Old Man and the Sea"));
+                .Books.Add(books.FirstOrDefault(b => b.Name == "The Old Man and the Sea"));
 
             authors.FirstOrDefault(a => a.Name == "John Griffith London")
-                .Books.Add(books.FirstOrDefault(b => b.Title == "Son of the Wolf"));
+                .Books.Add(books.FirstOrDefault(b => b.Name == "Son of the Wolf"));
 
             authors.FirstOrDefault(a => a.Name == "Dame Agatha Mary Clarissa Christie")
-                .Books.Add(books.FirstOrDefault(b => b.Title == "Murder on the Orient Express"));
+                .Books.Add(books.FirstOrDefault(b => b.Name == "Murder on the Orient Express"));
 
             context.Books.AddRange(books);
             context.LiteratureForms.AddRange(literatureForms);

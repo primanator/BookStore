@@ -3,143 +3,86 @@
     using System;
     using System.Collections.Generic;
     using DTO;
-    using Interface;
+    using Interfaces;
+    using AutoMapper;
+    using DAL.Interfaces.UnitOfWork;
+    using DAL.Interfaces.Repository;
+    using System.Linq;
 
     public class BookStoreService : IBookStoreService
     {
-        public void DeleteAuthor(string name)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public BookStoreService(IUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
         }
 
-        public void DeleteBook(string title)
+        public void UpdateRecord<T>(T freshRecord) where T : Dto
         {
-            throw new NotImplementedException();
+            Type recordType = freshRecord.GetType();
+            T recordToUpdate = recordType != typeof(LibraryDto) ? GetSingleRecord<T>(freshRecord.Name) : GetSingleRecord<T>();
+
+            if (recordToUpdate == null)
+                return;
+
+            foreach (var property in recordToUpdate.GetType().GetProperties())
+            {
+                var newValue = recordType.GetProperty(property.Name)?.GetValue(freshRecord);
+                property.SetValue(recordToUpdate, newValue);
+            }
+
+            GetRepository<T>()?.Update(recordToUpdate);
         }
 
-        public void DeleteCountry(string name)
+        public void CreateRecord<T>(T newRecord) where T : Dto
         {
-            throw new NotImplementedException();
+            GetRepository<T>()?.Insert(newRecord);
         }
 
-        public void DeleteGenre(string name)
+        public IEnumerable<T> GetAllRecords<T>() where T : Dto
         {
-            throw new NotImplementedException();
+            return Mapper.Map<IEnumerable<T>>(GetRepository<T>()?.FindBy(r => true));
         }
 
-        public void DeleteLibrary()
+        public T GetSingleRecord<T>(string searchKey = null) where T : Dto
         {
-            throw new NotImplementedException();
+            if (searchKey == null)
+                return Mapper.Map<T>(GetRepository<T>()?.FindBy(l => true).FirstOrDefault());
+            return Mapper.Map<T>(GetRepository<T>()?.FindBy(r => r.Name == searchKey).FirstOrDefault());
         }
 
-        public void DeleteLiteratureForm(string name)
+        public void DeleteRecord<T>(T recordToDelete) where T : Dto
         {
-            throw new NotImplementedException();
+            GetRepository<T>()?.Delete(recordToDelete);
         }
 
-        public void DeleteUser(string name)
+        public IEnumerable<AuthorDto> Get21CenturyAuthors()
         {
-            throw new NotImplementedException();
+            return Mapper.Map<IEnumerable<AuthorDto>>(_unitOfWork.GetAuthorRepository().Get21CenturyAuthors());
         }
 
-        public IEnumerable<AuthorDTO> GetAllAuthors()
+        private IGenericRepository<T> GetRepository<T>() where T : Dto
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<BookDTO> GetAllBooks()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<CountryDTO> GetAllCountries()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<GenreDTO> GetAllGenres()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<LibraryDTO> GetAllLibraries()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<LiteratureFormDTO> GetAllLiteratureForms()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UserDTO> GetAllUsers()
-        {
-            throw new NotImplementedException();
-        }
-
-        public AuthorDTO GetAuthor(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public BookDTO GetBook(string title)
-        {
-            throw new NotImplementedException();
-        }
-
-        public CountryDTO GetCountry(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public GenreDTO GetGenre(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public LibraryDTO GetLibrary()
-        {
-            throw new NotImplementedException();
-        }
-
-        public LiteratureFormDTO GetLiteratureForm(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public UserDTO GetUser(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ManipulateAuthor(string name, string gender, DateTime? birthdate, DateTime? deathdate, int countryId, ICollection<LiteratureFormDTO> literatureForms, ICollection<BookDTO> books, bool edit = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ManipulateBook(string title, string isbn, int pages, bool limitedEdition, DateTime? writtenIn, int libraryId, ICollection<AuthorDTO> authors, ICollection<GenreDTO> genres, bool edit = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ManipulateCountry(string name, ICollection<UserDTO> users, ICollection<AuthorDTO> authors, bool edit = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ManipulateeGenre(string name, ICollection<BookDTO> books, bool edit = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ManipulateLiteratureForm(string name, ICollection<AuthorDTO> authors, bool edit = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ManipulateUser(string fullname, string nickname, string password, bool admin, int age, int countryId, int libraryId, bool edit = false)
-        {
-            throw new NotImplementedException();
+            switch (typeof(T).Name)
+            {
+                case nameof(AuthorDto):
+                    return (IGenericRepository<T>)_unitOfWork.GetAuthorRepository();
+                case nameof(BookDto):
+                    return (IGenericRepository<T>)_unitOfWork.GetBookRepository();
+                case nameof(CountryDto):
+                    return (IGenericRepository<T>)_unitOfWork.GetCountryRepository();
+                case nameof(GenreDto):
+                    return (IGenericRepository<T>)_unitOfWork.GetGenreRepository();
+                case nameof(LibraryDto):
+                    return (IGenericRepository<T>)_unitOfWork.GetLibraryRepository();
+                case nameof(LiteratureFormDto):
+                    return (IGenericRepository<T>)_unitOfWork.GetLiteratureFormRepository();
+                case nameof(UserDto):
+                    return (IGenericRepository<T>)_unitOfWork.GetUserRepository();
+                default:
+                    return null;
+            }
         }
     }
 }

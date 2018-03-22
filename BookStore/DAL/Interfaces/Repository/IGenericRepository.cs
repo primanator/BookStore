@@ -1,4 +1,4 @@
-﻿namespace DAL.Interfaces
+﻿namespace DAL.Interfaces.Repository
 {
     using System;
     using System.Collections.Generic;
