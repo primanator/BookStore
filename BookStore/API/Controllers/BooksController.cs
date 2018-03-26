@@ -1,119 +1,129 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Results;
-using API.Models;
-
-namespace API.Controllers
+﻿namespace API.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+    using API.Models;
+    using BLL.Interfaces;
+    using BLL.DTO;
+    using AutoMapper;
+
     public class BooksController : ApiController
     {
-        public static IList<BookModel> books = new List<BookModel>()
+        private readonly IBookStoreService _service;
+
+        public BooksController(IBookStoreService service)
         {
-            new BookModel()
-            {
-                Id = 0,
-                Name = "Murder on the Orient Express",
-                Isbn = "0062073508",
-                Pages = 255,
-                LimitedEdition = false,
-                WrittenIn = new DateTime(1936, 1, 1)
-            },
-            new BookModel()
-            {
-                Id = 1,
-                Name = "The Old Man and the Sea",
-                Isbn = "0684801221",
-                Pages = 127,
-                LimitedEdition = false,
-                WrittenIn = new DateTime(1951, 1, 1)
-            },
-            new BookModel()
-            {
-                Id = 2,
-                Name = "Son of the Wolf",
-                Isbn = "0891906541",
-                Pages = 99,
-                LimitedEdition = false,
-                WrittenIn = new DateTime(1911, 1, 1)
-            }
-        };
+            _service = service;
+        }
+
         public IHttpActionResult PostCreateBook(BookModel newBook)
         {
-            if (!ModelState.IsValid || books.Contains(newBook))
-                return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid model state");
 
             try
             {
-                books.Add(newBook);
-                return Ok();
+                if (_service.GetSingleRecord<BookDto>(newBook.Name) == null)
+                    throw new ArgumentException("Book with such name already exists in database.");
+
+                _service.CreateRecord(Mapper.Map<BookDto>(newBook));
             }
             catch (Exception e)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
+                ReturnBadRequest(e);
             }
+
+            return Ok();
         }
 
         public IHttpActionResult GetAllBooks()
         {
-            return Ok(books);
-        }
+            IEnumerable<BookModel> books = null;
 
-        public IHttpActionResult GetBookById(int id)
-        {
-            var book = books.FirstOrDefault(e => e.Id == id);
-            if (books == null)
+            try
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                books = Mapper.Map<IEnumerable<BookModel>>(_service.GetAllRecords<BookDto>());
             }
-            return Ok(book);
+            catch (Exception e)
+            {
+                ReturnBadRequest(e);
+            }
+
+            return Ok();
         }
 
         public IHttpActionResult GetBookByName(string name)
         {
-            var book = books.FirstOrDefault(e => e.Name == name);
-            if (books == null)
+            if (name == null)
+                return BadRequest("Parameter's value is empty.");
+
+            BookModel book = null;
+
+            try
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                book = Mapper.Map<BookModel>(_service.GetSingleRecord<BookDto>(name));
             }
+            catch (Exception e)
+            {
+                ReturnBadRequest(e);
+            }
+
             return Ok(book);
         }
 
         public IHttpActionResult PutUpdateBook(BookModel freshBook)
         {
             if (!ModelState.IsValid)
-                return BadRequest("Not a valid model");
-
-            BookModel oldBook = books.FirstOrDefault(b => b.Id == freshBook.Id);
-            if (oldBook == null)
-                return BadRequest("Not such book to update");
+                return BadRequest("Invalid model state");
 
             try
             {
-                books[books.IndexOf(oldBook)] = freshBook;
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.OK));
+                if (_service.GetSingleRecord<BookDto>(freshBook.Name) == null)
+                    throw new KeyNotFoundException("Can't find book to update.");
+
+                _service.UpdateRecord(Mapper.Map<BookDto>(freshBook));
             }
             catch (Exception e)
             {
-                return new ExceptionResult(e, this);
+                ReturnBadRequest(e);
             }
+
+            return Ok();
         }
 
-        public IHttpActionResult DeleteBookById(int id)
+        public IHttpActionResult DeleteBookByName(string name)
         {
+            if (name == null)
+                return BadRequest("Parameter's value is empty.");
+
+            BookModel bookToDelete = null;
+
             try
             {
-                var bookToDelete = books.FirstOrDefault(r => r.Id == id);
-                books.Remove(bookToDelete);
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.OK));
+                bookToDelete = Mapper.Map<BookModel>(_service.GetSingleRecord<BookDto>(name));
+                if (bookToDelete == null)
+                    throw new KeyNotFoundException("Can't find book to delete.");
+
+                _service.DeleteRecord(Mapper.Map<BookDto>(bookToDelete));
             }
-            catch
+            catch (Exception e)
             {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest));
+                ReturnBadRequest(e);
             }
+
+            return Ok();
+        }
+
+        private void ReturnBadRequest(Exception e)
+        {
+            throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                Content = new StringContent(e.Message),
+                ReasonPhrase = "Server exception."
+            });
         }
     }
 }
