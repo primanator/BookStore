@@ -6,10 +6,19 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{5BFA3DE5-5D7B-4357-9978-0FE2452601FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{2636707F-7473-436C-9195-3589A7B9F754}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BFA3DE5-5D7B-4357-9978-0FE2452601FE} = {5BFA3DE5-5D7B-4357-9978-0FE2452601FE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{6D598529-1240-4E88-96D8-397859F25440}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2636707F-7473-436C-9195-3589A7B9F754} = {2636707F-7473-436C-9195-3589A7B9F754}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{A294F788-780D-43AA-95A8-811BB62D112A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6D598529-1240-4E88-96D8-397859F25440} = {6D598529-1240-4E88-96D8-397859F25440}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
