@@ -58,6 +58,8 @@
     <Compile Include="Interfaces\IBookStoreService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BookStoreService.cs" />
+    <Compile Include="Utils\AutomapperConfig.cs" />
+    <Compile Include="Utils\ServiceModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
