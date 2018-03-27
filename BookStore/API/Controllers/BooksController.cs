@@ -5,7 +5,7 @@
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
-    using API.Models;
+    using Models;
     using BLL.Interfaces;
     using BLL.DTO;
     using AutoMapper;
@@ -26,10 +26,10 @@
 
             try
             {
-                if (_service.GetSingleRecord<BookDto>(newBook.Name) == null)
+                if (_service.GetSingleBook(newBook.Name) == null)
                     throw new ArgumentException("Book with such name already exists in database.");
 
-                _service.CreateRecord(Mapper.Map<BookDto>(newBook));
+                _service.CreateBook(Mapper.Map<BookDto>(newBook));
             }
             catch (Exception e)
             {
@@ -45,14 +45,14 @@
 
             try
             {
-                books = Mapper.Map<IEnumerable<BookModel>>(_service.GetAllRecords<BookDto>());
+                books = Mapper.Map<IEnumerable<BookModel>>(_service.GetAllBooks());
             }
             catch (Exception e)
             {
                 ReturnBadRequest(e);
             }
 
-            return Ok();
+            return Ok(books);
         }
 
         public IHttpActionResult GetBookByName(string name)
@@ -64,7 +64,7 @@
 
             try
             {
-                book = Mapper.Map<BookModel>(_service.GetSingleRecord<BookDto>(name));
+                book = Mapper.Map<BookModel>(_service.GetSingleBook(name));
             }
             catch (Exception e)
             {
@@ -81,10 +81,10 @@
 
             try
             {
-                if (_service.GetSingleRecord<BookDto>(freshBook.Name) == null)
+                if (_service.GetSingleBook(freshBook.Name) == null)
                     throw new KeyNotFoundException("Can't find book to update.");
 
-                _service.UpdateRecord(Mapper.Map<BookDto>(freshBook));
+                _service.UpdateBook(Mapper.Map<BookDto>(freshBook));
             }
             catch (Exception e)
             {
@@ -103,11 +103,11 @@
 
             try
             {
-                bookToDelete = Mapper.Map<BookModel>(_service.GetSingleRecord<BookDto>(name));
+                bookToDelete = Mapper.Map<BookModel>(_service.GetSingleBook(name));
                 if (bookToDelete == null)
                     throw new KeyNotFoundException("Can't find book to delete.");
 
-                _service.DeleteRecord(Mapper.Map<BookDto>(bookToDelete));
+                _service.DeleteBook(Mapper.Map<BookDto>(bookToDelete));
             }
             catch (Exception e)
             {

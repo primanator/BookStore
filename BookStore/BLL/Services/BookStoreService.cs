@@ -6,8 +6,7 @@
     using Interfaces;
     using AutoMapper;
     using DAL.Interfaces.UnitOfWork;
-    using DAL.Interfaces.Repository;
-    using System.Linq;
+    using DAL.Entities;
 
     public class BookStoreService : IBookStoreService
     {
@@ -18,71 +17,50 @@
             _unitOfWork = unitOfWork;
         }
 
-        public void UpdateRecord<T>(T freshRecord) where T : Dto
+        public void CreateBook(BookDto record)
         {
-            Type recordType = freshRecord.GetType();
-            T recordToUpdate = recordType != typeof(LibraryDto) ? GetSingleRecord<T>(freshRecord.Name) : GetSingleRecord<T>();
+            if (GetSingleBook(record.Name) != null)
+                throw new ArgumentException("Database already contains book with such name.");
 
-            if (recordToUpdate == null)
-                return;
+            _unitOfWork.GetBookRepository().Insert(Mapper.Map<Book>(record));
+        }
 
-            foreach (var property in recordToUpdate.GetType().GetProperties())
+        public void UpdateBook(BookDto record)
+        {
+            var bookToUpdate = GetSingleBook(record.Name);
+
+            if (bookToUpdate == null)
+                throw new ArgumentException("Database does not contain such book to update.");
+
+            var type = bookToUpdate.GetType();
+            foreach (var property in type.GetProperties())
             {
-                var newValue = recordType.GetProperty(property.Name)?.GetValue(freshRecord);
-                property.SetValue(recordToUpdate, newValue);
+                var newValue = type.GetProperty(property.Name)?.GetValue(record);
+                property.SetValue(bookToUpdate, newValue);
             }
 
-            GetRepository<T>()?.Update(recordToUpdate);
+            _unitOfWork.GetBookRepository().Update(Mapper.Map<Book>(bookToUpdate));
         }
 
-        public void CreateRecord<T>(T newRecord) where T : Dto
+        public IEnumerable<BookDto> GetAllBooks()
         {
-            GetRepository<T>()?.Insert(newRecord);
+            return Mapper.Map<IEnumerable<BookDto>>(_unitOfWork.GetBookRepository().FindBy(b => true));
         }
 
-        public IEnumerable<T> GetAllRecords<T>() where T : Dto
+        public BookDto GetSingleBook(string title)
         {
-            return Mapper.Map<IEnumerable<T>>(GetRepository<T>()?.FindBy(r => true));
+            if (title == null)
+                throw new ArgumentException("Name of the book is empty.");
+
+            return Mapper.Map<BookDto>(_unitOfWork.GetBookRepository().FindBy(b => b.Name == title));
         }
 
-        public T GetSingleRecord<T>(string searchKey = null) where T : Dto
+        public void DeleteBook(BookDto record)
         {
-            if (searchKey == null)
-                return Mapper.Map<T>(GetRepository<T>()?.FindBy(l => true).FirstOrDefault());
-            return Mapper.Map<T>(GetRepository<T>()?.FindBy(r => r.Name == searchKey).FirstOrDefault());
-        }
+            if (GetSingleBook(record.Name) != null)
+                throw new ArgumentException("Database does not contain such book to update.");
 
-        public void DeleteRecord<T>(T recordToDelete) where T : Dto
-        {
-            GetRepository<T>()?.Delete(recordToDelete);
-        }
-
-        public IEnumerable<AuthorDto> Get21CenturyAuthors()
-        {
-            return Mapper.Map<IEnumerable<AuthorDto>>(_unitOfWork.GetAuthorRepository().Get21CenturyAuthors());
-        }
-
-        private IGenericRepository<T> GetRepository<T>() where T : Dto
-        {
-            switch (typeof(T).Name)
-            {
-                case nameof(AuthorDto):
-                    return (IGenericRepository<T>)_unitOfWork.GetAuthorRepository();
-                case nameof(BookDto):
-                    return (IGenericRepository<T>)_unitOfWork.GetBookRepository();
-                case nameof(CountryDto):
-                    return (IGenericRepository<T>)_unitOfWork.GetCountryRepository();
-                case nameof(GenreDto):
-                    return (IGenericRepository<T>)_unitOfWork.GetGenreRepository();
-                case nameof(LibraryDto):
-                    return (IGenericRepository<T>)_unitOfWork.GetLibraryRepository();
-                case nameof(LiteratureFormDto):
-                    return (IGenericRepository<T>)_unitOfWork.GetLiteratureFormRepository();
-                case nameof(UserDto):
-                    return (IGenericRepository<T>)_unitOfWork.GetUserRepository();
-                default:
-                    return null;
-            }
+            _unitOfWork.GetBookRepository().Delete(Mapper.Map<Book>(record));
         }
     }
 }
