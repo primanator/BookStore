@@ -1,4 +1,6 @@
-﻿namespace BLL.Services
+﻿using System.Linq;
+
+namespace BLL.Services
 {
     using System;
     using System.Collections.Generic;
@@ -52,7 +54,7 @@
             if (title == null)
                 throw new ArgumentException("Name of the book is empty.");
 
-            return Mapper.Map<BookDto>(_unitOfWork.GetBookRepository().FindBy(b => b.Name == title));
+            return Mapper.Map<BookDto>(_unitOfWork.GetBookRepository().FindBy(b => b.Name == title).SingleOrDefault());
         }
 
         public void DeleteBook(BookDto record)
