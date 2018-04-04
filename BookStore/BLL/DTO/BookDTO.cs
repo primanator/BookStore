@@ -8,7 +8,7 @@
         public string Isbn { get; set; }
         public int Pages { get; set; }
         public bool LimitedEdition { get; set; }
-        public DateTime? WrittenIn { get; set; }
+        public DateTime WrittenIn { get; set; }
 
         public int LibraryId { get; set; }
         public LibraryDto Library { get; set; }

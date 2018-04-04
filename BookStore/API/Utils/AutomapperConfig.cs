@@ -8,7 +8,8 @@
     {
         public AutomapperConfig()
         {
-            CreateMap<BookDto, BookModel>();
+            CreateMap<BookModel, BookDto>()
+                .ForMember(x => x.Authors, opt => opt.Ignore());
         }
     }
 }

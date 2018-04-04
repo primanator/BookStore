@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace BLL.Services
+﻿namespace BLL.Services
 {
     using System;
     using System.Collections.Generic;
@@ -9,6 +7,7 @@ namespace BLL.Services
     using AutoMapper;
     using DAL.Interfaces.UnitOfWork;
     using DAL.Entities;
+    using System.Linq;
 
     public class BookStoreService : IBookStoreService
     {

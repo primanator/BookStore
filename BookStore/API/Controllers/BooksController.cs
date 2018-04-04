@@ -26,14 +26,14 @@
 
             try
             {
-                if (_service.GetSingleBook(newBook.Name) == null)
+                if (_service.GetSingleBook(newBook.Name) != null)
                     throw new ArgumentException("Book with such name already exists in database.");
 
                 _service.CreateBook(Mapper.Map<BookDto>(newBook));
             }
             catch (Exception e)
             {
-                ReturnBadRequest(e);
+                throw new HttpResponseException(InternalErrorMessage(e.Message));
             }
 
             return Ok();
@@ -49,7 +49,7 @@
             }
             catch (Exception e)
             {
-                ReturnBadRequest(e);
+                throw new HttpResponseException(InternalErrorMessage(e.Message));
             }
 
             return Ok(books);
@@ -68,7 +68,7 @@
             }
             catch (Exception e)
             {
-                ReturnBadRequest(e);
+                throw new HttpResponseException(InternalErrorMessage(e.Message));
             }
 
             return Ok(book);
@@ -88,7 +88,7 @@
             }
             catch (Exception e)
             {
-                ReturnBadRequest(e);
+                throw new HttpResponseException(InternalErrorMessage(e.Message));
             }
 
             return Ok();
@@ -111,19 +111,20 @@
             }
             catch (Exception e)
             {
-                ReturnBadRequest(e);
+                throw new HttpResponseException(InternalErrorMessage(e.Message));
             }
 
             return Ok();
         }
 
-        private void ReturnBadRequest(Exception e)
+        private HttpResponseMessage InternalErrorMessage(string message)
         {
-            throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            return new HttpResponseMessage
             {
-                Content = new StringContent(e.Message),
-                ReasonPhrase = "Server exception."
-            });
+                Content = new StringContent(message),
+                ReasonPhrase = "Server exception.",
+                StatusCode = HttpStatusCode.BadRequest
+            };
         }
     }
 }

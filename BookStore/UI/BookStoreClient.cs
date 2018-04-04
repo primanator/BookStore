@@ -1,10 +1,10 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-
-namespace UI
+﻿namespace UI
 {
+    using System;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Threading.Tasks;
+
     class BookStoreClient
     {
 
@@ -23,11 +23,11 @@ namespace UI
 
         static async Task GetRequest(string ID)
         {
-            switch (ID)
+            switch (ID.ToLowerInvariant())
             {
-                case "Get":
-                    Console.WriteLine("Enter id:");
-                    int id = Convert.ToInt32(Console.ReadLine());
+                case "get":
+                    Console.WriteLine("Enter name:");
+                    string name = Console.ReadLine();
                     using (var client = new HttpClient())
                     {
                         client.BaseAddress = new Uri("http://localhost:50402/");
@@ -37,8 +37,8 @@ namespace UI
 
                         HttpResponseMessage response;
 
-                        //id == 0 means select all records    
-                        if (id == 0)
+                        //empty name means select all records    
+                        if (string.IsNullOrEmpty(name))
                         {
                             response = await client.GetAsync("api/books");
                             if (response.IsSuccessStatusCode)
@@ -53,7 +53,7 @@ namespace UI
                         }
                         else
                         {
-                            response = await client.GetAsync("api/books/" + id);
+                            response = await client.GetAsync("api/books?=" + name);
                             if (response.IsSuccessStatusCode)
                             {
                                 Book report = await response.Content.ReadAsAsync<Book>();
@@ -64,7 +64,7 @@ namespace UI
                     }
                     break;
 
-                case "Post":
+                case "post":
                     /*BookStoreClient newReport = new BookStoreClient();
                     Console.WriteLine("Enter data:");
                     Console.WriteLine("Enter Id:");
@@ -85,7 +85,8 @@ namespace UI
                         Isbn = "9785699687275",
                         LimitedEdition = false,
                         Pages = 154,
-                        WrittenIn = new DateTime(1605, 1, 1)
+                        WrittenIn = new DateTime(1615, 1, 1),
+                        LibraryId = 1
                     };
 
                     using (var client = new HttpClient())
@@ -95,21 +96,11 @@ namespace UI
                         client.DefaultRequestHeaders.Accept.Add(
                             new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        HttpResponseMessage response = await client.PostAsJsonAsync("api/books", newReport);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            bool result = await response.Content.ReadAsAsync<bool>();
-                            if (result)
-                                Console.WriteLine("Book created");
-                            else
-                                Console.WriteLine(response.Content);
-                        }
+                        ShowResponceAsync(await client.PostAsJsonAsync("api/books", newReport));
                     }
                     break;
 
-                case "Put":
-                    Console.WriteLine("Enter id:");
+                case "put":
                     Book update = new Book()
                     {
                         Id = 1,
@@ -127,22 +118,13 @@ namespace UI
                         client.DefaultRequestHeaders.Accept.Add(
                             new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        HttpResponseMessage response = await client.PutAsJsonAsync("api/books", update);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            bool result = await response.Content.ReadAsAsync<bool>();
-                            if (result)
-                                Console.WriteLine("Book updated");
-                            else
-                                Console.WriteLine(response.Content);
-                        }
+                        ShowResponceAsync(await client.PutAsJsonAsync("api/books", update));
                     }
                     break;
 
-                case "Delete":
-                    Console.WriteLine("Enter id:");
-                    int delete = Convert.ToInt32(Console.ReadLine());
+                case "delete":
+                    Console.WriteLine("Enter name:");
+                    string toDelete = Console.ReadLine();
                     using (var client = new HttpClient())
                     {
                         client.BaseAddress = new Uri("http://localhost:50402/");
@@ -150,22 +132,21 @@ namespace UI
                         client.DefaultRequestHeaders.Accept.Add(
                             new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        HttpResponseMessage response = await client.DeleteAsync("api/books/" + delete);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            bool result = await response.Content.ReadAsAsync<bool>();
-                            if (result)
-                                Console.WriteLine("Book deleted");
-                            else
-                                Console.WriteLine(response.Content);
-                        }
+                        ShowResponceAsync(await client.DeleteAsync("api/books?=" + toDelete));
                     }
                     break;
             }
 
         }
 
+        static async void ShowResponceAsync(HttpResponseMessage response)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrEmpty(content))
+                Console.WriteLine("Operation was succesfull.");
+            else
+                Console.WriteLine(content);
+        }
     }
 
     public class Book
@@ -175,6 +156,7 @@ namespace UI
         public string Isbn { get; set; }
         public int Pages { get; set; }
         public bool LimitedEdition { get; set; }
-        public DateTime? WrittenIn { get; set; }
+        public DateTime WrittenIn { get; set; }
+        public int LibraryId { get; set; }
     }
 }
