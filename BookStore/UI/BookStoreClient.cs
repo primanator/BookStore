@@ -26,7 +26,7 @@
             switch (ID.ToLowerInvariant())
             {
                 case "get":
-                    Console.WriteLine("Enter name:");
+                    Console.WriteLine("Enter name (leave empty to choose all):");
                     string name = Console.ReadLine();
                     using (var client = new HttpClient())
                     {
@@ -43,22 +43,24 @@
                             response = await client.GetAsync("api/books");
                             if (response.IsSuccessStatusCode)
                             {
-                                Book[] reports = await response.Content.ReadAsAsync<Book[]>();
-                                foreach (var report in reports)
-                                {
-                                    Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", report.Id, report.Name,
-                                        report.Isbn, report.Pages, report.LimitedEdition);
-                                }
+                                Book[] books = await response.Content.ReadAsAsync<Book[]>();
+                                if (books != null)
+                                    foreach (var report in books)
+                                        Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", report.Id, report.Name, report.Isbn, report.Pages, report.LimitedEdition);
+                                else
+                                    Console.WriteLine("There are no books in the library.");
                             }
                         }
                         else
                         {
-                            response = await client.GetAsync("api/books?=" + name);
+                            response = await client.GetAsync("api/books?name=" + name);
                             if (response.IsSuccessStatusCode)
                             {
-                                Book report = await response.Content.ReadAsAsync<Book>();
-                                Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", report.Id, report.Name,
-                                    report.Isbn, report.Pages, report.LimitedEdition);
+                                Book book = await response.Content.ReadAsAsync<Book>();
+                                if (book != null)
+                                    Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", book.Id, book.Name, book.Isbn, book.Pages, book.LimitedEdition);
+                                else
+                                    Console.WriteLine("There is no such book in the library.");
                             }
                         }
                     }
