@@ -69,8 +69,7 @@
 
         public void Delete(T entity)
         {
-            if (_db.Set<T>().Find(entity.Id) != null)
-                _db.Entry(entity).State = EntityState.Detached;
+            _db.Entry(_db.Set<T>().Find(entity.Id)).State = EntityState.Deleted;
             _db.SaveChanges();
         }
     }
