@@ -58,9 +58,6 @@
 
         public void DeleteBook(BookDto record)
         {
-            if (GetSingleBook(record.Name) != null)
-                throw new ArgumentException("Database does not contain such book to update.");
-
             _unitOfWork.GetBookRepository().Delete(Mapper.Map<Book>(record));
         }
     }

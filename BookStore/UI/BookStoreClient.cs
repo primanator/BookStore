@@ -21,11 +21,12 @@
             }
         }
 
-        static async Task GetRequest(string ID)
+        private static async Task GetRequest(string ID)
         {
             switch (ID.ToLowerInvariant())
             {
                 case "get":
+                {
                     Console.WriteLine("Enter name (leave empty to choose all):");
                     string name = Console.ReadLine();
                     using (var client = new HttpClient())
@@ -37,7 +38,6 @@
 
                         HttpResponseMessage response;
 
-                        //empty name means select all records    
                         if (string.IsNullOrEmpty(name))
                         {
                             response = await client.GetAsync("api/books");
@@ -46,7 +46,8 @@
                                 Book[] books = await response.Content.ReadAsAsync<Book[]>();
                                 if (books != null)
                                     foreach (var report in books)
-                                        Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", report.Id, report.Name, report.Isbn, report.Pages, report.LimitedEdition);
+                                        Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", report.Id, report.Name,
+                                            report.Isbn, report.Pages, report.LimitedEdition);
                                 else
                                     Console.WriteLine("There are no books in the library.");
                             }
@@ -58,38 +59,20 @@
                             {
                                 Book book = await response.Content.ReadAsAsync<Book>();
                                 if (book != null)
-                                    Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", book.Id, book.Name, book.Isbn, book.Pages, book.LimitedEdition);
+                                    Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", book.Id, book.Name, book.Isbn,
+                                        book.Pages, book.LimitedEdition);
                                 else
                                     Console.WriteLine("There is no such book in the library.");
                             }
                         }
                     }
-                    break;
 
+                    break;
+                }
                 case "post":
-                    /*BookStoreClient newReport = new BookStoreClient();
-                    Console.WriteLine("Enter data:");
-                    Console.WriteLine("Enter Id:");
-                    newReport.Id = Int32.Parse(Console.ReadLine());
-                    Console.WriteLine("Enter Name:");
-                    newReport.Name = Console.ReadLine();
-                    Console.WriteLine("Enter Isbn:");
-                    newReport.Isbn = Console.ReadLine();
-                    Console.WriteLine("Enter Pages:");
-                    newReport.Pages = Int32.Parse(Console.ReadLine());
-                    Console.WriteLine("Enter LimitedEdition:");
-                    newReport.LimitedEdition = Boolean.Parse(Console.ReadLine());*/
-
-                    Book newReport = new Book()
-                    {
-                        Id = 3,
-                        Name = "Miguel de Cervantes",
-                        Isbn = "9785699687275",
-                        LimitedEdition = false,
-                        Pages = 154,
-                        WrittenIn = new DateTime(1615, 1, 1),
-                        LibraryId = 1
-                    };
+                {
+                    Console.WriteLine("Create new book for library.");
+                    var newBook = GetBookFromUserInput();
 
                     using (var client = new HttpClient())
                     {
@@ -98,20 +81,15 @@
                         client.DefaultRequestHeaders.Accept.Add(
                             new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        ShowResponceAsync(await client.PostAsJsonAsync("api/books", newReport));
+                        ShowResponceAsync(await client.PostAsJsonAsync("api/books", newBook));
                     }
-                    break;
 
+                    break;
+                }
                 case "put":
-                    Book update = new Book()
-                    {
-                        Id = 1,
-                        Name = "The Young Man and The Land.",
-                        Isbn = "6666666666",
-                        Pages = 666,
-                        LimitedEdition = true,
-                        WrittenIn = new DateTime(1666, 1, 1)
-                    };
+                {
+                    Console.WriteLine("Enter Title of the book you want to update: ");
+                    var nameBook = Console.ReadLine();
 
                     using (var client = new HttpClient())
                     {
@@ -120,11 +98,23 @@
                         client.DefaultRequestHeaders.Accept.Add(
                             new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        ShowResponceAsync(await client.PutAsJsonAsync("api/books", update));
+                        var response = await client.GetAsync("api/books?name=" + nameBook);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var bookToUpdate = await response.Content.ReadAsAsync<Book>();
+                            if (bookToUpdate != null)
+                            {
+                                ShowResponceAsync(await client.PutAsJsonAsync("api/books", CopyBookWithUserUpdates(bookToUpdate)));
+                            }
+                            else
+                                Console.WriteLine("There is no such book in the library.");
+                        }
                     }
-                    break;
 
+                    break;
+                }
                 case "delete":
+                {
                     Console.WriteLine("Enter name:");
                     string toDelete = Console.ReadLine();
                     using (var client = new HttpClient())
@@ -134,31 +124,57 @@
                         client.DefaultRequestHeaders.Accept.Add(
                             new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        ShowResponceAsync(await client.DeleteAsync("api/books?=" + toDelete));
+                        ShowResponceAsync(await client.DeleteAsync("api/books?name=" + toDelete));
                     }
-                    break;
-            }
 
+                    break;
+                }
+            }
         }
 
-        static async void ShowResponceAsync(HttpResponseMessage response)
+        private static async void ShowResponceAsync(HttpResponseMessage response)
         {
             var content = await response.Content.ReadAsStringAsync();
-            if (string.IsNullOrEmpty(content))
-                Console.WriteLine("Operation was succesfull.");
-            else
-                Console.WriteLine(content);
+            Console.WriteLine(string.IsNullOrEmpty(content) ? "Operation was succesfull." : content);
         }
-    }
 
-    public class Book
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Isbn { get; set; }
-        public int Pages { get; set; }
-        public bool LimitedEdition { get; set; }
-        public DateTime WrittenIn { get; set; }
-        public int LibraryId { get; set; }
+        private static Book GetBookFromUserInput()
+        {
+            Book newBook = new Book();
+
+            var properties = newBook.GetType().GetProperties();
+
+            foreach (var prop in properties)
+            {
+                if (prop.Name != "Id" && prop.Name != "LibraryId")
+                {
+                    Console.WriteLine("Please enter {0}", prop.Name);
+                    var userValue = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(userValue))
+                        prop.SetValue(newBook, Convert.ChangeType(userValue, prop.PropertyType));
+                }
+            }
+
+            newBook.LibraryId = 1;
+            return newBook;
+        }
+
+        private static Book CopyBookWithUserUpdates(Book bookToCopy)
+        {
+            var properties = bookToCopy.GetType().GetProperties();
+
+            foreach (var prop in properties)
+            {
+                if (prop.Name != "Id" && prop.Name != "Name" && prop.Name != "LibraryId")
+                {
+                    Console.WriteLine("Please enter {0}", prop.Name);
+                    var userValue = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(userValue))
+                        prop.SetValue(bookToCopy, Convert.ChangeType(userValue, prop.PropertyType));
+                }
+            }
+
+            return bookToCopy;
+        }
     }
 }
