@@ -14,7 +14,7 @@
         public DbSet<LiteratureForm> LiteratureForms { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public BookStoreContext() : base("BookStoreConnection")
+        public BookStoreContext() : base("BookStoreDb")
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BookStoreContext, Migrations.Configuration>());
 
