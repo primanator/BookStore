@@ -1,180 +1,152 @@
 ﻿namespace UI
 {
     using System;
+    using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
-    class BookStoreClient
+    internal class BookStoreClient : IDisposable
     {
+        private readonly HttpClient _client;
+        private HttpResponseMessage _response;
 
-        static void Main(string[] args)
+        public BookStoreClient(Uri baseAddress, IEnumerable<MediaTypeWithQualityHeaderValue> headers)
         {
-            while (true)
+            _client = new HttpClient
             {
-                Console.WriteLine("Enter Action:");
-                string id = Console.ReadLine();
+                BaseAddress = baseAddress
+            };
 
-                GetRequest(id).Wait();
-                Console.ReadKey();
-                Console.Clear();
-            }
+            _client.DefaultRequestHeaders.Accept.Clear();
+
+            foreach (var header in headers)
+                _client.DefaultRequestHeaders.Accept.Add(header);
         }
 
-        private static async Task GetRequest(string ID)
+        private async Task<Book[]> GetAllBooks()
         {
-            switch (ID.ToLowerInvariant())
+            _response = await _client.GetAsync("api/books");
+            CheckResponse();
+
+            return await _response.Content.ReadAsAsync<Book[]>();
+        }
+
+        private async Task<Book> GetBookByTitle(string title)
+        {
+            _response = await _client.GetAsync("api/books?name=" + title);
+            CheckResponse();
+
+            return await _response.Content.ReadAsAsync<Book>();
+        }
+
+        private async Task<string> PostNewBook(Book newBook)
+        {
+            _response = await _client.PostAsJsonAsync("api/books", newBook);
+            CheckResponse();
+
+            return await _response.Content.ReadAsStringAsync();
+        }
+
+        private async Task<string> PutUpdateBook(Book newBook)
+        {
+            _response = await _client.PutAsJsonAsync("api/books", newBook);
+            CheckResponse();
+
+            return await _response.Content.ReadAsStringAsync();
+        }
+
+        private async Task<string> DeleteBook(string title)
+        {
+            _response = await _client.DeleteAsync("api/books?name=" + title);
+            CheckResponse();
+
+            return await _response.Content.ReadAsStringAsync();
+        }
+
+        private void CheckResponse()
+        {
+            if (!_response.IsSuccessStatusCode)
+                throw new HttpRequestException("Request returned with failed status code: " + _response.StatusCode);
+        }
+
+        public void Dispose()
+        {
+            _client.Dispose();
+        }
+
+        public async Task SendRequest(string httpVerb)
+        {
+
+            switch (httpVerb.ToLowerInvariant())
             {
                 case "get":
-                {
-                    Console.WriteLine("Enter name (leave empty to choose all):");
-                    string name = Console.ReadLine();
-                    using (var client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri("http://localhost:50402/");
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(
-                            new MediaTypeWithQualityHeaderValue("application/json"));
-
-                        HttpResponseMessage response;
+                        Console.WriteLine("Enter name (leave empty to choose all):");
+                        string name = Console.ReadLine();
 
                         if (string.IsNullOrEmpty(name))
                         {
-                            response = await client.GetAsync("api/books");
-                            if (response.IsSuccessStatusCode)
-                            {
-                                Book[] books = await response.Content.ReadAsAsync<Book[]>();
-                                if (books != null)
-                                    foreach (var report in books)
-                                        Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", report.Id, report.Name,
-                                            report.Isbn, report.Pages, report.LimitedEdition);
-                                else
-                                    Console.WriteLine("There are no books in the library.");
-                            }
+                            Book[] books = await GetAllBooks();
+                            if (books != null)
+                                foreach (var book in books)
+                                    Console.WriteLine("\nId:{0}\tName:{1}\tIsbn:{2}\tPages:{3}\tLimitedEdition:{4}", book.Id, book.Name,
+                                        book.Isbn, book.Pages, book.LimitedEdition);
+                            else
+                                Console.WriteLine("There are no books in the library.");
                         }
                         else
                         {
-                            response = await client.GetAsync("api/books?name=" + name);
-                            if (response.IsSuccessStatusCode)
-                            {
-                                Book book = await response.Content.ReadAsAsync<Book>();
-                                if (book != null)
-                                    Console.WriteLine("\n{0}\t{1}\t{2}\t{3}\t{4}", book.Id, book.Name, book.Isbn,
-                                        book.Pages, book.LimitedEdition);
-                                else
-                                    Console.WriteLine("There is no such book in the library.");
-                            }
-                        }
-                    }
-
-                    break;
-                }
-                case "post":
-                {
-                    Console.WriteLine("Create new book for library.");
-                    var newBook = GetBookFromUserInput();
-
-                    using (var client = new HttpClient())
-                    {
-                        client.BaseAddress = new Uri("http://localhost:50402/");
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(
-                            new MediaTypeWithQualityHeaderValue("application/json"));
-
-                        ShowResponceAsync(await client.PostAsJsonAsync("api/books", newBook));
-                    }
-
-                    break;
-                }
-                case "put":
-                {
-                    Console.WriteLine("Enter Title of the book you want to update: ");
-                    var nameBook = Console.ReadLine();
-
-                    using (var client = new HttpClient())
-                    {
-                        client.BaseAddress = new Uri("http://localhost:50402/");
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(
-                            new MediaTypeWithQualityHeaderValue("application/json"));
-
-                        var response = await client.GetAsync("api/books?name=" + nameBook);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var bookToUpdate = await response.Content.ReadAsAsync<Book>();
-                            if (bookToUpdate != null)
-                            {
-                                ShowResponceAsync(await client.PutAsJsonAsync("api/books", CopyBookWithUserUpdates(bookToUpdate)));
-                            }
+                            Book book = await GetBookByTitle(name);
+                            if (book != null)
+                                Console.WriteLine("\nId:{0}\tName:{1}\tIsbn:{2}\tPages:{3}\tLimitedEdition:{4}", book.Id, book.Name,
+                                    book.Isbn, book.Pages, book.LimitedEdition);
                             else
                                 Console.WriteLine("There is no such book in the library.");
                         }
+                        break;
                     }
-
-                    break;
-                }
-                case "delete":
-                {
-                    Console.WriteLine("Enter name:");
-                    string toDelete = Console.ReadLine();
-                    using (var client = new HttpClient())
+                case "post":
                     {
-                        client.BaseAddress = new Uri("http://localhost:50402/");
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(
-                            new MediaTypeWithQualityHeaderValue("application/json"));
+                        Console.WriteLine("Create new book for library.");
+                        var newBook = Book.GetBookFromUserInput();
 
-                        ShowResponceAsync(await client.DeleteAsync("api/books?name=" + toDelete));
+                        var result = await PostNewBook(newBook);
+                        Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
+                        break;
                     }
+                case "put":
+                    {
+                        Console.WriteLine("Enter title of the book you want to update: ");
+                        var title = Console.ReadLine();
 
-                    break;
-                }
+                        var bookToUpdate = await GetBookByTitle(title);
+                        if (bookToUpdate != null)
+                        {
+                            Book.CopyBookWithUserUpdates(bookToUpdate);
+                            var result = await PutUpdateBook(bookToUpdate);
+                            Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
+                        }
+                        else
+                            Console.WriteLine("There is no such book in the library.");
+
+                        break;
+                    }
+                case "delete":
+                    {
+                        Console.WriteLine("Enter name:");
+                        string toDelete = Console.ReadLine();
+
+                        var result = await DeleteBook(toDelete);
+                        Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("Client does not support such method.");
+                        break;
+                    }
             }
-        }
-
-        private static async void ShowResponceAsync(HttpResponseMessage response)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(string.IsNullOrEmpty(content) ? "Operation was succesfull." : content);
-        }
-
-        private static Book GetBookFromUserInput()
-        {
-            Book newBook = new Book();
-
-            var properties = newBook.GetType().GetProperties();
-
-            foreach (var prop in properties)
-            {
-                if (prop.Name != "Id" && prop.Name != "LibraryId")
-                {
-                    Console.WriteLine("Please enter {0}", prop.Name);
-                    var userValue = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(userValue))
-                        prop.SetValue(newBook, Convert.ChangeType(userValue, prop.PropertyType));
-                }
-            }
-
-            newBook.LibraryId = 1;
-            return newBook;
-        }
-
-        private static Book CopyBookWithUserUpdates(Book bookToCopy)
-        {
-            var properties = bookToCopy.GetType().GetProperties();
-
-            foreach (var prop in properties)
-            {
-                if (prop.Name != "Id" && prop.Name != "Name" && prop.Name != "LibraryId")
-                {
-                    Console.WriteLine("Please enter {0}", prop.Name);
-                    var userValue = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(userValue))
-                        prop.SetValue(bookToCopy, Convert.ChangeType(userValue, prop.PropertyType));
-                }
-            }
-
-            return bookToCopy;
         }
     }
 }
