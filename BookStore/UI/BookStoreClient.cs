@@ -24,7 +24,7 @@
                 _client.DefaultRequestHeaders.Accept.Add(header);
         }
 
-        private async Task<Book[]> GetAllBooks()
+        private async Task<Book[]> GetAllBooksAsync()
         {
             _response = await _client.GetAsync("api/books");
             CheckResponse();
@@ -32,7 +32,7 @@
             return await _response.Content.ReadAsAsync<Book[]>();
         }
 
-        private async Task<Book> GetBookByTitle(string title)
+        private async Task<Book> GetBookByTitleAsync(string title)
         {
             _response = await _client.GetAsync("api/books?name=" + title);
             CheckResponse();
@@ -40,7 +40,7 @@
             return await _response.Content.ReadAsAsync<Book>();
         }
 
-        private async Task<string> PostNewBook(Book newBook)
+        private async Task<string> PostNewBookAsync(Book newBook)
         {
             _response = await _client.PostAsJsonAsync("api/books", newBook);
             CheckResponse();
@@ -48,7 +48,7 @@
             return await _response.Content.ReadAsStringAsync();
         }
 
-        private async Task<string> PutUpdateBook(Book newBook)
+        private async Task<string> PutUpdateBookAsync(Book newBook)
         {
             _response = await _client.PutAsJsonAsync("api/books", newBook);
             CheckResponse();
@@ -56,7 +56,7 @@
             return await _response.Content.ReadAsStringAsync();
         }
 
-        private async Task<string> DeleteBook(string title)
+        private async Task<string> DeleteBookAsync(string title)
         {
             _response = await _client.DeleteAsync("api/books?name=" + title);
             CheckResponse();
@@ -75,7 +75,7 @@
             _client.Dispose();
         }
 
-        public async Task SendRequest(string httpVerb)
+        public async Task SendRequestAsync(string httpVerb)
         {
 
             switch (httpVerb.ToLowerInvariant())
@@ -87,7 +87,7 @@
 
                         if (string.IsNullOrEmpty(name))
                         {
-                            Book[] books = await GetAllBooks();
+                            Book[] books = await GetAllBooksAsync();
                             if (books != null)
                                 foreach (var book in books)
                                     Console.WriteLine("\nId:{0}\tName:{1}\tIsbn:{2}\tPages:{3}\tLimitedEdition:{4}", book.Id, book.Name,
@@ -97,7 +97,7 @@
                         }
                         else
                         {
-                            Book book = await GetBookByTitle(name);
+                            Book book = await GetBookByTitleAsync(name);
                             if (book != null)
                                 Console.WriteLine("\nId:{0}\tName:{1}\tIsbn:{2}\tPages:{3}\tLimitedEdition:{4}", book.Id, book.Name,
                                     book.Isbn, book.Pages, book.LimitedEdition);
@@ -111,7 +111,7 @@
                         Console.WriteLine("Create new book for library.");
                         var newBook = Book.GetBookFromUserInput();
 
-                        var result = await PostNewBook(newBook);
+                        var result = await PostNewBookAsync(newBook);
                         Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
                         break;
                     }
@@ -120,11 +120,11 @@
                         Console.WriteLine("Enter title of the book you want to update: ");
                         var title = Console.ReadLine();
 
-                        var bookToUpdate = await GetBookByTitle(title);
+                        var bookToUpdate = await GetBookByTitleAsync(title);
                         if (bookToUpdate != null)
                         {
                             Book.CopyBookWithUserUpdates(bookToUpdate);
-                            var result = await PutUpdateBook(bookToUpdate);
+                            var result = await PutUpdateBookAsync(bookToUpdate);
                             Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
                         }
                         else
@@ -137,7 +137,7 @@
                         Console.WriteLine("Enter name:");
                         string toDelete = Console.ReadLine();
 
-                        var result = await DeleteBook(toDelete);
+                        var result = await DeleteBookAsync(toDelete);
                         Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
                         break;
                     }

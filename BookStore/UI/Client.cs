@@ -14,7 +14,7 @@
                 using (BookStoreClient client = new BookStoreClient(new Uri("http://localhost:50402/"),
                     new[] { new MediaTypeWithQualityHeaderValue("application/json") }))
                 {
-                    client.SendRequest(Console.ReadLine()).Wait();
+                    client.SendRequestAsync(Console.ReadLine()).Wait();
                 }
 
                 Console.ReadKey();
