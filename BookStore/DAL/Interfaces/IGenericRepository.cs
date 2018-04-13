@@ -1,4 +1,4 @@
-﻿namespace DAL.Interfaces.Repository
+﻿namespace DAL.Interfaces
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +10,6 @@
         void Insert(T entity);
         void Delete(T entity);
         void Update(T entity);
-        void Save(T entity);
         T Get(int id);
     }
 }

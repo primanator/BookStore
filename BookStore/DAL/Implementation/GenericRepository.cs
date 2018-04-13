@@ -1,4 +1,4 @@
-﻿namespace DAL.Implementation.Repository
+﻿namespace DAL.Implementation
 {
     using System;
     using Entities;
@@ -7,7 +7,7 @@
     using System.Linq.Expressions;
     using System.Linq;
     using System.Data.Entity;
-    using Interfaces.Repository;
+    using DAL.Interfaces;
 
     public class GenericRepository<T> : IGenericRepository<T> where T : Entity
     {
@@ -33,7 +33,7 @@
             if (id <= 0)
                 throw new ArgumentOutOfRangeException("Entity Id is less or equals zero.");
 
-            T entity = GetEntity(id);
+            T entity = _db.Set<T>().Find(id);
 
             if (entity == null)
                 throw new InvalidOperationException(string.Format("{0} with Id={1} was not found in the DB", typeof(T).Name, id));
@@ -41,36 +41,20 @@
             return entity;
         }
 
-        protected virtual T GetEntity(int id)
-        {
-            return _db.Set<T>().Find(id);
-        }
-
         public void Insert(T entity)
         {
             _db.Set<T>().Add(entity);
-            _db.SaveChanges();
-        }
-
-        public void Save(T entity)
-        {
-            if (entity.Id == 0)
-                Insert(entity);
-            else
-                Update(entity);
         }
 
         public void Update(T entity)
         {
             _db.Set<T>().Attach(entity);
             _db.Entry(entity).State = EntityState.Modified;
-            _db.SaveChanges();
         }
 
         public void Delete(T entity)
         {
             _db.Entry(_db.Set<T>().Find(entity.Id)).State = EntityState.Deleted;
-            _db.SaveChanges();
         }
     }
 }

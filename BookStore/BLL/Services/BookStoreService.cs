@@ -5,7 +5,7 @@
     using DTO;
     using Interfaces;
     using AutoMapper;
-    using DAL.Interfaces.UnitOfWork;
+    using DAL.Interfaces;
     using DAL.Entities;
     using System.Linq;
 
@@ -24,6 +24,7 @@
                 throw new ArgumentException("Database already contains book with such name.");
 
             _unitOfWork.GetBookRepository().Insert(Mapper.Map<Book>(record));
+            _unitOfWork.Save();
         }
 
         public void UpdateBook(BookDto record)
@@ -41,6 +42,7 @@
             }
 
             _unitOfWork.GetBookRepository().Update(Mapper.Map<Book>(bookToUpdate));
+            _unitOfWork.Save();
         }
 
         public IEnumerable<BookDto> GetAllBooks()
@@ -60,6 +62,7 @@
                 throw new KeyNotFoundException("Database does not contain such book to delete.");
 
             _unitOfWork.GetBookRepository().Delete(Mapper.Map<Book>(bookToDelete));
+            _unitOfWork.Save();
         }
     }
 }

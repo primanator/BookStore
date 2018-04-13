@@ -56,22 +56,10 @@
     <Compile Include="Entities\Library.cs" />
     <Compile Include="Entities\LiteratureForm.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Implementation\Repository\AuthorRepository.cs" />
-    <Compile Include="Implementation\Repository\BookRepository.cs" />
-    <Compile Include="Implementation\Repository\CountryRepository.cs" />
-    <Compile Include="Implementation\Repository\GenreRepository.cs" />
-    <Compile Include="Implementation\Repository\LibraryRepository.cs" />
-    <Compile Include="Implementation\Repository\LiteratureFormRepository.cs" />
-    <Compile Include="Implementation\Repository\UserRepository.cs" />
-    <Compile Include="Interfaces\Repository\IAuthorRepository.cs" />
-    <Compile Include="Interfaces\Repository\IBookRepository.cs" />
-    <Compile Include="Interfaces\Repository\ICountryRepository.cs" />
-    <Compile Include="Interfaces\Repository\IGenericRepository.cs" />
-    <Compile Include="Interfaces\Repository\IGenreRepository.cs" />
-    <Compile Include="Interfaces\Repository\ILibraryRepository.cs" />
-    <Compile Include="Interfaces\Repository\ILiteratureFormRepository.cs" />
-    <Compile Include="Interfaces\Repository\IUserRepository.cs.cs" />
-    <Compile Include="Interfaces\UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="Implementation\GenericRepository.cs" />
+    <Compile Include="Implementation\UnitOfWork.cs" />
+    <Compile Include="Interfaces\IGenericRepository.cs" />
+    <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Migrations\201803171146369_BookStore-v1.cs" />
     <Compile Include="Migrations\201803171146369_BookStore-v1.Designer.cs">
       <DependentUpon>201803171146369_BookStore-v1.cs</DependentUpon>
@@ -90,8 +78,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Implementation\Repository\GenericRepository.cs" />
-    <Compile Include="Implementation\UnitOfWork\UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

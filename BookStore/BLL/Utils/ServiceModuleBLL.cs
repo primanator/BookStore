@@ -1,7 +1,7 @@
 ﻿namespace BLL.Utils
 {
-    using DAL.Implementation.UnitOfWork;
-    using DAL.Interfaces.UnitOfWork;
+    using DAL.Implementation;
+    using DAL.Interfaces;
     using Ninject.Modules;
 
     public class ServiceModuleBLL : NinjectModule
