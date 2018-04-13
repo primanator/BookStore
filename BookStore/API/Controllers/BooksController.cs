@@ -21,14 +21,11 @@
 
         public IHttpActionResult PostCreateBook(BookModel newBook)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid && newBook == null)
                 return BadRequest("Invalid model state");
 
             try
             {
-                if (_service.GetSingleBook(newBook.Name) != null)
-                    throw new ArgumentException("Book with such name already exists in database.");
-
                 _service.CreateBook(Mapper.Map<BookDto>(newBook));
             }
             catch (Exception e)
@@ -76,14 +73,11 @@
 
         public IHttpActionResult PutUpdateBook(BookModel freshBook)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid && freshBook == null)
                 return BadRequest("Invalid model state");
 
             try
             {
-                if (_service.GetSingleBook(freshBook.Name) == null)
-                    throw new KeyNotFoundException("Can't find book to update.");
-
                 _service.UpdateBook(Mapper.Map<BookDto>(freshBook));
             }
             catch (Exception e)
@@ -99,15 +93,9 @@
             if (name == null)
                 return BadRequest("Parameter's value is empty.");
 
-            BookModel bookToDelete = null;
-
             try
             {
-                bookToDelete = Mapper.Map<BookModel>(_service.GetSingleBook(name));
-                if (bookToDelete == null)
-                    throw new KeyNotFoundException("Can't find book to delete.");
-
-                _service.DeleteBook(Mapper.Map<BookDto>(bookToDelete));
+                _service.DeleteBook(name);
             }
             catch (Exception e)
             {

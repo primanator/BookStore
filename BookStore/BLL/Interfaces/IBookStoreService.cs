@@ -14,6 +14,6 @@
 
         BookDto GetSingleBook(string title);
 
-        void DeleteBook(BookDto record);
+        void DeleteBook(string title);
     }
 }

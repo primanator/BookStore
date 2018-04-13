@@ -50,15 +50,16 @@
 
         public BookDto GetSingleBook(string title)
         {
-            if (title == null)
-                throw new ArgumentException("Name of the book is empty.");
-
             return Mapper.Map<BookDto>(_unitOfWork.GetBookRepository().FindBy(b => b.Name == title).SingleOrDefault());
         }
 
-        public void DeleteBook(BookDto record)
+        public void DeleteBook(string title)
         {
-            _unitOfWork.GetBookRepository().Delete(Mapper.Map<Book>(record));
+            BookDto bookToDelete = GetSingleBook(title);
+            if (bookToDelete == null)
+                throw new KeyNotFoundException("Database does not contain such book to delete.");
+
+            _unitOfWork.GetBookRepository().Delete(Mapper.Map<Book>(bookToDelete));
         }
     }
 }
