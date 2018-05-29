@@ -2,7 +2,7 @@
 {
     using EF;
     using Interfaces;
-    using DAL.Entities;
+    using Entities;
     using System;
 
     public class UnitOfWork : IUnitOfWork
@@ -17,7 +17,7 @@
         private IGenericRepository<LiteratureForm> _literatureFormRepository;
         private IGenericRepository<User> _userRepository;
 
-        private bool disposed = false;
+        private bool _disposed = false;
 
         public UnitOfWork()
         {
@@ -66,14 +66,14 @@
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!_disposed)
             {
                 if (disposing)
                 {
                     context.Dispose();
                 }
             }
-            disposed = true;
+            _disposed = true;
         }
 
         public void Dispose()

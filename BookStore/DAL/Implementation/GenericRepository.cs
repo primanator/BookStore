@@ -7,7 +7,7 @@
     using System.Linq.Expressions;
     using System.Linq;
     using System.Data.Entity;
-    using DAL.Interfaces;
+    using Interfaces;
 
     public class GenericRepository<T> : IGenericRepository<T> where T : Entity
     {
