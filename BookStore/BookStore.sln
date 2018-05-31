@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{A294
 		{6D598529-1240-4E88-96D8-397859F25440} = {6D598529-1240-4E88-96D8-397859F25440}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "BookStore_UnitTests\UnitTests.csproj", "{122E4099-7673-4826-9F8C-441D39125AF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,8 +44,15 @@ Global
 		{A294F788-780D-43AA-95A8-811BB62D112A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A294F788-780D-43AA-95A8-811BB62D112A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A294F788-780D-43AA-95A8-811BB62D112A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{122E4099-7673-4826-9F8C-441D39125AF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{122E4099-7673-4826-9F8C-441D39125AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{122E4099-7673-4826-9F8C-441D39125AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{122E4099-7673-4826-9F8C-441D39125AF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A7802FBD-9A0E-428C-8E81-3874CE2403A8}
 	EndGlobalSection
 EndGlobal
