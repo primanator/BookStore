@@ -1,6 +1,7 @@
 ﻿using API.App_Start;
 using API.Utils;
 using BLL.Utils;
+using DAL.Utils;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Modules;
@@ -35,7 +36,8 @@ namespace API.App_Start
             var modules = new INinjectModule[]
             {
                 new ServiceModuleBLL(),
-                new ServiceModuleAPI()
+                new ServiceModuleAPI(),
+                new ServiceModuleDAL()
             };
             var kernel = new StandardKernel(modules);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);

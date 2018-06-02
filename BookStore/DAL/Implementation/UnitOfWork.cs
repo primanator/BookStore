@@ -4,6 +4,7 @@
     using Interfaces;
     using Entities;
     using System;
+    using System.Data.Entity;
 
     public class UnitOfWork : IUnitOfWork
     {
@@ -19,9 +20,11 @@
 
         private bool _disposed = false;
 
-        public UnitOfWork()
+        public UnitOfWork(DbContext context)
         {
-            context = new BookStoreContext();
+            if (!(context is BookStoreContext))
+                throw new ArgumentException("Current Unit Of Work implementation is only confugured to work with " + typeof(BookStoreContext));
+            this.context = (BookStoreContext)context;
         }
 
         public IGenericRepository<Author> GetAuthorRepository()
