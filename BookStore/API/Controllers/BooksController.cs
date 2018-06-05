@@ -21,7 +21,7 @@
 
         public IHttpActionResult PostCreateBook(BookModel newBook)
         {
-            if (!ModelState.IsValid && newBook == null)
+            if (!ModelState.IsValid || newBook == null)
                 return BadRequest("Invalid model state");
 
             try
@@ -73,7 +73,7 @@
 
         public IHttpActionResult PutUpdateBook(BookModel freshBook)
         {
-            if (!ModelState.IsValid && freshBook == null)
+            if (!ModelState.IsValid || freshBook == null)
                 return BadRequest("Invalid model state");
 
             try
