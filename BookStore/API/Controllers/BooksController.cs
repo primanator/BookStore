@@ -54,7 +54,7 @@
 
         public IHttpActionResult GetBookByName(string name)
         {
-            if (name == null)
+            if (string.IsNullOrEmpty(name))
                 return BadRequest("Parameter's value is empty.");
 
             BookModel book = null;
@@ -90,7 +90,7 @@
 
         public IHttpActionResult DeleteBookByName(string name)
         {
-            if (name == null)
+            if (string.IsNullOrEmpty(name))
                 return BadRequest("Parameter's value is empty.");
 
             try
