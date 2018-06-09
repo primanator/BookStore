@@ -1,5 +1,6 @@
-﻿using BLL.DTO;
-using BLL.Interfaces;
+﻿using AutoMapper;
+using BLL.DTO;
+using BLL.Services;
 using DAL.Entities;
 using DAL.Interfaces;
 using NSubstitute;
@@ -13,142 +14,117 @@ namespace BookStore_UnitTests.BLL.Services
     [TestFixture]
     public class BookStoreServiceTests
     {
+        public BookStoreServiceTests()
+        {
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfiles("BLL");
+            });
+        }
+
         [Test]
         public void CreateBook_ExistingBook_Throws()
         {
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            var returnValue = new BookDto();
-            bookStoreServiceFake.When(service => service.CreateBook(Arg.Is<BookDto>(book => book != null)))
-                .Do(callinfo =>
+            var unitOfWorkStub = Substitute.For<IUnitOfWork>();
+            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
+                .Returns(new List<Book>
                 {
-                    if (bookStoreServiceFake.GetSingleBook(((BookDto)callinfo[0]).Name) != null)
-                        throw new ArgumentException("Database already contains book with such name.");
+                    new Book()
                 });
-            bookStoreServiceFake.GetSingleBook("").ReturnsForAnyArgs(returnValue);
+            var bookStoreService = new BookStoreService(unitOfWorkStub);
 
-            Assert.Throws<ArgumentException>(() => bookStoreServiceFake.CreateBook(new BookDto()));
+            Assert.Throws<ArgumentException>(() => bookStoreService.CreateBook(new BookDto()));
         }
 
         [Test]
         public void CreateBook_NewBook_CallsRepository()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            BookDto returnValue = null;
-            bookStoreServiceFake.When(service => service.CreateBook(Arg.Is<BookDto>(book => book != null)))
-                .Do(callinfo =>
-                {
-                    if (bookStoreServiceFake.GetSingleBook(((BookDto)callinfo[0]).Name) != null)
-                        throw new ArgumentException("Database already contains book with such name.");
-                    unitOfWorkMock.GetBookRepository().Insert(Arg.Any<Book>());
-                });
-            bookStoreServiceFake.GetSingleBook("").ReturnsForAnyArgs(returnValue);
+            List<Book> returnedValue = new List<Book>();
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
+            var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreServiceFake.CreateBook(new BookDto());
+            bookStoreService.CreateBook(new BookDto());
 
-            unitOfWorkMock.GetBookRepository().Received();
+            unitOfWorkMock.GetBookRepository().Received().Insert(Arg.Any<Book>());
         }
 
+        [Test]
         public void CreateBook_NewBook_CallsUnitOfWorkSave()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            BookDto returnValue = null;
-            bookStoreServiceFake.When(service => service.CreateBook(Arg.Is<BookDto>(book => book != null)))
-                .Do(callinfo =>
-                {
-                    if (bookStoreServiceFake.GetSingleBook(((BookDto)callinfo[0]).Name) != null)
-                        throw new ArgumentException("Database already contains book with such name.");
-                    unitOfWorkMock.GetBookRepository().Insert(Arg.Any<Book>());
-                    unitOfWorkMock.Save();
-                });
-            bookStoreServiceFake.GetSingleBook("").ReturnsForAnyArgs(returnValue);
+            List<Book> returnedValue = new List<Book>();
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
+            var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreServiceFake.CreateBook(new BookDto());
+            bookStoreService.CreateBook(new BookDto());
 
             unitOfWorkMock.Received().Save();
         }
 
         [Test]
-        public void GetAllBooks_Called_CallRepository()
+        public void GetAllBooks_Called_CallsRepository()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            bookStoreServiceFake.When(service => service.GetAllBooks())
-                .Do(callback =>
-                {
-                    unitOfWorkMock.GetBookRepository().FindBy(b => true);
-                });
+            var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreServiceFake.GetAllBooks();
+            bookStoreService.GetAllBooks();
 
-            unitOfWorkMock.Received().GetBookRepository();
+            unitOfWorkMock.GetBookRepository().Received().FindBy(Arg.Any<Expression<Func<Book, bool>>>());
         }
 
         [Test]
         public void GetAllBooks_Called_Returns()
         {
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            bookStoreServiceFake.GetAllBooks().ReturnsForAnyArgs(new List<BookDto>());
+            var unitOfWorkFake = Substitute.For<IUnitOfWork>();
+            unitOfWorkFake.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(new List<Book>());
+            var bookStoreService = new BookStoreService(unitOfWorkFake);
 
-            var result = bookStoreServiceFake.GetAllBooks();
+            var result = bookStoreService.GetAllBooks();
 
             Assert.NotNull(result);
+            Assert.IsInstanceOf(typeof(IEnumerable<BookDto>), result);
         }
 
         [Test]
         public void DeleteBook_MissingBook_Throws()
         {
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            BookDto returnValue = null;
-            bookStoreServiceFake.When(service => service.DeleteBook(Arg.Is<string>(s => !string.IsNullOrEmpty(s))))
-                .Do(callinfo =>
-                {
-                    if (bookStoreServiceFake.GetSingleBook((string)callinfo[0]) == null)
-                        throw new KeyNotFoundException("Database does not contain such book to delete.");
-                });
-            bookStoreServiceFake.GetSingleBook("").ReturnsForAnyArgs(returnValue);
+            List<Book> returnedValue = new List<Book>();
+            var unitOfWorkStub = Substitute.For<IUnitOfWork>();
+            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
+            var bookStoreService = new BookStoreService(unitOfWorkStub);
 
-            Assert.Throws<KeyNotFoundException>(() => bookStoreServiceFake.DeleteBook("Anything"));
+            Assert.Throws<KeyNotFoundException>(() => bookStoreService.DeleteBook("Anything"));
         }
 
         [Test]
         public void DeleteBook_ExistingBook_CallsRepository()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            var returnValue = new BookDto();
-            bookStoreServiceFake.When(service => service.DeleteBook(Arg.Is<string>(s => !string.IsNullOrEmpty(s))))
-                .Do(callinfo =>
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
+                .Returns(new List<Book>
                 {
-                    if (bookStoreServiceFake.GetSingleBook((string)callinfo[0]) == null)
-                        throw new KeyNotFoundException("Database does not contain such book to delete.");
-                    unitOfWorkMock.GetBookRepository().Delete(Arg.Any<Book>());
+                    new Book()
                 });
-            bookStoreServiceFake.GetSingleBook("").ReturnsForAnyArgs(returnValue);
+            var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreServiceFake.DeleteBook("Anything");
+            bookStoreService.DeleteBook("Anything");
 
-            unitOfWorkMock.GetBookRepository().Received();
+            unitOfWorkMock.GetBookRepository().Received().Delete(Arg.Any<Book>());
         }
 
         [Test]
         public void DeleteBook_ExistingBook_CallsUnitOfWorkSave()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            var returnValue = new BookDto();
-            bookStoreServiceFake.When(service => service.DeleteBook(Arg.Is<string>(s => !string.IsNullOrEmpty(s))))
-                .Do(callinfo =>
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
+                .Returns(new List<Book>
                 {
-                    if (bookStoreServiceFake.GetSingleBook((string)callinfo[0]) == null)
-                        throw new KeyNotFoundException("Database does not contain such book to delete.");
-                    unitOfWorkMock.GetBookRepository().Delete(Arg.Any<Book>());
-                    unitOfWorkMock.Save();
+                    new Book()
                 });
-            bookStoreServiceFake.GetSingleBook("").ReturnsForAnyArgs(returnValue);
+            var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreServiceFake.DeleteBook("Anything");
+            bookStoreService.DeleteBook("Anything");
 
             unitOfWorkMock.Received().Save();
         }
@@ -156,71 +132,59 @@ namespace BookStore_UnitTests.BLL.Services
         [Test]
         public void GetSingleBook_Called_Returns()
         {
-            var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            var returnValue = default(BookDto);
-            bookStoreServiceFake.GetSingleBook(Arg.Is<string>(s => !string.IsNullOrEmpty(s))).Returns(default(BookDto));
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(default(List<Book>));
+            var unitOfWorkStub = Substitute.For<IUnitOfWork>();
+            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
+                .Returns(new List<Book>
+                {
+                    new Book()
+                });
+            var bookStoreService = new BookStoreService(unitOfWorkStub);
 
-            var result = bookStoreServiceFake.GetSingleBook("Anything");
+            var result = bookStoreService.GetSingleBook("Anything");
 
-            Assert.AreEqual(returnValue, result);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(BookDto), result);
         }
 
         [Test]
         public void UpdateBook_NewBook_Throws()
         {
-            var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            BookDto returnValue = null;
-            bookStoreServiceFake.When(service => service.UpdateBook(Arg.Is<BookDto>(book => book != null)))
-                .Do(callinfo =>
-                {
-                    if (bookStoreServiceFake.GetSingleBook(((BookDto)callinfo[0]).Name) == null)
-                        throw new KeyNotFoundException("Database does not contain such book to delete.");
-                });
-            bookStoreServiceFake.GetSingleBook("").ReturnsForAnyArgs(returnValue);
+            List<Book> returnedValue = new List<Book>();
+            var unitOfWorkStub = Substitute.For<IUnitOfWork>();
+            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
+            var bookStoreService = new BookStoreService(unitOfWorkStub);
 
-            Assert.Throws<KeyNotFoundException>(() => bookStoreServiceFake.UpdateBook(new BookDto()));
+            Assert.Throws<ArgumentException>(() => bookStoreService.UpdateBook(new BookDto()));
         }
 
         [Test]
         public void UpdateBook_ExistingBook_CallsRepository()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            var returnValue = new BookDto();
-            bookStoreServiceFake.When(service => service.UpdateBook(Arg.Is<BookDto>(book => book != null)))
-                .Do(callinfo =>
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
+                .Returns(new List<Book>
                 {
-                    if (bookStoreServiceFake.GetSingleBook(((BookDto)callinfo[0]).Name) == null)
-                        throw new KeyNotFoundException("Database does not contain such book to delete.");
-                    unitOfWorkMock.GetBookRepository().Update(Arg.Any<Book>());
+                    new Book()
                 });
-            bookStoreServiceFake.GetSingleBook("").ReturnsForAnyArgs(returnValue);
+            var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreServiceFake.UpdateBook(new BookDto());
+            bookStoreService.UpdateBook(new BookDto());
 
-            unitOfWorkMock.GetBookRepository().Received();
+            unitOfWorkMock.GetBookRepository().Received().Update(Arg.Any<Book>());
         }
 
         [Test]
-        public void UpdateBook_ExistingBook_CallsSave()
+        public void UpdateBook_ExistingBook_CallsUnitOfWorkSave()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            var bookStoreServiceFake = Substitute.For<IBookStoreService>();
-            var returnValue = new BookDto();
-            bookStoreServiceFake.When(service => service.UpdateBook(Arg.Is<BookDto>(book => book != null)))
-                .Do(callinfo =>
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
+                .Returns(new List<Book>
                 {
-                    if (bookStoreServiceFake.GetSingleBook(((BookDto)callinfo[0]).Name) == null)
-                        throw new KeyNotFoundException("Database does not contain such book to delete.");
-                    unitOfWorkMock.GetBookRepository().Update(Arg.Any<Book>());
-                    unitOfWorkMock.Save();
+                    new Book()
                 });
-            bookStoreServiceFake.GetSingleBook("").ReturnsForAnyArgs(returnValue);
+            var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreServiceFake.UpdateBook(new BookDto());
+            bookStoreService.UpdateBook(new BookDto());
 
             unitOfWorkMock.Received().Save();
         }
