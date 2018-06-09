@@ -15,94 +15,102 @@ namespace BookStore_UnitTests.DAL.Implementation
         [Test]
         public void Constructor_BookStoreContextPassed_Creates()
         {
-            var contextStub = Substitute.For<BookStoreContext>();
+            var contextFake = Substitute.For<BookStoreContext>();
 
-            var unitOfWorkFake = new UnitOfWorkFake(contextStub);
+            var unitOfWork = new UnitOfWork(contextFake);
 
-            Assert.IsNotNull(unitOfWorkFake);
+            Assert.IsNotNull(unitOfWork);
+        }
+
+        [Test]
+        public void Constructor_FakeContextPassed_Throws()
+        {
+            var contextFake = new FakeContext();
+
+            Assert.Throws<ArgumentException>(() => new UnitOfWork(contextFake));
         }
 
         [Test]
         public void GetAuthorRepository_Called_Returns()
         {
-            var unitOfWorkFake = Substitute.For<IUnitOfWork>();
-            var authorRepo = Substitute.For<IGenericRepository<Author>>();
-            unitOfWorkFake.GetAuthorRepository().Returns(callinfo => authorRepo);
+            var contextFake = Substitute.For<BookStoreContext>();
+            var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWorkFake.GetAuthorRepository();
+            var result = unitOfWork.GetAuthorRepository();
 
+            Assert.IsNotNull(result);
             Assert.IsInstanceOf<IGenericRepository<Author>>(result);
         }
 
         [Test]
         public void GetBookRepository_Called_Returns()
         {
-            var unitOfWorkFake = Substitute.For<IUnitOfWork>();
-            var bookRepo = Substitute.For<IGenericRepository<Book>>();
-            unitOfWorkFake.GetBookRepository().Returns(callinfo => bookRepo);
+            var contextFake = Substitute.For<BookStoreContext>();
+            var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWorkFake.GetBookRepository();
+            var result = unitOfWork.GetBookRepository();
 
+            Assert.IsNotNull(result);
             Assert.IsInstanceOf<IGenericRepository<Book>>(result);
         }
 
         [Test]
         public void GetCountryRepository_Called_Returns()
         {
-            var unitOfWorkFake = Substitute.For<IUnitOfWork>();
-            var countryRepo = Substitute.For<IGenericRepository<Country>>();
-            unitOfWorkFake.GetCountryRepository().Returns(callinfo => countryRepo);
+            var contextFake = Substitute.For<BookStoreContext>();
+            var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWorkFake.GetCountryRepository();
+            var result = unitOfWork.GetCountryRepository();
 
+            Assert.IsNotNull(result);
             Assert.IsInstanceOf<IGenericRepository<Country>>(result);
         }
 
         [Test]
         public void GetGenreRepository_Called_Returns()
         {
-            var unitOfWorkFake = Substitute.For<IUnitOfWork>();
-            var genreRepo = Substitute.For<IGenericRepository<Genre>>();
-            unitOfWorkFake.GetGenreRepository().Returns(callinfo => genreRepo);
+            var contextFake = Substitute.For<BookStoreContext>();
+            var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWorkFake.GetGenreRepository();
+            var result = unitOfWork.GetGenreRepository();
 
+            Assert.IsNotNull(result);
             Assert.IsInstanceOf<IGenericRepository<Genre>>(result);
         }
 
         [Test]
         public void GetLibraryRepository_Called_Returns()
         {
-            var unitOfWorkFake = Substitute.For<IUnitOfWork>();
-            var libraryRepo = Substitute.For<IGenericRepository<Library>>();
-            unitOfWorkFake.GetLibraryRepository().Returns(callinfo => libraryRepo);
+            var contextFake = Substitute.For<BookStoreContext>();
+            var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWorkFake.GetLibraryRepository();
+            var result = unitOfWork.GetLibraryRepository();
 
+            Assert.IsNotNull(result);
             Assert.IsInstanceOf<IGenericRepository<Library>>(result);
         }
 
         [Test]
         public void GetLiteratureFormRepository_Called_Returns()
         {
-            var unitOfWorkFake = Substitute.For<IUnitOfWork>();
-            var literatureFormRepo = Substitute.For<IGenericRepository<LiteratureForm>>();
-            unitOfWorkFake.GetLiteratureFormRepository().Returns(callinfo => literatureFormRepo);
+            var contextFake = Substitute.For<BookStoreContext>();
+            var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWorkFake.GetLiteratureFormRepository();
+            var result = unitOfWork.GetLiteratureFormRepository();
 
+            Assert.IsNotNull(result);
             Assert.IsInstanceOf<IGenericRepository<LiteratureForm>>(result);
         }
 
         [Test]
         public void GetUserRepository_Called_Returns()
         {
-            var unitOfWorkFake = Substitute.For<IUnitOfWork>();
-            var userRepo = Substitute.For<IGenericRepository<User>>();
-            unitOfWorkFake.GetUserRepository().Returns(callinfo => userRepo);
+            var contextFake = Substitute.For<BookStoreContext>();
+            var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWorkFake.GetUserRepository();
+            var result = unitOfWork.GetUserRepository();
 
+            Assert.IsNotNull(result);
             Assert.IsInstanceOf<IGenericRepository<User>>(result);
         }
 
@@ -110,22 +118,13 @@ namespace BookStore_UnitTests.DAL.Implementation
         public void Save_Called_CallsContextSave()
         {
             var contextMock = Substitute.For<BookStoreContext>();
-            var unitOfWorkFake = new UnitOfWorkFake(contextMock);
+            var unitOfWork = new UnitOfWork(contextMock);
 
-            unitOfWorkFake.Save();
+            unitOfWork.Save();
 
             contextMock.Received().SaveChanges();
         }
     }
 
-    public class UnitOfWorkFake : UnitOfWork
-    {
-        public new BookStoreContext context;
-
-        public UnitOfWorkFake(DbContext context) : base (context)
-        {
-            this.context = (BookStoreContext)context;
-        }
-    }
-
+    public class FakeContext : DbContext { }
 }
