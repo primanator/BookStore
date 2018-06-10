@@ -1,9 +1,11 @@
-﻿using DAL.Entities;
-using DAL.Interfaces;
+﻿using DAL.EF;
+using DAL.Entities;
+using DAL.Implementation;
 using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -12,159 +14,100 @@ namespace BookStore_UnitTests.DAL.Implementation
     [TestFixture]
     public class GenericRepositoryTests
     {
-        [Test]
-        public void Get_IdLessThanZero_Throws()
-        {
-            var repoFake = Substitute.For<IGenericRepository<Entity>>();
-            repoFake.Get(Arg.Is<int>(x => x < 0)).Returns(callinfo => { throw new ArgumentOutOfRangeException("Entity Id is less or equals zero."); });
-
-            Assert.Throws<ArgumentOutOfRangeException>(() => repoFake.Get(-10));
-        }
-
         [TestCase(0)]
-        [TestCase(4)]
-        public void Get_MissingKey_Throws(int missingKey)
+        [TestCase(-10)]
+        public void Get_IdLessThanOrEqualsZero_Throws(int id)
         {
-            var repoFake = new FakeRepository<Book>
-            {
-                entities = new Dictionary<int, Book>()
-                {
-                    {1, new Book() },
-                    {2, new Book() },
-                    {3, new Book() }
-                },
-                throwNotFound = new InvalidOperationException("was not found in the DB")
-            };
+            var contextFake = Substitute.For<BookStoreContext>();
+            var repository = new GenericRepository<Book>(contextFake);
 
-            Assert.Throws<InvalidOperationException>(() => repoFake.Get(missingKey));
+            Assert.Throws<ArgumentOutOfRangeException>(() => repository.Get(id));
         }
 
         [TestCase(1)]
+        [TestCase(4)]
+        public void Get_MissingEntry_Throws(int missingKey)
+        {
+            var dbSetStub = Substitute.For<DbSet<Book>>();
+            dbSetStub.Find(Arg.Any<int>()).Returns(default(Book));
+            var contextStub = Substitute.For<BookStoreContext>();
+            contextStub.Set<Book>().Returns(dbSetStub);
+            var repository = new GenericRepository<Book>(contextStub);
+
+            Assert.Throws<InvalidOperationException>(() => repository.Get(missingKey));
+        }
+
         [TestCase(2)]
+        [TestCase(3)]
         public void Get_PresentKey_Returns(int presentKey)
         {
-            var repoFake = new FakeRepository<Book>
-            {
-                entities = new Dictionary<int, Book>()
-                {
-                    {1, new Book() },
-                    {2, new Book() },
-                    {3, new Book() }
-                }
-            };
+            var dbSetStub = Substitute.For<DbSet<Book>>();
+            dbSetStub.Find(Arg.Any<int>()).Returns(new Book());
+            var contextStub = Substitute.For<BookStoreContext>();
+            contextStub.Set<Book>().Returns(dbSetStub);
+            var repository = new GenericRepository<Book>(contextStub);
 
-            var result = repoFake.Get(presentKey);
+            var result = repository.Get(presentKey);
 
             Assert.NotNull(result);
+            Assert.IsInstanceOf(typeof(Book), result);
         }
 
         [Test]
-        public void Delete_PresentEntry_Removes()
+        public void Delete_ObjectPassed_ChangesEntryStateToDeleted()
         {
-            var presentEntry = new Book();
-            var repoFake = new FakeRepository<Book>
-            {
-                entities = new Dictionary<int, Book>()
-                {
-                    {1, presentEntry },
-                    {2, new Book() },
-                    {3, new Book() }
-                },
-                throwNotFound = new InvalidOperationException("was not found in the DB")
-            };
+            var dbSetStub = Substitute.For<DbSet<Book>>();
+            var returnedValue = new Book();
+            dbSetStub.Find(Arg.Any<int>()).Returns(returnedValue);
+            var contextStub = Substitute.For<BookStoreContext>();
+            contextStub.Set<Book>().Returns(dbSetStub);
+            var repository = new GenericRepository<Book>(contextStub);
 
-            repoFake.Delete(presentEntry);
+            repository.Delete(returnedValue);
+            var resultState = contextStub.Entry(dbSetStub.Find(1)).State;
 
-            Assert.Throws<InvalidOperationException>(() => repoFake.Get(1));
+            Assert.AreEqual(resultState, EntityState.Deleted);
         }
 
         [Test]
-        public void FindBy_PredicatePassed_Returns()
+        public void Insert_ObjectPassed_CallsContextSetAdd()
         {
-            var repoFake = Substitute.For<IGenericRepository<Entity>>();
-            repoFake.FindBy(Arg.Any<Expression<Func<Entity, bool>>>()).Returns(callinfo => new List<Entity>());
+            var contextMock = Substitute.For<BookStoreContext>();
+            var dbSetStub = Substitute.For<DbSet<Book>>();
+            contextMock.Set<Book>().Returns(dbSetStub);
+            var repository = new GenericRepository<Book>(contextMock);
 
-            var result = repoFake.FindBy(entry => entry.Name == "Any");
+            repository.Insert(new Book());
 
-            Assert.NotNull(result);
+            contextMock.Set<Book>().Received().Add(Arg.Any<Book>());
         }
 
         [Test]
-        public void Insert_ObjectPassed_AddsNew()
+        public void Update_ObjectPassed_CallsContextSetAttach()
         {
-            var repoFake = new FakeRepository<Book>
-            {
-                entities = new Dictionary<int, Book>()
-                {
-                    {1, new Book() },
-                    {2, new Book() },
-                    {3, new Book() }
-                },
-            };
+            var contextMock = Substitute.For<BookStoreContext>();
+            var dbSetStub = Substitute.For<DbSet<Book>>();
+            contextMock.Set<Book>().Returns(dbSetStub);
+            var repository = new GenericRepository<Book>(contextMock);
 
-            repoFake.Insert(new Book());
+            repository.Update(new Book());
 
-            var result = repoFake.Get(repoFake.entities.Count);
-            Assert.NotNull(result);
+            contextMock.Set<Book>().Received().Attach(Arg.Any<Book>());
         }
 
         [Test]
-        public void Update_FoundableObjectPassed_Updates()
+        public void Update_ObjectPassed_ChangesEntryStateToModified()
         {
-            var oldBook = new Book
-            {
-                Name = "Book for Dummies"
-            };
-            var newBook = new Book
-            {
-                Name = "Book for Smarties"
-            };
-            var repoFake = new FakeRepository<Book>
-            {
-                entities = new Dictionary<int, Book>()
-                {
-                    {1, oldBook },
-                    {2, new Book() },
-                    {3, new Book() }
-                },
-            };
+            var bookToUpdate = new Book();
+            var contextStub = Substitute.For<BookStoreContext>();
+            var dbSetStub = Substitute.For<DbSet<Book>>();
+            contextStub.Set<Book>().Returns(dbSetStub);
+            var repository = new GenericRepository<Book>(contextStub);
 
-            repoFake.Update(newBook);
+            repository.Update(bookToUpdate);
+            var resultState = contextStub.Entry(bookToUpdate).State;
 
-            var result = repoFake.Get(1);
-            Assert.AreEqual(result, newBook);
-        }
-    }
-
-    public class FakeRepository<T> : IGenericRepository<T> where T : Entity
-    {
-        public Exception throwNotFound;
-        public Dictionary<int, T> entities;
-        public T toUpdate;
-
-        public T Get(int id)
-        {
-            if (!entities.ContainsKey(id))
-                throw throwNotFound;
-            return entities[id];
-        }
-
-        public void Delete(T entity)
-        {
-            var toDelete = entities.Where(entry => entry.Value == entity).SingleOrDefault();
-            entities.Remove(toDelete.Key);
-        }
-
-        public IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate) { throw new NotImplementedException(); }
-
-        public void Insert(T entity)
-        {
-            entities.Add(entities.Count + 1, entity);
-        }
-
-        public void Update(T entity)
-        {
-            entities[1] = entity;
+            Assert.AreEqual(resultState, EntityState.Modified);
         }
     }
 }
