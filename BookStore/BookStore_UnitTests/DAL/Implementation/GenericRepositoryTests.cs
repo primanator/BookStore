@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -108,6 +109,71 @@ namespace BookStore_UnitTests.DAL.Implementation
             var resultState = contextStub.Entry(bookToUpdate).State;
 
             Assert.AreEqual(resultState, EntityState.Modified);
+        }
+
+        [Test]
+        public void FindBy_PredicatePassed_Returns()
+        {
+            var data = new List<Book>
+            {
+                new Book { Name = "BBB" },
+                new Book { Name = "ZZZ" },
+                new Book { Name = "AAA" }
+            }.AsQueryable();
+
+            var dbSetStub = NSubstituteUtils.CreateMockDbSet(data);
+            dbSetStub.AsNoTracking().Returns(dbSetStub);
+
+            var contextStub = Substitute.For<BookStoreContext>();
+            contextStub.Set<Book>().Returns(dbSetStub);
+            var repository = new GenericRepository<Book>(contextStub);
+
+            var result = repository.FindBy(entry => entry.Name == "ZZZ");
+
+            Assert.NotNull(result);
+            Assert.IsInstanceOf(typeof(IEnumerable<Book>), result);
+        }
+
+        [Test]
+        public void FindBy_PredicatePassed_CallsContextAsNoTracking()
+        {
+            var data = new List<Book>
+            {
+                new Book { Name = "BBB" },
+                new Book { Name = "ZZZ" },
+                new Book { Name = "AAA" }
+            }.AsQueryable();
+
+            var dbSetMock = NSubstituteUtils.CreateMockDbSet(data);
+            dbSetMock.AsNoTracking().Returns(dbSetMock);
+
+            var contextStub = Substitute.For<BookStoreContext>();
+            contextStub.Set<Book>().Returns(dbSetMock);
+            var repository = new GenericRepository<Book>(contextStub);
+
+            var result = repository.FindBy(entry => entry.Name == "ZZZ");
+
+            dbSetMock.Received().AsNoTracking();
+        }
+    }
+
+    public static class NSubstituteUtils
+    {
+        public static DbSet<T> CreateMockDbSet<T>(IEnumerable<T> data = null) where T : class
+        {
+            var dbSetMock = Substitute.For<DbSet<T>, IQueryable<T>>();
+
+            if (data != null)
+            {
+                var queryable = data.AsQueryable();
+
+                ((IQueryable<T>)dbSetMock).Provider.Returns(queryable.Provider);
+                ((IQueryable<T>)dbSetMock).Expression.Returns(queryable.Expression);
+                ((IQueryable<T>)dbSetMock).ElementType.Returns(queryable.ElementType);
+                ((IQueryable<T>)dbSetMock).GetEnumerator().Returns(queryable.GetEnumerator());
+            }
+
+            return dbSetMock;
         }
     }
 }
