@@ -2,7 +2,7 @@
 {
     using EF;
     using Interfaces;
-    using Entities;
+    using DTO.Entities;
     using System;
     using System.Data.Entity;
 

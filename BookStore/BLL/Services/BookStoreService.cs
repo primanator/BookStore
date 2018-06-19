@@ -2,12 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using DTO;
     using Interfaces;
-    using AutoMapper;
     using DAL.Interfaces;
-    using DAL.Entities;
     using System.Linq;
+    using DTO.Entities;
 
     public class BookStoreService : IBookStoreService
     {
@@ -18,16 +16,16 @@
             _unitOfWork = unitOfWork;
         }
 
-        public void CreateBook(BookDto record)
+        public void CreateBook(Book record)
         {
             if (GetSingleBook(record.Name) != null)
                 throw new ArgumentException("Database already contains book with such name.");
 
-            _unitOfWork.GetBookRepository().Insert(Mapper.Map<Book>(record));
+            _unitOfWork.GetBookRepository().Insert(record);
             _unitOfWork.Save();
         }
 
-        public void UpdateBook(BookDto record)
+        public void UpdateBook(Book record)
         {
             var bookToUpdate = GetSingleBook(record.Name);
 
@@ -41,27 +39,27 @@
                 property.SetValue(bookToUpdate, newValue);
             }
 
-            _unitOfWork.GetBookRepository().Update(Mapper.Map<Book>(bookToUpdate));
+            _unitOfWork.GetBookRepository().Update(bookToUpdate);
             _unitOfWork.Save();
         }
 
-        public IEnumerable<BookDto> GetAllBooks()
+        public IEnumerable<Book> GetAllBooks()
         {
-            return Mapper.Map<IEnumerable<BookDto>>(_unitOfWork.GetBookRepository().FindBy(b => true));
+            return _unitOfWork.GetBookRepository().FindBy(book => true);
         }
 
-        public BookDto GetSingleBook(string title)
+        public Book GetSingleBook(string title)
         {
-            return Mapper.Map<BookDto>(_unitOfWork.GetBookRepository().FindBy(b => b.Name == title).SingleOrDefault());
+            return _unitOfWork.GetBookRepository().FindBy(b => b.Name == title).SingleOrDefault();
         }
 
         public void DeleteBook(string title)
         {
-            BookDto bookToDelete = GetSingleBook(title);
+            Book bookToDelete = GetSingleBook(title);
             if (bookToDelete == null)
                 throw new KeyNotFoundException("Database does not contain such book to delete.");
 
-            _unitOfWork.GetBookRepository().Delete(Mapper.Map<Book>(bookToDelete));
+            _unitOfWork.GetBookRepository().Delete(bookToDelete);
             _unitOfWork.Save();
         }
     }

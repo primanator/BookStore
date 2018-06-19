@@ -1,6 +1,6 @@
 ﻿namespace DAL.Interfaces
 {
-    using Entities;
+    using DTO.Entities;
     using System;
 
     public interface IUnitOfWork : IDisposable

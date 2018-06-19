@@ -1,18 +1,17 @@
 ﻿namespace BLL.Interfaces
 {
     using System.Collections.Generic;
-    using System;
-    using DTO;
+    using DTO.Entities;
 
     public interface IBookStoreService
     {
-        void CreateBook(BookDto record);
+        void CreateBook(Book record);
 
-        void UpdateBook(BookDto record);
+        void UpdateBook(Book record);
 
-        IEnumerable<BookDto> GetAllBooks();
+        IEnumerable<Book> GetAllBooks();
 
-        BookDto GetSingleBook(string title);
+        Book GetSingleBook(string title);
 
         void DeleteBook(string title);
     }

@@ -1,7 +1,7 @@
 ﻿namespace DAL.Implementation
 {
     using System;
-    using Entities;
+    using DTO.Entities;
     using EF;
     using System.Collections.Generic;
     using System.Linq.Expressions;

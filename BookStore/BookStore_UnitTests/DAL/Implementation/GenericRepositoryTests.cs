@@ -1,14 +1,12 @@
 ﻿using DAL.EF;
-using DAL.Entities;
+using DTO.Entities;
 using DAL.Implementation;
 using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace BookStore_UnitTests.DAL.Implementation
 {

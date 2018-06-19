@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{5BFA3DE5-5D7B-4357-9978-0FE2452601FE}"
 EndProject
@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{A294
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "BookStore_UnitTests\UnitTests.csproj", "{122E4099-7673-4826-9F8C-441D39125AF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{1825B9AD-0738-421E-83B0-F41F630CD0D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,10 @@ Global
 		{122E4099-7673-4826-9F8C-441D39125AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{122E4099-7673-4826-9F8C-441D39125AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{122E4099-7673-4826-9F8C-441D39125AF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1825B9AD-0738-421E-83B0-F41F630CD0D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1825B9AD-0738-421E-83B0-F41F630CD0D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1825B9AD-0738-421E-83B0-F41F630CD0D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1825B9AD-0738-421E-83B0-F41F630CD0D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

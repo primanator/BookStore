@@ -30,12 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="DAL">
-      <HintPath>..\DAL\bin\Debug\DAL.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -57,23 +51,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\AuthorDTO.cs" />
-    <Compile Include="DTO\BookDTO.cs" />
-    <Compile Include="DTO\CountryDTO.cs" />
-    <Compile Include="DTO\Dto.cs" />
-    <Compile Include="DTO\GenreDTO.cs" />
-    <Compile Include="DTO\LibraryDTO.cs" />
-    <Compile Include="DTO\LiteratureFormDTO.cs" />
-    <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Interfaces\IBookStoreService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BookStoreService.cs" />
-    <Compile Include="Utils\AutomapperConfig.cs" />
     <Compile Include="Utils\ServiceModuleBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{5BFA3DE5-5D7B-4357-9978-0FE2452601FE}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTO\DTO.csproj">
+      <Project>{1825B9AD-0738-421E-83B0-F41F630CD0D7}</Project>
+      <Name>DTO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

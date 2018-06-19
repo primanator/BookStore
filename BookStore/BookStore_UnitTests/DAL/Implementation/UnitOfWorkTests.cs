@@ -1,5 +1,5 @@
 ﻿using DAL.EF;
-using DAL.Entities;
+using DTO.Entities;
 using DAL.Implementation;
 using DAL.Interfaces;
 using NSubstitute;

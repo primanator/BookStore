@@ -1,4 +1,4 @@
-﻿namespace DAL.Entities
+﻿namespace DTO.Entities
 {
     public abstract class Entity
     {

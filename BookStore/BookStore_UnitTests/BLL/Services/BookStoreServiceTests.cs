@@ -1,27 +1,17 @@
-﻿using AutoMapper;
-using BLL.DTO;
-using BLL.Services;
-using DAL.Entities;
+﻿using BLL.Services;
 using DAL.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using DTO.Entities;
 
 namespace BookStore_UnitTests.BLL.Services
 {
     [TestFixture]
     public class BookStoreServiceTests
     {
-        public BookStoreServiceTests()
-        {
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfiles("BLL");
-            });
-        }
-
         [Test]
         public void CreateBook_ExistingBook_Throws()
         {
@@ -33,7 +23,7 @@ namespace BookStore_UnitTests.BLL.Services
                 });
             var bookStoreService = new BookStoreService(unitOfWorkStub);
 
-            Assert.Throws<ArgumentException>(() => bookStoreService.CreateBook(new BookDto()));
+            Assert.Throws<ArgumentException>(() => bookStoreService.CreateBook(new Book()));
         }
 
         [Test]
@@ -44,7 +34,7 @@ namespace BookStore_UnitTests.BLL.Services
             unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreService.CreateBook(new BookDto());
+            bookStoreService.CreateBook(new Book());
 
             unitOfWorkMock.GetBookRepository().Received().Insert(Arg.Any<Book>());
         }
@@ -57,7 +47,7 @@ namespace BookStore_UnitTests.BLL.Services
             unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreService.CreateBook(new BookDto());
+            bookStoreService.CreateBook(new Book());
 
             unitOfWorkMock.Received().Save();
         }
@@ -83,7 +73,7 @@ namespace BookStore_UnitTests.BLL.Services
             var result = bookStoreService.GetAllBooks();
 
             Assert.NotNull(result);
-            Assert.IsInstanceOf(typeof(IEnumerable<BookDto>), result);
+            Assert.IsInstanceOf(typeof(IEnumerable<Book>), result);
         }
 
         [Test]
@@ -143,7 +133,7 @@ namespace BookStore_UnitTests.BLL.Services
             var result = bookStoreService.GetSingleBook("Anything");
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof(BookDto), result);
+            Assert.IsInstanceOf(typeof(Book), result);
         }
 
         [Test]
@@ -154,7 +144,7 @@ namespace BookStore_UnitTests.BLL.Services
             unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookStoreService(unitOfWorkStub);
 
-            Assert.Throws<ArgumentException>(() => bookStoreService.UpdateBook(new BookDto()));
+            Assert.Throws<ArgumentException>(() => bookStoreService.UpdateBook(new Book()));
         }
 
         [Test]
@@ -168,7 +158,7 @@ namespace BookStore_UnitTests.BLL.Services
                 });
             var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreService.UpdateBook(new BookDto());
+            bookStoreService.UpdateBook(new Book());
 
             unitOfWorkMock.GetBookRepository().Received().Update(Arg.Any<Book>());
         }
@@ -184,7 +174,7 @@ namespace BookStore_UnitTests.BLL.Services
                 });
             var bookStoreService = new BookStoreService(unitOfWorkMock);
 
-            bookStoreService.UpdateBook(new BookDto());
+            bookStoreService.UpdateBook(new Book());
 
             unitOfWorkMock.Received().Save();
         }

@@ -5,6 +5,7 @@
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
+    using DTO.Entities;
 
     internal class BookStoreClient : IDisposable
     {
@@ -109,7 +110,7 @@
                 case "post":
                     {
                         Console.WriteLine("Create new book for library.");
-                        var newBook = Book.GetBookFromUserInput();
+                        var newBook = GetBookFromUserInput();
 
                         var result = await PostNewBookAsync(newBook);
                         Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
@@ -123,7 +124,7 @@
                         var bookToUpdate = await GetBookByTitleAsync(title);
                         if (bookToUpdate != null)
                         {
-                            Book.CopyBookWithUserUpdates(bookToUpdate);
+                            CopyBookWithUserUpdates(bookToUpdate);
                             var result = await PutUpdateBookAsync(bookToUpdate);
                             Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
                         }
@@ -147,6 +148,45 @@
                         break;
                     }
             }
+        }
+
+        public static Book GetBookFromUserInput()
+        {
+            Book newBook = new Book();
+
+            var properties = newBook.GetType().GetProperties();
+
+            foreach (var prop in properties)
+            {
+                if (prop.Name != "Id" && prop.Name != "LibraryId")
+                {
+                    Console.WriteLine("Please enter book's {0}", prop.Name);
+                    var userValue = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(userValue))
+                        prop.SetValue(newBook, Convert.ChangeType(userValue, prop.PropertyType));
+                }
+            }
+
+            newBook.LibraryId = 1;
+            return newBook;
+        }
+
+        public static Book CopyBookWithUserUpdates(Book bookToCopy)
+        {
+            var properties = bookToCopy.GetType().GetProperties();
+
+            foreach (var prop in properties)
+            {
+                if (prop.Name != "Id" && prop.Name != "Name" && prop.Name != "LibraryId")
+                {
+                    Console.WriteLine("Please enter book's {0}", prop.Name);
+                    var userValue = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(userValue))
+                        prop.SetValue(bookToCopy, Convert.ChangeType(userValue, prop.PropertyType));
+                }
+            }
+
+            return bookToCopy;
         }
     }
 }

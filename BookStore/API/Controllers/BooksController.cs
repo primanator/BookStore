@@ -5,10 +5,8 @@
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
-    using Models;
+    using DTO.Entities;
     using BLL.Interfaces;
-    using BLL.DTO;
-    using AutoMapper;
 
     public class BooksController : ApiController
     {
@@ -19,14 +17,14 @@
             _service = service;
         }
 
-        public IHttpActionResult PostCreateBook(BookModel newBook)
+        public IHttpActionResult PostCreateBook(Book newBook)
         {
             if (!ModelState.IsValid || newBook == null)
                 return BadRequest("Invalid model state");
 
             try
             {
-                _service.CreateBook(Mapper.Map<BookDto>(newBook));
+                _service.CreateBook(newBook);
             }
             catch (Exception e)
             {
@@ -38,11 +36,11 @@
 
         public IHttpActionResult GetAllBooks()
         {
-            IEnumerable<BookModel> books = null;
+            IEnumerable<Book> books = null;
 
             try
             {
-                books = Mapper.Map<IEnumerable<BookModel>>(_service.GetAllBooks());
+                books = _service.GetAllBooks();
             }
             catch (Exception e)
             {
@@ -57,11 +55,12 @@
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Parameter's value is empty.");
 
-            BookModel book = null;
+            Book book = null;
 
             try
             {
-                book = Mapper.Map<BookModel>(_service.GetSingleBook(name));
+                book = _service.GetSingleBook(name);
+                DeleteBookByName(name);
             }
             catch (Exception e)
             {
@@ -71,14 +70,14 @@
             return Ok(book);
         }
 
-        public IHttpActionResult PutUpdateBook(BookModel freshBook)
+        public IHttpActionResult PutUpdateBook(Book freshBook)
         {
             if (!ModelState.IsValid || freshBook == null)
                 return BadRequest("Invalid model state");
 
             try
             {
-                _service.UpdateBook(Mapper.Map<BookDto>(freshBook));
+                _service.UpdateBook(freshBook);
             }
             catch (Exception e)
             {

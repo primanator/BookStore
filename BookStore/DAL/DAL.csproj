@@ -51,14 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EF\BookStoreContext.cs" />
-    <Compile Include="Entities\Author.cs" />
-    <Compile Include="Entities\Book.cs" />
-    <Compile Include="Entities\Country.cs" />
-    <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\Genre.cs" />
-    <Compile Include="Entities\Library.cs" />
-    <Compile Include="Entities\LiteratureForm.cs" />
-    <Compile Include="Entities\User.cs" />
     <Compile Include="Implementation\GenericRepository.cs" />
     <Compile Include="Implementation\UnitOfWork.cs" />
     <Compile Include="Interfaces\IGenericRepository.cs" />
@@ -101,6 +93,11 @@
       <DependentUpon>201804041256371_ChangeBookWrittenInType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DTO\DTO.csproj">
+      <Project>{1825B9AD-0738-421E-83B0-F41F630CD0D7}</Project>
+      <Name>DTO</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

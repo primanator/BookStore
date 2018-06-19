@@ -1,4 +1,4 @@
-﻿namespace DAL.Entities
+﻿namespace DTO.Entities
 {
     using System;
     using System.Collections.Generic;
