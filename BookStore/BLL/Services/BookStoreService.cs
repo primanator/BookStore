@@ -32,12 +32,7 @@
             if (bookToUpdate == null)
                 throw new ArgumentException("Database does not contain such book to update.");
 
-            var type = bookToUpdate.GetType();
-            foreach (var property in type.GetProperties())
-            {
-                var newValue = type.GetProperty(property.Name)?.GetValue(record);
-                property.SetValue(bookToUpdate, newValue);
-            }
+            bookToUpdate.SelfUpdate<Book>(record);
 
             _unitOfWork.GetBookRepository().Update(bookToUpdate);
             _unitOfWork.Save();
