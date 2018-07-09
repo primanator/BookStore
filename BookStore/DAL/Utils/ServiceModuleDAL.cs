@@ -8,7 +8,7 @@
     {
         public override void Load()
         {
-            Bind(typeof(BookStoreContext)).To(typeof(DbContext));
+            Bind<DbContext>().To<BookStoreContext>();
         }
     }
 }
