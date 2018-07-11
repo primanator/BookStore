@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
-namespace BookStore_UnitTests.DAL.Implementation
+namespace UnitTests.DAL.Implementation
 {
     [TestFixture]
     public class GenericRepositoryTests

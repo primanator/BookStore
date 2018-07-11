@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using DTO.Entities;
 
-namespace BookStore_UnitTests.BLL.Services
+namespace UnitTests.BLL.Services
 {
     [TestFixture]
     public class BookStoreServiceTests

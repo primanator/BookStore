@@ -8,7 +8,7 @@ using NSubstitute;
 using NUnit.Framework;
 using DTO.Entities;
 
-namespace BookStore_UnitTests.API.Controllers
+namespace UnitTests.API.Controllers
 {
     [TestFixture]
     public class BooksControllerTests

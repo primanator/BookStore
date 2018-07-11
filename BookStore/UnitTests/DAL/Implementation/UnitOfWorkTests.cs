@@ -7,7 +7,7 @@ using NUnit.Framework;
 using System;
 using System.Data.Entity;
 
-namespace BookStore_UnitTests.DAL.Implementation
+namespace UnitTests.DAL.Implementation
 {
     [TestFixture]
     public class UnitOfWorkTests
