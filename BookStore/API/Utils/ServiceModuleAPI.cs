@@ -8,7 +8,8 @@
     {
         public override void Load()
         {
-            Bind<IBookStoreService>().To<BookStoreService>();
+            Bind<IBookService>().To<BookService>();
+            Bind<IDocumentService>().To<DocumentService>();
         }
     }
 }

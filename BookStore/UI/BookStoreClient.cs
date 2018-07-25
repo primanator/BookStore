@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
@@ -65,10 +66,33 @@
             return await _response.Content.ReadAsStringAsync();
         }
 
+        private async Task<string> PostDocument(FileInfo file)
+        {
+            HttpContent fileStreamContent = null;
+            try
+            {
+                fileStreamContent = new StreamContent(file.OpenRead());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return "runtime error occured";
+            }
+
+            using (var formData = new MultipartFormDataContent())
+            {
+                formData.Add(fileStreamContent, "importDocument", file.Name);
+                _response = await _client.PostAsync("api/documents", formData);
+            }
+            CheckResponse();
+
+            return await _response.Content.ReadAsStringAsync();
+        }
+
         private void CheckResponse()
         {
             if (!_response.IsSuccessStatusCode)
-                throw new HttpRequestException("Request returned with failed status code: " + _response.StatusCode);
+                Console.WriteLine("Request returned with failed status code: " + _response.StatusCode);
         }
 
         public void Dispose()
@@ -78,7 +102,6 @@
 
         public async Task SendRequestAsync(string httpVerb)
         {
-
             switch (httpVerb.ToLowerInvariant())
             {
                 case "get":
@@ -113,7 +136,29 @@
                         var newBook = GetBookFromUserInput();
 
                         var result = await PostNewBookAsync(newBook);
-                        Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
+                        Console.WriteLine("Operation result is: " + (string.IsNullOrEmpty(result) ? "succesfull" : result));
+                        break;
+                    }
+                case "import":
+                    {
+                        Console.WriteLine("Enter path to the .xlsx file you want to import: ");
+                        var path = Console.ReadLine();
+
+                        FileInfo toImport = null;
+                        try
+                        {
+                            toImport = new FileInfo(path);
+                            if (toImport.Extension != "xlsx")
+                                throw new ArgumentException("Input file is not in .xlsx format.");
+                        }
+                        catch(Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                            break;
+                        }
+
+                        var result = await PostDocument(toImport);
+                        Console.WriteLine("Operation result is: " + (string.IsNullOrEmpty(result) ? "succesfull" : result));
                         break;
                     }
                 case "put":
@@ -126,7 +171,7 @@
                         {
                             CopyBookWithUserUpdates(bookToUpdate);
                             var result = await PutUpdateBookAsync(bookToUpdate);
-                            Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
+                            Console.WriteLine("Operation result is: " + (string.IsNullOrEmpty(result) ? "succesfull" : result));
                         }
                         else
                             Console.WriteLine("There is no such book in the library.");
@@ -139,7 +184,7 @@
                         string toDelete = Console.ReadLine();
 
                         var result = await DeleteBookAsync(toDelete);
-                        Console.WriteLine(string.IsNullOrEmpty(result) ? "Operation was succesfull." : result);
+                        Console.WriteLine("Operation result is: " + (string.IsNullOrEmpty(result) ? "succesfull" : result));
                         break;
                     }
                 default:

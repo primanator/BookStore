@@ -9,7 +9,7 @@
         {
             while (true)
             {
-                Console.WriteLine("Enter Http method:");
+                Console.WriteLine("Enter command (get/post/put/delete/import):");
 
                 using (BookStoreClient client = new BookStoreClient(new Uri("http://localhost:50402/"),
                     new[] { new MediaTypeWithQualityHeaderValue("application/json") }))

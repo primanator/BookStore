@@ -2,19 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
     using System.Web.Http;
     using DTO.Entities;
     using BLL.Interfaces;
+    using API.Utils;
 
     public class BooksController : ApiController
     {
-        private readonly IBookStoreService _service;
+        private readonly IBookService _bookService;
 
-        public BooksController(IBookStoreService service)
+        public BooksController(IBookService service)
         {
-            _service = service;
+            _bookService = service;
         }
 
         public IHttpActionResult PostCreateBook(Book newBook)
@@ -24,11 +23,11 @@
 
             try
             {
-                _service.CreateBook(newBook);
+                _bookService.Create(newBook);
             }
             catch (Exception e)
             {
-                throw new HttpResponseException(InternalErrorMessage(e.Message));
+                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
             }
 
             return Ok();
@@ -40,11 +39,11 @@
 
             try
             {
-                books = _service.GetAllBooks();
+                books = _bookService.GetAll();
             }
             catch (Exception e)
             {
-                throw new HttpResponseException(InternalErrorMessage(e.Message));
+                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
             }
 
             return Ok(books);
@@ -59,12 +58,12 @@
 
             try
             {
-                book = _service.GetSingleBook(name);
+                book = _bookService.GetSingle(name);
                 DeleteBookByName(name);
             }
             catch (Exception e)
             {
-                throw new HttpResponseException(InternalErrorMessage(e.Message));
+                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
             }
 
             return Ok(book);
@@ -77,11 +76,11 @@
 
             try
             {
-                _service.UpdateBook(freshBook);
+                _bookService.Update(freshBook);
             }
             catch (Exception e)
             {
-                throw new HttpResponseException(InternalErrorMessage(e.Message));
+                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
             }
 
             return Ok();
@@ -94,24 +93,14 @@
 
             try
             {
-                _service.DeleteBook(name);
+                _bookService.Delete(name);
             }
             catch (Exception e)
             {
-                throw new HttpResponseException(InternalErrorMessage(e.Message));
+                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
             }
 
             return Ok();
-        }
-
-        private HttpResponseMessage InternalErrorMessage(string message)
-        {
-            return new HttpResponseMessage
-            {
-                Content = new StringContent(message),
-                ReasonPhrase = "Server exception.",
-                StatusCode = HttpStatusCode.BadRequest
-            };
         }
     }
 }

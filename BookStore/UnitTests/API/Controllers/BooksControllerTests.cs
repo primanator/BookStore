@@ -17,7 +17,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void PostCreateBook_NewBookIsNull_BadRequest()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
+            var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
             var result = booksController.PostCreateBook(null);
@@ -28,19 +28,19 @@ namespace UnitTests.API.Controllers
         [Test]
         public void PostCreateBook_NewBook_CallsService()
         {
-            var serviceMock = Substitute.For<IBookStoreService>();
+            var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
             booksController.PostCreateBook(new Book());
 
-            serviceMock.Received().CreateBook(Arg.Any<Book>());
+            serviceMock.Received().Create(Arg.Any<Book>());
         }
 
         [Test]
         public void PostCreateBook_ServiceThrows_Throws()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
-            serviceStub.When(service => service.CreateBook(Arg.Any<Book>()))
+            var serviceStub = Substitute.For<IBookService>();
+            serviceStub.When(service => service.Create(Arg.Any<Book>()))
                 .Do(callback =>
                 {
                     throw new Exception();
@@ -53,7 +53,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void PostCreateBook_NewBook_OkResult()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
+            var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
             var result = booksController.PostCreateBook(new Book());
@@ -64,19 +64,19 @@ namespace UnitTests.API.Controllers
         [Test]
         public void GetAllBooks_Called_CallsService()
         {
-            var serviceMock = Substitute.For<IBookStoreService>();
+            var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
             booksController.GetAllBooks();
 
-            serviceMock.Received().GetAllBooks();
+            serviceMock.Received().GetAll();
         }
 
         [Test]
         public void GetAllBooks_ServiceThrows_Throws()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
-            serviceStub.When(service => service.GetAllBooks())
+            var serviceStub = Substitute.For<IBookService>();
+            serviceStub.When(service => service.GetAll())
                 .Do(callback =>
                 {
                     throw new Exception();
@@ -89,7 +89,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void GetAllBooks_Called_OkResultWithEnumerable()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
+            var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
             var result = booksController.GetAllBooks();
@@ -100,7 +100,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void GetBookByName_NullPassed_BadRequest()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
+            var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
             var result = booksController.GetBookByName(null);
@@ -111,7 +111,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void GetBookByName_EmptyStringPassed_BadRequest()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
+            var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
             var result = booksController.GetBookByName("");
@@ -122,19 +122,19 @@ namespace UnitTests.API.Controllers
         [Test]
         public void GetBookByName_CorrectStringPassed_CallsService()
         {
-            var serviceMock = Substitute.For<IBookStoreService>();
+            var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
             booksController.GetBookByName("AnyBookName");
 
-            serviceMock.Received().GetSingleBook(Arg.Any<string>());
+            serviceMock.Received().GetSingle(Arg.Any<string>());
         }
 
         [Test]
         public void GetBookByName_ServiceThrows_Throws()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
-            serviceStub.When(service => service.GetSingleBook(Arg.Any<string>()))
+            var serviceStub = Substitute.For<IBookService>();
+            serviceStub.When(service => service.GetSingle(Arg.Any<string>()))
                 .Do(callback =>
                 {
                     throw new Exception();
@@ -147,7 +147,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void GetBookByName_CorrectStringPassed_OkResultWithValue()
         {
-            var serviceMock = Substitute.For<IBookStoreService>();
+            var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
             var result = booksController.GetBookByName("AnyBookName");
@@ -158,7 +158,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void PutUpdateBook_BookIsNull_BadRequest()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
+            var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
             var result = booksController.PutUpdateBook(null);
@@ -169,19 +169,19 @@ namespace UnitTests.API.Controllers
         [Test]
         public void PutUpdateBook_BookPassed_CallsService()
         {
-            var serviceMock = Substitute.For<IBookStoreService>();
+            var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
             booksController.PutUpdateBook(new Book());
 
-            serviceMock.Received().UpdateBook(Arg.Any<Book>());
+            serviceMock.Received().Update(Arg.Any<Book>());
         }
 
         [Test]
         public void PutUpdateBook_ServiceThrows_Throws()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
-            serviceStub.When(service => service.UpdateBook(Arg.Any<Book>()))
+            var serviceStub = Substitute.For<IBookService>();
+            serviceStub.When(service => service.Update(Arg.Any<Book>()))
                 .Do(callback =>
                 {
                     throw new Exception();
@@ -194,7 +194,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void PutUpdateBook_BookPassed_OkResult()
         {
-            var serviceMock = Substitute.For<IBookStoreService>();
+            var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
             var result = booksController.PutUpdateBook(new Book());
@@ -205,7 +205,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void DeleteBookByName_NullPassed_BadRequest()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
+            var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
             var result = booksController.DeleteBookByName(null);
@@ -216,7 +216,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void DeleteBookByName_EmptyStringPassed_BadRequest()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
+            var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
             var result = booksController.DeleteBookByName("");
@@ -227,19 +227,19 @@ namespace UnitTests.API.Controllers
         [Test]
         public void DeleteBookByName_CorrectStringPassed_CallsService()
         {
-            var serviceMock = Substitute.For<IBookStoreService>();
+            var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
             booksController.DeleteBookByName("AnyBookName");
 
-            serviceMock.Received().DeleteBook(Arg.Any<string>());
+            serviceMock.Received().Delete(Arg.Any<string>());
         }
 
         [Test]
         public void DeleteBookByName_ServiceThrows_Throws()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
-            serviceStub.When(service => service.DeleteBook(Arg.Any<string>()))
+            var serviceStub = Substitute.For<IBookService>();
+            serviceStub.When(service => service.Delete(Arg.Any<string>()))
                 .Do(callback =>
                 {
                     throw new Exception();
@@ -252,7 +252,7 @@ namespace UnitTests.API.Controllers
         [Test]
         public void DeleteBookByName_CorrectStringPassed_OkResult()
         {
-            var serviceStub = Substitute.For<IBookStoreService>();
+            var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
             var result = booksController.DeleteBookByName("AnyBookName");
