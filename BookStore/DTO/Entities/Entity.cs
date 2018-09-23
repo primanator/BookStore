@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Reflection;
 
 namespace DTO.Entities
 {
@@ -13,13 +13,18 @@ namespace DTO.Entities
             return string.Format("{0} - {1}", GetType().Name, Id);
         }
 
+        private PropertyInfo[] _cashedProperties;
+
         public void SelfUpdate<T>(T toUpdateWith) where T : Entity
         {
-            var ownType = this.GetType();
-
-            foreach (var property in ownType.GetProperties())
+            if (_cashedProperties == null)
             {
-                var newValue = ownType.GetProperty(property.Name)?.GetValue(toUpdateWith);
+                _cashedProperties = GetType().GetProperties();
+            }
+
+            foreach (var property in _cashedProperties)
+            {
+                var newValue = property.GetValue(toUpdateWith);
                 if (property.GetValue(this) != newValue)
                     property.SetValue(this, newValue);
             }
