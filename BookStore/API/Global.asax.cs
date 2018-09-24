@@ -1,5 +1,6 @@
 ﻿namespace API
 {
+    using AutoMapper;
     using Utils;
     using System.Web.Http;
 
@@ -9,6 +10,11 @@
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             GlobalConfiguration.Configuration.Filters.Add(new NotImplementedExceptionFilterAttribute());
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfiles("DAL");
+            });
         }
     }
 }

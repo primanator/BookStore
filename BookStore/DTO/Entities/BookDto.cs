@@ -3,12 +3,12 @@
     using System;
     using System.Collections.Generic;
 
-    public class Book : Entity
+    public class BookDto : EntityDto
     {
-        public Book()
+        public BookDto()
         {
-            Authors = new HashSet<Author>();
-            Genres = new HashSet<Genre>();
+            Authors = new HashSet<AuthorDto>();
+            Genres = new HashSet<GenreDto>();
         }
 
         public string Isbn { get; set; }
@@ -17,10 +17,10 @@
         public DateTime WrittenIn { get; set; }
 
         public int LibraryId { get; set; }
-        public virtual Library Library { get; set; }
+        public LibraryDto Library { get; set; }
 
-        public virtual ICollection<Author> Authors { get; set; }
+        public ICollection<AuthorDto> Authors { get; set; }
 
-        public virtual ICollection<Genre> Genres { get; set; }
+        public ICollection<GenreDto> Genres { get; set; }
     }
 }

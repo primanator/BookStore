@@ -16,45 +16,47 @@
             _unitOfWork = unitOfWork;
         }
 
-        public void Create(Book record)
+        public void Create(BookDto record)
         {
             if (GetSingle(record.Name) != null)
                 throw new ArgumentException("Database already contains book with such name.");
 
-            _unitOfWork.GetBookRepository().Insert(record);
+            //_unitOfWork.GetBookRepository().Insert(record);
             _unitOfWork.Save();
         }
 
-        public void Update(Book record)
+        public void Update(BookDto record)
         {
             var bookToUpdate = GetSingle(record.Name);
 
             if (bookToUpdate == null)
                 throw new ArgumentException("Database does not contain such book to update.");
 
-            bookToUpdate.SelfUpdate<Book>(record);
+            bookToUpdate.SelfUpdate<BookDto>(record);
 
-            _unitOfWork.GetBookRepository().Update(bookToUpdate);
+            //_unitOfWork.GetBookRepository().Update(bookToUpdate);
             _unitOfWork.Save();
         }
 
-        public IEnumerable<Book> GetAll()
+        public IEnumerable<BookDto> GetAll()
         {
-            return _unitOfWork.GetBookRepository().FindBy(book => true);
+            return null;
+            //return _unitOfWork.GetBookRepository().FindBy(book => true);
         }
 
-        public Book GetSingle(string title)
+        public BookDto GetSingle(string title)
         {
-            return _unitOfWork.GetBookRepository().FindBy(b => b.Name == title).SingleOrDefault();
+            return null;
+            //return _unitOfWork.GetBookRepository().FindBy(b => b.Name == title).SingleOrDefault();
         }
 
         public void Delete(string title)
         {
-            Book bookToDelete = GetSingle(title);
+            BookDto bookToDelete = GetSingle(title);
             if (bookToDelete == null)
                 throw new KeyNotFoundException("Database does not contain such book to delete.");
 
-            _unitOfWork.GetBookRepository().Delete(bookToDelete);
+            //_unitOfWork.GetBookRepository().Delete(bookToDelete);
             _unitOfWork.Save();
         }
     }

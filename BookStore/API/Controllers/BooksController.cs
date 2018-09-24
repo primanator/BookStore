@@ -16,7 +16,7 @@
             _bookService = service;
         }
 
-        public IHttpActionResult PostCreateBook(Book newBook)
+        public IHttpActionResult PostCreateBook(BookDto newBook)
         {
             if (!ModelState.IsValid || newBook == null)
                 return BadRequest("Invalid model state");
@@ -35,7 +35,7 @@
 
         public IHttpActionResult GetAllBooks()
         {
-            IEnumerable<Book> books = null;
+            IEnumerable<BookDto> books = null;
 
             try
             {
@@ -54,7 +54,7 @@
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Parameter's value is empty.");
 
-            Book book = null;
+            BookDto book = null;
 
             try
             {
@@ -69,7 +69,7 @@
             return Ok(book);
         }
 
-        public IHttpActionResult PutUpdateBook(Book freshBook)
+        public IHttpActionResult PutUpdateBook(BookDto freshBook)
         {
             if (!ModelState.IsValid || freshBook == null)
                 return BadRequest("Invalid model state");

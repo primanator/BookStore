@@ -1,6 +1,6 @@
 ﻿namespace DAL.Utils
 {
-    using DAL.EF;
+    using EF;
     using Ninject.Modules;
     using System.Data.Entity;
 

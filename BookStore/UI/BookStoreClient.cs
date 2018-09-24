@@ -26,23 +26,23 @@
                 _client.DefaultRequestHeaders.Accept.Add(header);
         }
 
-        private async Task<Book[]> GetAllBooksAsync()
+        private async Task<BookDto[]> GetAllBooksAsync()
         {
             _response = await _client.GetAsync("api/books");
             CheckResponse();
 
-            return await _response.Content.ReadAsAsync<Book[]>();
+            return await _response.Content.ReadAsAsync<BookDto[]>();
         }
 
-        private async Task<Book> GetBookByTitleAsync(string title)
+        private async Task<BookDto> GetBookByTitleAsync(string title)
         {
             _response = await _client.GetAsync("api/books?name=" + title);
             CheckResponse();
 
-            return await _response.Content.ReadAsAsync<Book>();
+            return await _response.Content.ReadAsAsync<BookDto>();
         }
 
-        private async Task<string> PostNewBookAsync(Book newBook)
+        private async Task<string> PostNewBookAsync(BookDto newBook)
         {
             _response = await _client.PostAsJsonAsync("api/books", newBook);
             CheckResponse();
@@ -50,7 +50,7 @@
             return await _response.Content.ReadAsStringAsync();
         }
 
-        private async Task<string> PutUpdateBookAsync(Book newBook)
+        private async Task<string> PutUpdateBookAsync(BookDto newBook)
         {
             _response = await _client.PutAsJsonAsync("api/books", newBook);
             CheckResponse();
@@ -111,7 +111,7 @@
 
                         if (string.IsNullOrEmpty(name))
                         {
-                            Book[] books = await GetAllBooksAsync();
+                            BookDto[] books = await GetAllBooksAsync();
                             if (books != null)
                                 foreach (var book in books)
                                     Console.WriteLine("\nId:{0}\tName:{1}\tIsbn:{2}\tPages:{3}\tLimitedEdition:{4}", book.Id, book.Name,
@@ -121,7 +121,7 @@
                         }
                         else
                         {
-                            Book book = await GetBookByTitleAsync(name);
+                            BookDto book = await GetBookByTitleAsync(name);
                             if (book != null)
                                 Console.WriteLine("\nId:{0}\tName:{1}\tIsbn:{2}\tPages:{3}\tLimitedEdition:{4}", book.Id, book.Name,
                                     book.Isbn, book.Pages, book.LimitedEdition);
@@ -195,9 +195,9 @@
             }
         }
 
-        public static Book GetBookFromUserInput()
+        public static BookDto GetBookFromUserInput()
         {
-            Book newBook = new Book();
+            BookDto newBook = new BookDto();
 
             var properties = newBook.GetType().GetProperties();
 
@@ -216,7 +216,7 @@
             return newBook;
         }
 
-        public static Book CopyBookWithUserUpdates(Book bookToCopy)
+        public static BookDto CopyBookWithUserUpdates(BookDto bookToCopy)
         {
             var properties = bookToCopy.GetType().GetProperties();
 

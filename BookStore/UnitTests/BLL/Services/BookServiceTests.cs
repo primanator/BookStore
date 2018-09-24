@@ -16,38 +16,38 @@ namespace UnitTests.BLL.Services
         public void CreateBook_ExistingBook_Throws()
         {
             var unitOfWorkStub = Substitute.For<IUnitOfWork>();
-            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
-                .Returns(new List<Book>
+            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+                .Returns(new List<BookDto>
                 {
-                    new Book()
+                    new BookDto()
                 });
             var bookStoreService = new BookService(unitOfWorkStub);
 
-            Assert.Throws<ArgumentException>(() => bookStoreService.Create(new Book()));
+            Assert.Throws<ArgumentException>(() => bookStoreService.Create(new BookDto()));
         }
 
         [Test]
         public void CreateBook_NewBook_CallsRepository()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            List<Book> returnedValue = new List<Book>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
+            List<BookDto> returnedValue = new List<BookDto>();
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookService(unitOfWorkMock);
 
-            bookStoreService.Create(new Book());
+            bookStoreService.Create(new BookDto());
 
-            unitOfWorkMock.GetBookRepository().Received().Insert(Arg.Any<Book>());
+            unitOfWorkMock.GetBookRepository().Received().Insert(Arg.Any<BookDto>());
         }
 
         [Test]
         public void CreateBook_NewBook_CallsUnitOfWorkSave()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            List<Book> returnedValue = new List<Book>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
+            List<BookDto> returnedValue = new List<BookDto>();
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookService(unitOfWorkMock);
 
-            bookStoreService.Create(new Book());
+            bookStoreService.Create(new BookDto());
 
             unitOfWorkMock.Received().Save();
         }
@@ -60,28 +60,28 @@ namespace UnitTests.BLL.Services
 
             bookStoreService.GetAll();
 
-            unitOfWorkMock.GetBookRepository().Received().FindBy(Arg.Any<Expression<Func<Book, bool>>>());
+            unitOfWorkMock.GetBookRepository().Received().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>());
         }
 
         [Test]
         public void GetAllBooks_Called_Returns()
         {
             var unitOfWorkFake = Substitute.For<IUnitOfWork>();
-            unitOfWorkFake.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(new List<Book>());
+            unitOfWorkFake.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(new List<BookDto>());
             var bookStoreService = new BookService(unitOfWorkFake);
 
             var result = bookStoreService.GetAll();
 
             Assert.NotNull(result);
-            Assert.IsInstanceOf(typeof(IEnumerable<Book>), result);
+            Assert.IsInstanceOf(typeof(IEnumerable<BookDto>), result);
         }
 
         [Test]
         public void DeleteBook_MissingBook_Throws()
         {
-            List<Book> returnedValue = new List<Book>();
+            List<BookDto> returnedValue = new List<BookDto>();
             var unitOfWorkStub = Substitute.For<IUnitOfWork>();
-            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
+            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookService(unitOfWorkStub);
 
             Assert.Throws<KeyNotFoundException>(() => bookStoreService.Delete("Anything"));
@@ -91,26 +91,26 @@ namespace UnitTests.BLL.Services
         public void DeleteBook_ExistingBook_CallsRepository()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
-                .Returns(new List<Book>
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+                .Returns(new List<BookDto>
                 {
-                    new Book()
+                    new BookDto()
                 });
             var bookStoreService = new BookService(unitOfWorkMock);
 
             bookStoreService.Delete("Anything");
 
-            unitOfWorkMock.GetBookRepository().Received().Delete(Arg.Any<Book>());
+            unitOfWorkMock.GetBookRepository().Received().Delete(Arg.Any<BookDto>());
         }
 
         [Test]
         public void DeleteBook_ExistingBook_CallsUnitOfWorkSave()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
-                .Returns(new List<Book>
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+                .Returns(new List<BookDto>
                 {
-                    new Book()
+                    new BookDto()
                 });
             var bookStoreService = new BookService(unitOfWorkMock);
 
@@ -123,58 +123,58 @@ namespace UnitTests.BLL.Services
         public void GetSingleBook_Called_Returns()
         {
             var unitOfWorkStub = Substitute.For<IUnitOfWork>();
-            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
-                .Returns(new List<Book>
+            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+                .Returns(new List<BookDto>
                 {
-                    new Book()
+                    new BookDto()
                 });
             var bookStoreService = new BookService(unitOfWorkStub);
 
             var result = bookStoreService.GetSingle("Anything");
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof(Book), result);
+            Assert.IsInstanceOf(typeof(BookDto), result);
         }
 
         [Test]
         public void UpdateBook_NewBook_Throws()
         {
-            List<Book> returnedValue = new List<Book>();
+            List<BookDto> returnedValue = new List<BookDto>();
             var unitOfWorkStub = Substitute.For<IUnitOfWork>();
-            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>()).Returns(returnedValue);
+            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookService(unitOfWorkStub);
 
-            Assert.Throws<ArgumentException>(() => bookStoreService.Update(new Book()));
+            Assert.Throws<ArgumentException>(() => bookStoreService.Update(new BookDto()));
         }
 
         [Test]
         public void UpdateBook_ExistingBook_CallsRepository()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
-                .Returns(new List<Book>
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+                .Returns(new List<BookDto>
                 {
-                    new Book()
+                    new BookDto()
                 });
             var bookStoreService = new BookService(unitOfWorkMock);
 
-            bookStoreService.Update(new Book());
+            bookStoreService.Update(new BookDto());
 
-            unitOfWorkMock.GetBookRepository().Received().Update(Arg.Any<Book>());
+            unitOfWorkMock.GetBookRepository().Received().Update(Arg.Any<BookDto>());
         }
 
         [Test]
         public void UpdateBook_ExistingBook_CallsUnitOfWorkSave()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<Book, bool>>>())
-                .Returns(new List<Book>
+            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+                .Returns(new List<BookDto>
                 {
-                    new Book()
+                    new BookDto()
                 });
             var bookStoreService = new BookService(unitOfWorkMock);
 
-            bookStoreService.Update(new Book());
+            bookStoreService.Update(new BookDto());
 
             unitOfWorkMock.Received().Save();
         }

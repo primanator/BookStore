@@ -2,9 +2,9 @@
 {
     using System;
     using System.Linq.Expressions;
-    using DTO.Entities;
+    using Entities;
 
-    public class DtoFilterBuilder<T> where T: Entity
+    public class DtoFilterBuilder<T> where T: EntityDto
     {
         protected Expression<Func<T, bool>> _toBuild;
 

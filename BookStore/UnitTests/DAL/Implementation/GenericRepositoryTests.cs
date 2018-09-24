@@ -1,5 +1,4 @@
 ﻿using DAL.EF;
-using DTO.Entities;
 using DAL.Implementation;
 using NSubstitute;
 using NUnit.Framework;
@@ -7,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using DTO_EF.Entities;
 
 namespace UnitTests.DAL.Implementation
 {

@@ -1,6 +1,6 @@
 ﻿namespace DAL.Migrations
 {
-    using DTO.Entities;
+    using DTO_EF.Entities;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;

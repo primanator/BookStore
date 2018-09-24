@@ -1,8 +1,10 @@
 ﻿namespace DAL.Implementation
 {
+    using AutoMapper;
     using EF;
     using Interfaces;
     using DTO.Entities;
+    using DTO_EF.Entities;
     using System;
     using System.Data.Entity;
 
@@ -27,39 +29,39 @@
             this.context = (BookStoreContext)context;
         }
 
-        public IGenericRepository<Author> GetAuthorRepository()
+        public IGenericRepository<AuthorDto> GetAuthorRepository()
         {
-            return _authorRepository ?? (_authorRepository = new GenericRepository<Author>(context));
+            return Mapper.Map<IGenericRepository<AuthorDto>>(_authorRepository ?? (_authorRepository = new GenericRepository<Author>(context)));
         }
 
-        public IGenericRepository<Book> GetBookRepository()
+        public IGenericRepository<BookDto> GetBookRepository()
         {
-            return _bookRepository ?? (_bookRepository = new GenericRepository<Book>(context));
+            return Mapper.Map<IGenericRepository<BookDto>>(_bookRepository ?? (_bookRepository = new GenericRepository<Book>(context)));
         }
 
-        public IGenericRepository<Country> GetCountryRepository()
+        public IGenericRepository<CountryDto> GetCountryRepository()
         {
-            return _countryRepository ?? (_countryRepository = new GenericRepository<Country>(context));
+            return Mapper.Map<IGenericRepository<CountryDto>>(_countryRepository ?? (_countryRepository = new GenericRepository<Country>(context)));
         }
 
-        public IGenericRepository<Genre> GetGenreRepository()
+        public IGenericRepository<GenreDto> GetGenreRepository()
         {
-            return _genreRepository ?? (_genreRepository = new GenericRepository<Genre>(context));
+            return Mapper.Map<IGenericRepository<GenreDto>>(_genreRepository ?? (_genreRepository = new GenericRepository<Genre>(context)));
         }
 
-        public IGenericRepository<Library> GetLibraryRepository()
+        public IGenericRepository<LibraryDto> GetLibraryRepository()
         {
-            return _libraryRepository ?? (_libraryRepository = new GenericRepository<Library>(context));
+            return Mapper.Map<IGenericRepository<LibraryDto>>(_libraryRepository ?? (_libraryRepository = new GenericRepository<Library>(context)));
         }
 
-        public IGenericRepository<LiteratureForm> GetLiteratureFormRepository()
+        public IGenericRepository<LiteratureFormDto> GetLiteratureFormRepository()
         {
-            return _literatureFormRepository ?? (_literatureFormRepository = new GenericRepository<LiteratureForm>(context));
+            return Mapper.Map<IGenericRepository<LiteratureFormDto>>(_literatureFormRepository ?? (_literatureFormRepository = new GenericRepository<LiteratureForm>(context)));
         }
 
-        public IGenericRepository<User> GetUserRepository()
+        public IGenericRepository<UserDto> GetUserRepository()
         {
-            return _userRepository ?? (_userRepository = new GenericRepository<User>(context));
+            return Mapper.Map<IGenericRepository<UserDto>>(_userRepository ?? (_userRepository = new GenericRepository<User>(context)));
         }
 
         public void Save()

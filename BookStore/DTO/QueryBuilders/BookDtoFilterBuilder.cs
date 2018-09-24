@@ -2,9 +2,9 @@
 {
     using System;
     using System.Linq.Expressions;
-    using DTO.Entities;
+    using Entities;
 
-    public class BookDtoFilterBuilder : DtoFilterBuilder<Book>
+    public class BookDtoFilterBuilder : DtoFilterBuilder<BookDto>
     {
         public BookDtoFilterBuilder FindByIsbn(string isbn)
         {

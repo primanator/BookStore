@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-
-namespace DTO.Entities
+﻿namespace DTO.Entities
 {
-    public abstract class Entity
+    using System.Reflection;
+
+    public abstract class EntityDto
     {
         public int Id { get; set; }
 
@@ -15,7 +15,7 @@ namespace DTO.Entities
 
         private PropertyInfo[] _cashedProperties;
 
-        public void SelfUpdate<T>(T toUpdateWith) where T : Entity
+        public void SelfUpdate<T>(T toUpdateWith) where T : EntityDto
         {
             if (_cashedProperties == null)
             {

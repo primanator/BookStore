@@ -31,23 +31,23 @@ namespace UnitTests.API.Controllers
             var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
-            booksController.PostCreateBook(new Book());
+            booksController.PostCreateBook(new BookDto());
 
-            serviceMock.Received().Create(Arg.Any<Book>());
+            serviceMock.Received().Create(Arg.Any<BookDto>());
         }
 
         [Test]
         public void PostCreateBook_ServiceThrows_Throws()
         {
             var serviceStub = Substitute.For<IBookService>();
-            serviceStub.When(service => service.Create(Arg.Any<Book>()))
+            serviceStub.When(service => service.Create(Arg.Any<BookDto>()))
                 .Do(callback =>
                 {
                     throw new Exception();
                 });
             var booksController = new BooksController(serviceStub);
 
-            Assert.Throws<HttpResponseException>(() => booksController.PostCreateBook(new Book()));
+            Assert.Throws<HttpResponseException>(() => booksController.PostCreateBook(new BookDto()));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace UnitTests.API.Controllers
             var serviceStub = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceStub);
 
-            var result = booksController.PostCreateBook(new Book());
+            var result = booksController.PostCreateBook(new BookDto());
 
             Assert.IsInstanceOf<OkResult>(result);
         }
@@ -94,7 +94,7 @@ namespace UnitTests.API.Controllers
 
             var result = booksController.GetAllBooks();
 
-            Assert.IsInstanceOf<OkNegotiatedContentResult<IEnumerable<Book>>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<IEnumerable<BookDto>>>(result);
         }
 
         [Test]
@@ -152,7 +152,7 @@ namespace UnitTests.API.Controllers
 
             var result = booksController.GetBookByName("AnyBookName");
 
-            Assert.IsInstanceOf<OkNegotiatedContentResult<Book>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<BookDto>>(result);
         }
 
         [Test]
@@ -172,23 +172,23 @@ namespace UnitTests.API.Controllers
             var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
-            booksController.PutUpdateBook(new Book());
+            booksController.PutUpdateBook(new BookDto());
 
-            serviceMock.Received().Update(Arg.Any<Book>());
+            serviceMock.Received().Update(Arg.Any<BookDto>());
         }
 
         [Test]
         public void PutUpdateBook_ServiceThrows_Throws()
         {
             var serviceStub = Substitute.For<IBookService>();
-            serviceStub.When(service => service.Update(Arg.Any<Book>()))
+            serviceStub.When(service => service.Update(Arg.Any<BookDto>()))
                 .Do(callback =>
                 {
                     throw new Exception();
                 });
             var booksController = new BooksController(serviceStub);
 
-            Assert.Throws<HttpResponseException>(() => booksController.PutUpdateBook(new Book()));
+            Assert.Throws<HttpResponseException>(() => booksController.PutUpdateBook(new BookDto()));
         }
 
         [Test]
@@ -197,7 +197,7 @@ namespace UnitTests.API.Controllers
             var serviceMock = Substitute.For<IBookService>();
             var booksController = new BooksController(serviceMock);
 
-            var result = booksController.PutUpdateBook(new Book());
+            var result = booksController.PutUpdateBook(new BookDto());
 
             Assert.IsInstanceOf<OkResult>(result);
         }

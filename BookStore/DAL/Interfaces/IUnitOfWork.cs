@@ -5,13 +5,13 @@
 
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<Author> GetAuthorRepository();
-        IGenericRepository<Book> GetBookRepository();
-        IGenericRepository<Country> GetCountryRepository();
-        IGenericRepository<Genre> GetGenreRepository();
-        IGenericRepository<Library> GetLibraryRepository();
-        IGenericRepository<LiteratureForm> GetLiteratureFormRepository();
-        IGenericRepository<User> GetUserRepository();
+        IGenericRepository<AuthorDto> GetAuthorRepository();
+        IGenericRepository<BookDto> GetBookRepository();
+        IGenericRepository<CountryDto> GetCountryRepository();
+        IGenericRepository<GenreDto> GetGenreRepository();
+        IGenericRepository<LibraryDto> GetLibraryRepository();
+        IGenericRepository<LiteratureFormDto> GetLiteratureFormRepository();
+        IGenericRepository<UserDto> GetUserRepository();
         void Save();
     }
 }

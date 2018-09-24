@@ -1,11 +1,11 @@
 ﻿using DAL.EF;
-using DTO.Entities;
 using DAL.Implementation;
 using DAL.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Data.Entity;
+using DTO_EF.Entities;
 
 namespace UnitTests.DAL.Implementation
 {

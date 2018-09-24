@@ -5,13 +5,13 @@
 
     public interface IBookService
     {
-        void Create(Book record);
+        void Create(BookDto record);
 
-        void Update(Book record);
+        void Update(BookDto record);
 
-        IEnumerable<Book> GetAll();
+        IEnumerable<BookDto> GetAll();
 
-        Book GetSingle(string title);
+        BookDto GetSingle(string title);
 
         void Delete(string title);
     }

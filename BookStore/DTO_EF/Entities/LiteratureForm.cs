@@ -1,5 +1,5 @@
-﻿namespace DTO.Entities
-{ 
+﻿namespace DTO_EF.Entities
+{
     using System.Collections.Generic;
 
     public class LiteratureForm : Entity
