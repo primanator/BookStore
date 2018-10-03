@@ -1,17 +1,12 @@
 ﻿namespace DAL.Interfaces
 {
     using DTO.Entities;
+    using DTO_EF.Entities;
     using System;
 
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<AuthorDto> GetAuthorRepository();
-        IGenericRepository<BookDto> GetBookRepository();
-        IGenericRepository<CountryDto> GetCountryRepository();
-        IGenericRepository<GenreDto> GetGenreRepository();
-        IGenericRepository<LibraryDto> GetLibraryRepository();
-        IGenericRepository<LiteratureFormDto> GetLiteratureFormRepository();
-        IGenericRepository<UserDto> GetUserRepository();
+        IRepository<Book, BookDto> BookRepository { get; }
         void Save();
     }
 }

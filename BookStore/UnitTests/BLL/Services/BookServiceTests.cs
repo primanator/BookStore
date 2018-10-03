@@ -16,7 +16,7 @@ namespace UnitTests.BLL.Services
         public void CreateBook_ExistingBook_Throws()
         {
             var unitOfWorkStub = Substitute.For<IUnitOfWork>();
-            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+            unitOfWorkStub.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
                 .Returns(new List<BookDto>
                 {
                     new BookDto()
@@ -31,12 +31,12 @@ namespace UnitTests.BLL.Services
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
             List<BookDto> returnedValue = new List<BookDto>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
+            unitOfWorkMock.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookService(unitOfWorkMock);
 
             bookStoreService.Create(new BookDto());
 
-            unitOfWorkMock.GetBookRepository().Received().Insert(Arg.Any<BookDto>());
+            unitOfWorkMock.BookRepository.Received().Insert(Arg.Any<BookDto>());
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace UnitTests.BLL.Services
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
             List<BookDto> returnedValue = new List<BookDto>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
+            unitOfWorkMock.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookService(unitOfWorkMock);
 
             bookStoreService.Create(new BookDto());
@@ -60,14 +60,14 @@ namespace UnitTests.BLL.Services
 
             bookStoreService.GetAll();
 
-            unitOfWorkMock.GetBookRepository().Received().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>());
+            unitOfWorkMock.BookRepository.Received().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>());
         }
 
         [Test]
         public void GetAllBooks_Called_Returns()
         {
             var unitOfWorkFake = Substitute.For<IUnitOfWork>();
-            unitOfWorkFake.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(new List<BookDto>());
+            unitOfWorkFake.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(new List<BookDto>());
             var bookStoreService = new BookService(unitOfWorkFake);
 
             var result = bookStoreService.GetAll();
@@ -81,7 +81,7 @@ namespace UnitTests.BLL.Services
         {
             List<BookDto> returnedValue = new List<BookDto>();
             var unitOfWorkStub = Substitute.For<IUnitOfWork>();
-            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
+            unitOfWorkStub.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookService(unitOfWorkStub);
 
             Assert.Throws<KeyNotFoundException>(() => bookStoreService.Delete("Anything"));
@@ -91,7 +91,7 @@ namespace UnitTests.BLL.Services
         public void DeleteBook_ExistingBook_CallsRepository()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+            unitOfWorkMock.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
                 .Returns(new List<BookDto>
                 {
                     new BookDto()
@@ -100,14 +100,14 @@ namespace UnitTests.BLL.Services
 
             bookStoreService.Delete("Anything");
 
-            unitOfWorkMock.GetBookRepository().Received().Delete(Arg.Any<BookDto>());
+            unitOfWorkMock.BookRepository.Received().Delete(Arg.Any<BookDto>());
         }
 
         [Test]
         public void DeleteBook_ExistingBook_CallsUnitOfWorkSave()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+            unitOfWorkMock.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
                 .Returns(new List<BookDto>
                 {
                     new BookDto()
@@ -123,7 +123,7 @@ namespace UnitTests.BLL.Services
         public void GetSingleBook_Called_Returns()
         {
             var unitOfWorkStub = Substitute.For<IUnitOfWork>();
-            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+            unitOfWorkStub.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
                 .Returns(new List<BookDto>
                 {
                     new BookDto()
@@ -141,7 +141,7 @@ namespace UnitTests.BLL.Services
         {
             List<BookDto> returnedValue = new List<BookDto>();
             var unitOfWorkStub = Substitute.For<IUnitOfWork>();
-            unitOfWorkStub.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
+            unitOfWorkStub.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>()).Returns(returnedValue);
             var bookStoreService = new BookService(unitOfWorkStub);
 
             Assert.Throws<ArgumentException>(() => bookStoreService.Update(new BookDto()));
@@ -151,7 +151,7 @@ namespace UnitTests.BLL.Services
         public void UpdateBook_ExistingBook_CallsRepository()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+            unitOfWorkMock.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
                 .Returns(new List<BookDto>
                 {
                     new BookDto()
@@ -160,14 +160,14 @@ namespace UnitTests.BLL.Services
 
             bookStoreService.Update(new BookDto());
 
-            unitOfWorkMock.GetBookRepository().Received().Update(Arg.Any<BookDto>());
+            unitOfWorkMock.BookRepository.Received().Update(Arg.Any<BookDto>());
         }
 
         [Test]
         public void UpdateBook_ExistingBook_CallsUnitOfWorkSave()
         {
             var unitOfWorkMock = Substitute.For<IUnitOfWork>();
-            unitOfWorkMock.GetBookRepository().FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
+            unitOfWorkMock.BookRepository.FindBy(Arg.Any<Expression<Func<BookDto, bool>>>())
                 .Returns(new List<BookDto>
                 {
                     new BookDto()

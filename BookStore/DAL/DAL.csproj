@@ -64,9 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EF\BookStoreContext.cs" />
-    <Compile Include="Implementation\GenericRepository.cs" />
+    <Compile Include="Implementation\Repository.cs" />
     <Compile Include="Implementation\UnitOfWork.cs" />
-    <Compile Include="Interfaces\IGenericRepository.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Migrations\201803171146369_BookStore-v1.cs" />
     <Compile Include="Migrations\201803171146369_BookStore-v1.Designer.cs">

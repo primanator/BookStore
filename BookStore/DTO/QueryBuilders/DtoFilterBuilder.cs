@@ -1,4 +1,4 @@
-﻿namespace DTO.QueryBuilder
+﻿namespace DTO.QueryBuilders
 {
     using System;
     using System.Linq.Expressions;
@@ -8,19 +8,25 @@
     {
         protected Expression<Func<T, bool>> _toBuild;
 
-        public DtoFilterBuilder() { }
+        public DtoFilterBuilder()
+        {
+            _toBuild = (x => true);
+        }
 
         public DtoFilterBuilder<T> FindByName(string name)
         {
             Expression.Add(_toBuild, FuncToExpression(x => x.Name == name));
-
             return this;
         }
 
         public DtoFilterBuilder<T> FindById(int id)
         {
             Expression.Add(_toBuild, FuncToExpression(x => x.Id == id));
+            return this;
+        }
 
+        public DtoFilterBuilder<T> FindAll()
+        {
             return this;
         }
 

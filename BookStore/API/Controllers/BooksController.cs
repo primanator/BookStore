@@ -5,7 +5,7 @@
     using System.Web.Http;
     using DTO.Entities;
     using BLL.Interfaces;
-    using API.Utils;
+    using Utils;
 
     public class BooksController : ApiController
     {
@@ -59,7 +59,6 @@
             try
             {
                 book = _bookService.GetSingle(name);
-                DeleteBookByName(name);
             }
             catch (Exception e)
             {

@@ -5,6 +5,7 @@ using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Data.Entity;
+using DTO.Entities;
 using DTO_EF.Entities;
 
 namespace UnitTests.DAL.Implementation
@@ -30,17 +31,6 @@ namespace UnitTests.DAL.Implementation
             Assert.Throws<ArgumentException>(() => new UnitOfWork(contextFake));
         }
 
-        [Test]
-        public void GetAuthorRepository_Called_Returns()
-        {
-            var contextFake = Substitute.For<BookStoreContext>();
-            var unitOfWork = new UnitOfWork(contextFake);
-
-            var result = unitOfWork.GetAuthorRepository();
-
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<IGenericRepository<Author>>(result);
-        }
 
         [Test]
         public void GetBookRepository_Called_Returns()
@@ -48,70 +38,10 @@ namespace UnitTests.DAL.Implementation
             var contextFake = Substitute.For<BookStoreContext>();
             var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWork.GetBookRepository();
+            var result = unitOfWork.BookRepository;
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf<IGenericRepository<Book>>(result);
-        }
-
-        [Test]
-        public void GetCountryRepository_Called_Returns()
-        {
-            var contextFake = Substitute.For<BookStoreContext>();
-            var unitOfWork = new UnitOfWork(contextFake);
-
-            var result = unitOfWork.GetCountryRepository();
-
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<IGenericRepository<Country>>(result);
-        }
-
-        [Test]
-        public void GetGenreRepository_Called_Returns()
-        {
-            var contextFake = Substitute.For<BookStoreContext>();
-            var unitOfWork = new UnitOfWork(contextFake);
-
-            var result = unitOfWork.GetGenreRepository();
-
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<IGenericRepository<Genre>>(result);
-        }
-
-        [Test]
-        public void GetLibraryRepository_Called_Returns()
-        {
-            var contextFake = Substitute.For<BookStoreContext>();
-            var unitOfWork = new UnitOfWork(contextFake);
-
-            var result = unitOfWork.GetLibraryRepository();
-
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<IGenericRepository<Library>>(result);
-        }
-
-        [Test]
-        public void GetLiteratureFormRepository_Called_Returns()
-        {
-            var contextFake = Substitute.For<BookStoreContext>();
-            var unitOfWork = new UnitOfWork(contextFake);
-
-            var result = unitOfWork.GetLiteratureFormRepository();
-
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<IGenericRepository<LiteratureForm>>(result);
-        }
-
-        [Test]
-        public void GetUserRepository_Called_Returns()
-        {
-            var contextFake = Substitute.For<BookStoreContext>();
-            var unitOfWork = new UnitOfWork(contextFake);
-
-            var result = unitOfWork.GetUserRepository();
-
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<IGenericRepository<User>>(result);
+            Assert.IsInstanceOf<IRepository<Book, BookDto>>(result);
         }
 
         [Test]
