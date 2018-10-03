@@ -1,6 +1,4 @@
-﻿using DTO_EF.Entities;
-
-namespace BLL.Services
+﻿namespace BLL.Services
 {
     using System;
     using System.Collections.Generic;
@@ -13,18 +11,19 @@ namespace BLL.Services
     public class BookService : IBookService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly BookDtoFilterBuilder _filter;
+        private readonly BookDtoFilterBuilder _filterBuilder;
 
-        public BookService(IUnitOfWork unitOfWork)
+        public BookService(IUnitOfWork unitOfWork, DtoFilterBuilder<BookDto> builder)
         {
             _unitOfWork = unitOfWork;
-            _filter = new BookDtoFilterBuilder();
+            _filterBuilder = new BookDtoFilterBuilder();
+            //_filterBuilder = builder;
         }
 
         public void Create(BookDto record)
         {
-            if (GetSingle(record.Name) != null)
-                throw new ArgumentException("Database already contains book with such name.");
+            //if (GetSingle(record.Name) != null)
+            //    throw new ArgumentException("Database already contains book with such name.");
 
             _unitOfWork.BookRepository.Insert(record);
             _unitOfWork.Save();
@@ -45,13 +44,14 @@ namespace BLL.Services
 
         public IEnumerable<BookDto> GetAll()
         {
-            var predicate = _filter.FindAll().Build();
+            var predicate = _filterBuilder.FindAll().Build();
             return _unitOfWork.BookRepository.FindBy(predicate);
         }
 
         public BookDto GetSingle(string title)
         {
-            return _unitOfWork.BookRepository.FindBy(x => x.Name == title).SingleOrDefault();
+            var predicate = _filterBuilder.FindByName(title).Build();
+            return _unitOfWork.BookRepository.FindBy(predicate).SingleOrDefault();
         }
 
         public void Delete(string title)

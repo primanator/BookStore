@@ -10,7 +10,7 @@
 
         public DtoFilterBuilder()
         {
-            _toBuild = (x => true);
+            _toBuild = FuncToExpression((x => true));
         }
 
         public DtoFilterBuilder<T> FindByName(string name)

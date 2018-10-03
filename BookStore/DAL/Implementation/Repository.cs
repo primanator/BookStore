@@ -24,13 +24,10 @@
 
         public List<T1> FindBy(Expression<Func<T1, bool>> dtoExpression)
         {
-            var objExpression = Mapper.Map<Func<T, bool>>(dtoExpression.Compile());
-
-            var a = Db.Set<T>().AsNoTracking().ToList();
-            var b = Mapper.Map<List<T>>(a);
-            var c = b.Where(objExpression);
-            //var source = Db.Set<T>().AsNoTracking().Where(dtoExpression).ProjectTo<T1>().ToList();
-            return Mapper.Map<List<T1>>(c).ToList();
+            return
+                Mapper.Map<IEnumerable<T1>>(Db.Set<T>().AsNoTracking())
+                   .Where(dtoExpression.Compile())
+                    .ToList();
         }
 
         public T1 Get(int id)
