@@ -17,13 +17,12 @@
         {
             _unitOfWork = unitOfWork;
             _filterBuilder = new BookDtoFilterBuilder();
-            //_filterBuilder = builder;
         }
 
         public void Create(BookDto record)
         {
-            //if (GetSingle(record.Name) != null)
-            //    throw new ArgumentException("Database already contains book with such name.");
+            if (GetSingle(record.Name) != null)
+                throw new ArgumentException("Database already contains book with such name.");
 
             _unitOfWork.BookRepository.Insert(record);
             _unitOfWork.Save();
@@ -32,7 +31,6 @@
         public void Update(BookDto record)
         {
             var bookToUpdate = GetSingle(record.Name);
-
             if (bookToUpdate == null)
                 throw new ArgumentException("Database does not contain such book to update.");
 

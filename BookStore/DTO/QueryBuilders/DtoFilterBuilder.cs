@@ -2,26 +2,27 @@
 {
     using System;
     using System.Linq.Expressions;
+    using DTO.Utils;
     using Entities;
 
-    public class DtoFilterBuilder<T> where T: EntityDto
+    public class DtoFilterBuilder<T> where T : EntityDto
     {
         protected Expression<Func<T, bool>> _toBuild;
 
         public DtoFilterBuilder()
         {
-            _toBuild = FuncToExpression((x => true));
+            _toBuild = FuncToExpression(x => true);
         }
 
         public DtoFilterBuilder<T> FindByName(string name)
         {
-            Expression.Add(_toBuild, FuncToExpression(x => x.Name == name));
+            _toBuild = _toBuild.And(FuncToExpression(x => x.Name == name));
             return this;
         }
 
         public DtoFilterBuilder<T> FindById(int id)
         {
-            Expression.Add(_toBuild, FuncToExpression(x => x.Id == id));
+            _toBuild = _toBuild.And(FuncToExpression(x => x.Id == id));
             return this;
         }
 
