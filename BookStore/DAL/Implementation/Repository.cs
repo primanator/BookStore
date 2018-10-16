@@ -11,9 +11,9 @@
     using System.Data.Entity;
     using Interfaces;
 
-    public class Repository<T, T1> : IRepository<T, T1>
-        where T : Entity
-        where T1 : EntityDto
+    public class Repository<TEntity, TDto> : IRepository<TDto>
+        where TEntity : Entity
+        where TDto : EntityDto
     {
         public Repository(BookStoreContext context)
         {
@@ -22,41 +22,29 @@
 
         protected BookStoreContext Db { get; }
 
-        public List<T1> FindBy(Expression<Func<T1, bool>> dtoExpression)
+        public List<TDto> FindBy(Expression<Func<TDto, bool>> dtoExpression)
         {
             return
-                Mapper.Map<IEnumerable<T1>>(Db.Set<T>().AsNoTracking())
+                Mapper.Map<IEnumerable<TDto>>(Db.Set<TEntity>().AsNoTracking())
                    .Where(dtoExpression.Compile())
                     .ToList();
         }
 
-        public T1 Get(int id)
+        public void Insert(TDto entity)
         {
-            if (id <= 0)
-                throw new ArgumentOutOfRangeException("Entity Id is less or equals zero.");
-
-            var entityToMap = Db.Set<T>().Find(id);
-            if (entityToMap == null)
-                throw new InvalidOperationException(string.Format("{0} with Id={1} was not found in the DB", typeof(T1).Name, id));
-
-            return Mapper.Map<T1>(entityToMap);
+            Db.Set<TEntity>().Add(Mapper.Map<TEntity>(entity));
         }
 
-        public void Insert(T1 entity)
+        public void Update(TDto entity)
         {
-            Db.Set<T>().Add(Mapper.Map<T>(entity));
-        }
-
-        public void Update(T1 entity)
-        {
-            var mappedEntity = Mapper.Map<T>(entity);
-            Db.Set<T>().Attach(mappedEntity);
+            var mappedEntity = Mapper.Map<TEntity>(entity);
+            Db.Set<TEntity>().Attach(mappedEntity);
             Db.Entry(mappedEntity).State = EntityState.Modified;
         }
 
-        public void Delete(T1 entity)
+        public void Delete(TDto entity)
         {
-            var mappedEntity = Mapper.Map<T>(entity);
+            var mappedEntity = Mapper.Map<TEntity>(entity);
             Db.Entry(mappedEntity).State = EntityState.Deleted;
         }
     }

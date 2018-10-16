@@ -1,8 +1,8 @@
 ﻿namespace DAL.Implementation
 {
     using DTO.Entities;
-    using EF;
     using DTO_EF.Entities;
+    using EF;
     using Interfaces;
     using System;
     using System.Data.Entity;
@@ -11,7 +11,7 @@
     {
         protected readonly BookStoreContext context;
 
-        public IRepository<Book, BookDto> BookRepository { get; }
+        public IRepository<BookDto> BookRepository { get; }
 
         private bool _disposed = false;
 

@@ -11,7 +11,6 @@
         }
 
         public ICollection<UserDto> Users { get; set; }
-
         public ICollection<AuthorDto> Authors { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Linq.Expressions;
-    using DTO.Utils;
+    using Utils;
     using Entities;
 
     public class DtoFilterBuilder<T> where T : EntityDto

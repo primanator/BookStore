@@ -1,33 +1,47 @@
 ﻿namespace DTO.Entities
 {
+    using System;
+    using System.Collections.Generic;
     using System.Reflection;
+    using System.Linq;
 
     public abstract class EntityDto
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
 
-        public override string ToString()
-        {
-            return string.Format("{0} - {1}", GetType().Name, Id);
-        }
+        private static readonly Dictionary<Type, PropertyInfo[]> TypeProperties;
 
-        private PropertyInfo[] _cashedProperties;
+        static EntityDto()
+        {
+            TypeProperties = new Dictionary<Type, PropertyInfo[]>();
+
+            var entityTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes())
+                .Where(type => typeof(EntityDto).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                .ToList();
+
+            foreach (var entityType in entityTypes)
+            {
+                TypeProperties.Add(entityType, entityType.GetProperties());
+            }
+        }
 
         public void SelfUpdate<T>(T toUpdateWith) where T : EntityDto
         {
-            if (_cashedProperties == null)
-            {
-                _cashedProperties = GetType().GetProperties();
-            }
+            if (!TypeProperties.TryGetValue(this.GetType(), out var cachedProperties))
+                return;
 
-            foreach (var property in _cashedProperties)
+            foreach (var property in cachedProperties)
             {
                 var newValue = property.GetValue(toUpdateWith);
                 if (property.GetValue(this) != newValue)
                     property.SetValue(this, newValue);
             }
+        }
+
+        public override string ToString()
+        {
+            return $"{GetType().Name} - {Id}";
         }
     }
 }

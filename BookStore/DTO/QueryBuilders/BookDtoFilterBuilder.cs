@@ -1,7 +1,7 @@
 ﻿namespace DTO.QueryBuilders
 {
-    using DTO.Utils;
     using Entities;
+    using Utils;
 
     public class BookDtoFilterBuilder : DtoFilterBuilder<BookDto>
     {

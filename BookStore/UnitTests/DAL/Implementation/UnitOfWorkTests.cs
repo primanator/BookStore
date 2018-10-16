@@ -6,7 +6,6 @@ using NUnit.Framework;
 using System;
 using System.Data.Entity;
 using DTO.Entities;
-using DTO_EF.Entities;
 
 namespace UnitTests.DAL.Implementation
 {
@@ -41,7 +40,7 @@ namespace UnitTests.DAL.Implementation
             var result = unitOfWork.BookRepository;
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf<IRepository<Book, BookDto>>(result);
+            Assert.IsInstanceOf<IRepository<BookDto>>(result);
         }
 
         [Test]
