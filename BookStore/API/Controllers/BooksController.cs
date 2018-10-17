@@ -1,11 +1,8 @@
 ﻿namespace API.Controllers
 {
-    using System;
-    using System.Collections.Generic;
     using System.Web.Http;
     using DTO.Entities;
     using BLL.Interfaces;
-    using Utils;
 
     public class BooksController : ApiController
     {
@@ -21,30 +18,14 @@
             if (!ModelState.IsValid || newBook == null)
                 return BadRequest("Invalid model state");
 
-            try
-            {
-                _bookService.Create(newBook);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
-            }
+            _bookService.Create(newBook);
 
             return Ok();
         }
 
         public IHttpActionResult GetAllBooks()
         {
-            IEnumerable<BookDto> books = null;
-
-            try
-            {
-                books = _bookService.GetAll();
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
-            }
+            var books = _bookService.GetAll();
 
             return Ok(books);
         }
@@ -54,16 +35,7 @@
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Parameter's value is empty.");
 
-            BookDto book = null;
-
-            try
-            {
-                book = _bookService.GetSingle(name);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
-            }
+            var book = _bookService.GetSingle(name);
 
             return Ok(book);
         }
@@ -73,14 +45,7 @@
             if (!ModelState.IsValid || freshBook == null)
                 return BadRequest("Invalid model state");
 
-            try
-            {
-                _bookService.Update(freshBook);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
-            }
+            _bookService.Update(freshBook);
 
             return Ok();
         }
@@ -90,14 +55,7 @@
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Parameter's value is empty.");
 
-            try
-            {
-                _bookService.Delete(name);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(this.ControllerErrorHttpResponse(e.Message));
-            }
+            _bookService.Delete(name);
 
             return Ok();
         }

@@ -4,9 +4,9 @@
     using DTO.Entities;
     using DTO_EF.Entities;
 
-    public class AutomapperConfig : Profile
+    public class MapperConfig : Profile
     {
-        public AutomapperConfig()
+        public MapperConfig()
         {
             CreateMap<BookDto, Book>();
         }

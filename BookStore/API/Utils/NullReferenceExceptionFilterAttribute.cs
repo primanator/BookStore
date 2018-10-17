@@ -5,16 +5,16 @@
     using System.Net.Http;
     using System.Web.Http.Filters;
 
-    public class NotImplementedExceptionFilterAttribute : ExceptionFilterAttribute
+    public class NullReferenceExceptionFilterAttribute : ExceptionFilterAttribute
     {
         public override void OnException(HttpActionExecutedContext context)
         {
-            if (context.Exception is NotImplementedException)
+            if (context.Exception is NullReferenceException)
             {
                 context.Response = new HttpResponseMessage
                 {
                     Content = new StringContent(context.Exception.Message),
-                    StatusCode = HttpStatusCode.NotImplemented,
+                    StatusCode = HttpStatusCode.InternalServerError,
                     ReasonPhrase = "Server exception."
                 };
             }

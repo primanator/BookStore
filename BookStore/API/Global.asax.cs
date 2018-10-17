@@ -10,6 +10,7 @@
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             GlobalConfiguration.Configuration.Filters.Add(new NotImplementedExceptionFilterAttribute());
+            GlobalConfiguration.Configuration.Filters.Add(new NullReferenceExceptionFilterAttribute());
 
             Mapper.Initialize(cfg =>
             {
