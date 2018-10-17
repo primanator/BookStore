@@ -1,7 +1,4 @@
 ﻿using API.App_Start;
-using API.Utils;
-using BLL.Utils;
-using DAL.Utils;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Modules;
@@ -9,9 +6,10 @@ using Ninject.Web.Common;
 using Ninject.Web.Common.WebHost;
 using System;
 using System.Web;
-         
+using DependencyResolver;
+
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
+[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
 
 namespace API.App_Start
 {
@@ -35,9 +33,7 @@ namespace API.App_Start
         {
             var modules = new INinjectModule[]
             {
-                new ServiceModuleBLL(),
-                new ServiceModuleAPI(),
-                new ServiceModuleDAL()
+                new ServiceModule()
             };
             var kernel = new StandardKernel(modules);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
