@@ -33,7 +33,7 @@ namespace API.App_Start
         {
             var modules = new INinjectModule[]
             {
-                new ServiceModule()
+                new InjectModule()
             };
             var kernel = new StandardKernel(modules);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);

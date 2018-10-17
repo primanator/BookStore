@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace DAL.Utils
+﻿namespace DependencyResolver
 {
+    using AutoMapper;
     using DTO.Entities;
     using DTO_EF.Entities;
-    using AutoMapper;
 
     public class AutomapperConfig : Profile
     {

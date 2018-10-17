@@ -13,7 +13,7 @@
 
             Mapper.Initialize(cfg =>
             {
-                cfg.AddProfiles("DAL");
+                cfg.AddProfiles("DependencyResolver");
             });
         }
     }

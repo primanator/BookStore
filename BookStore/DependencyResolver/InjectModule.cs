@@ -8,7 +8,7 @@
     using DAL.Implementation;
     using DAL.Interfaces;
 
-    public class ServiceModule : NinjectModule
+    public class InjectModule : NinjectModule
     {
         public override void Load()
         {
