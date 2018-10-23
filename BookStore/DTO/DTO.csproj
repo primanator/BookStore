@@ -48,7 +48,7 @@
     <Compile Include="Entities\AuthorDto.cs" />
     <Compile Include="Entities\BookDto.cs" />
     <Compile Include="Entities\CountryDto.cs" />
-    <Compile Include="Entities\EntityDto.cs" />
+    <Compile Include="Entities\Dto.cs" />
     <Compile Include="Entities\GenreDto.cs" />
     <Compile Include="Entities\LibraryDto.cs" />
     <Compile Include="Entities\LiteratureFormDto.cs" />

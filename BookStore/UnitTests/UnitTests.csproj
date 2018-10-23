@@ -85,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Controllers\BooksControllerTests.cs" />
-    <Compile Include="BLL\Services\BookServiceTests.cs" />
+    <Compile Include="BLL\Services\ImportServiceTests.cs" />
     <Compile Include="DAL\Implementation\GenericRepositoryTests.cs" />
     <Compile Include="DAL\Implementation\UnitOfWorkTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
