@@ -7,6 +7,8 @@
     using DAL.EF;
     using DAL.Implementation;
     using DAL.Interfaces;
+    using DTO.Entities;
+    using BLL.Utils;
 
     public class InjectModule : NinjectModule
     {
@@ -16,6 +18,7 @@
             Bind<IUnitOfWork>().To<UnitOfWork>();
             Bind<IBookService>().To<BookService>();
             Bind<IImportService>().To<ImportService>();
+            Bind<IValidator<BookDto>, ExcelFileValidator<BookDto>>();
         }
     }
 }

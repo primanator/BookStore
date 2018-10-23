@@ -24,7 +24,7 @@
             if (GetSingle(record.Name) != null)
                 throw new ArgumentException("Database already contains book with such name.");
 
-            _unitOfWork.BookRepository.Insert(record);
+            _unitOfWork.GetRepository<BookDto>().Insert(record);
             _unitOfWork.Save();
         }
 
@@ -36,20 +36,20 @@
 
             bookToUpdate.SelfUpdate(record);
 
-            _unitOfWork.BookRepository.Update(bookToUpdate);
+            _unitOfWork.GetRepository<BookDto>().Update(bookToUpdate);
             _unitOfWork.Save();
         }
 
         public IEnumerable<BookDto> GetAll()
         {
             var predicate = _filterBuilder.FindAll().Build();
-            return _unitOfWork.BookRepository.FindBy(predicate);
+            return _unitOfWork.GetRepository<BookDto>().FindBy(predicate);
         }
 
         public BookDto GetSingle(string title)
         {
             var predicate = _filterBuilder.FindByName(title).Build();
-            return _unitOfWork.BookRepository.FindBy(predicate).SingleOrDefault();
+            return _unitOfWork.GetRepository<BookDto>().FindBy(predicate).SingleOrDefault();
         }
 
         public void Delete(string title)
@@ -58,7 +58,7 @@
             if (bookToDelete == null)
                 throw new KeyNotFoundException("Database does not contain such book to delete.");
 
-            _unitOfWork.BookRepository.Delete(bookToDelete);
+            _unitOfWork.GetRepository<BookDto>().Delete(bookToDelete);
             _unitOfWork.Save();
         }
     }

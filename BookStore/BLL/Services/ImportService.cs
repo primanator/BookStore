@@ -20,7 +20,6 @@
             _validator = validator;
 
             var importFileIsValid = ((IValidator<T>)_validator).Check(importSource);
-
             if (importFileIsValid)
             {
                 PerformImport<T>(importSource);

@@ -5,21 +5,29 @@
     using OfficeOpenXml;
     using System.Collections.Generic;
     using System.Web;
+    using System.Linq;
 
-    public class ExcelFileValidator : IValidator
+    public class ExcelFileValidator<T> : IValidator<T>, IValidator
+        where T : Dto
     {
-        private Dictionary<string, int> keyValuePairs; // !
+        private Dictionary<string, int> _propertyColumnDictionary;
 
         public ExcelFileValidator()
         {
+            var dtoProperties = typeof(T).GetProperties()
+                .Where(prop => prop.Name != "Id" && prop.Name != "LibraryId")
+                .ToList();
 
+            dtoProperties.ForEach(prop => _propertyColumnDictionary.Add(prop.Name.ToLowerInvariant(), 0)); // in excel column indexes start at 1
         }
 
         public bool Check(HttpPostedFile importSource)
         {
-            using (var excelPackage = new ExcelPackage(importSource.InputStream))
+            using (var package = new ExcelPackage(importSource.InputStream))
             {
-                if (excelPackage.Workbook.Worksheets.Count == 0)
+                if (package.Workbook.Worksheets.Count == 0
+                    | package.Workbook.Worksheets.FirstOrDefault().Dimension == null
+                    | !MatchPropertiesAndColumns(package))
                 {
                     return false;
                 }
@@ -27,39 +35,34 @@
             return true;
         }
 
-        public List<T> Extract<T>(HttpPostedFile importSource) where T : Dto
+        public List<T> Extract(HttpPostedFile importSource)
         {
-            using (var excelPackage = new ExcelPackage(importSource.InputStream))
+            using (var package = new ExcelPackage(importSource.InputStream))
             {
 
             }
             return new List<T>();
         }
 
-        private List<BookDto> DistinguishBooks(ExcelPackage package)
+        private bool MatchPropertiesAndColumns(ExcelPackage package)
         {
-            var newBooks = new List<BookDto>();
-            foreach (var worksheet in package.Workbook.Worksheets)
+            var worksheet = package.Workbook.Worksheets.FirstOrDefault();
+            for (int column = worksheet.Dimension.Start.Column; column <= worksheet.Dimension.End.Column; column++)
             {
-                for (var row = worksheet.Dimension.Start.Row; row <= worksheet.Dimension.End.Row; row++)
-                {
-                    var possibleEntry = new BookDto();
-                    var column = worksheet.Dimension.Start.Column;
-                    do
-                    {
-                        if (worksheet.Cells[row, column].Value != null)
-                        {
-                            var cellData = worksheet.Cells[row, column].Value.ToString();
-                        }
-                        else
-                        {
+                var cellValue = worksheet.Cells[1, column].Value;
+                var cellString = cellValue != null ? cellValue.ToString().ToLowerInvariant() : "";
 
-                        }
-                    } while (column <= 5);
+                if (_propertyColumnDictionary.TryGetValue(cellString, out var columnNumber) || columnNumber == 0)
+                {
+
                 }
             }
-            return new List<BookDto>();
-        }
 
+            return _propertyColumnDictionary.Keys.All(propertyName =>
+            {
+                
+                return false;
+            });
+        }
     }
 }

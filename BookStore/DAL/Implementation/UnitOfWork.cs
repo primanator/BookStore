@@ -12,8 +12,6 @@
     {
         protected readonly BookStoreContext context;
 
-        public IRepository<BookDto> BookRepository { get; }
-
         private Dictionary<Type, Object> _repositoryDictionary { get; }
 
         private bool _disposed = false;
