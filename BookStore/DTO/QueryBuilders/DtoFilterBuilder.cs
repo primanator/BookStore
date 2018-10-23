@@ -5,7 +5,7 @@
     using Utils;
     using Entities;
 
-    public class DtoFilterBuilder<T> where T : EntityDto
+    public class DtoFilterBuilder<T> where T : Dto
     {
         protected Expression<Func<T, bool>> _toBuild;
 

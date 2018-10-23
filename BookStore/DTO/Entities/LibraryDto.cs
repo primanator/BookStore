@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class LibraryDto : EntityDto
+    public class LibraryDto : Dto
     {
         public LibraryDto()
         {

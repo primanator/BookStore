@@ -2,7 +2,7 @@
 { 
     using System.Collections.Generic;
 
-    public class LiteratureFormDto : EntityDto
+    public class LiteratureFormDto : Dto
     {
         public LiteratureFormDto()
         {

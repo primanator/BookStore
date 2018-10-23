@@ -1,6 +1,6 @@
 ﻿namespace DTO.Entities
 {
-    public class UserDto : EntityDto
+    public class UserDto : Dto
     {
         public string Nickname { get; set; }
         public string Password { get; set; }

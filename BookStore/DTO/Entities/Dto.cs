@@ -5,19 +5,19 @@
     using System.Reflection;
     using System.Linq;
 
-    public abstract class EntityDto
+    public abstract class Dto
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
         private static readonly Dictionary<Type, PropertyInfo[]> TypeProperties;
 
-        static EntityDto()
+        static Dto()
         {
             TypeProperties = new Dictionary<Type, PropertyInfo[]>();
 
             var entityTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes())
-                .Where(type => typeof(EntityDto).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                .Where(type => typeof(Dto).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
                 .ToList();
 
             foreach (var entityType in entityTypes)
@@ -26,7 +26,7 @@
             }
         }
 
-        public void SelfUpdate<T>(T toUpdateWith) where T : EntityDto
+        public void SelfUpdate<T>(T toUpdateWith) where T : Dto
         {
             if (!TypeProperties.TryGetValue(this.GetType(), out var cachedProperties))
                 return;

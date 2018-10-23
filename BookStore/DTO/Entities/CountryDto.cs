@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class CountryDto : EntityDto
+    public class CountryDto : Dto
     {
         public CountryDto()
         {

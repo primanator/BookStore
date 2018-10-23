@@ -6,7 +6,7 @@
     using System.Linq.Expressions;
 
     public interface IRepository<TDto> 
-        where TDto : EntityDto
+        where TDto : Dto
     {
         List<TDto> FindBy(Expression<Func<TDto, bool>> dtoExpression);
         void Insert(TDto entity);

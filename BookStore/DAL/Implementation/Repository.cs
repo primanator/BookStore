@@ -13,7 +13,7 @@
 
     public class Repository<TEntity, TDto> : IRepository<TDto>
         where TEntity : Entity
-        where TDto : EntityDto
+        where TDto : Dto
     {
         public Repository(BookStoreContext context)
         {

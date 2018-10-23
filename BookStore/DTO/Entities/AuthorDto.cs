@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    public class AuthorDto : EntityDto
+    public class AuthorDto : Dto
     {
         public AuthorDto()
         {

@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    public class BookDto : EntityDto
+    public class BookDto : Dto
     {
         public BookDto()
         {

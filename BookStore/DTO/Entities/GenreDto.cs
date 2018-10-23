@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class GenreDto : EntityDto
+    public class GenreDto : Dto
     {
         public GenreDto()
         {
