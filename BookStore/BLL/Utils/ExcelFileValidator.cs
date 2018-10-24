@@ -18,21 +18,25 @@
                 .Where(prop => prop.Name != "Id" && prop.Name != "LibraryId")
                 .ToList();
 
-            dtoProperties.ForEach(prop => _propertyColumnDictionary.Add(prop.Name.ToLowerInvariant(), 0)); // in excel column indexes start at 1
+            dtoProperties.ForEach(prop => _propertyColumnDictionary.Add(prop.Name, 0));
         }
 
         public bool Check(HttpPostedFile importSource)
         {
             using (var package = new ExcelPackage(importSource.InputStream))
             {
-                if (package.Workbook.Worksheets.Count == 0
-                    | package.Workbook.Worksheets.FirstOrDefault().Dimension == null
-                    | !MatchPropertiesAndColumns(package))
+                if (package.Workbook.Worksheets.Count == 0 || package.Workbook.Worksheets.FirstOrDefault().Dimension == null)
                 {
                     return false;
                 }
+
+                MatchPropertiesAndColumns(package);
+
+                return !_propertyColumnDictionary.Keys.All(propertyName =>
+                {
+                    return _propertyColumnDictionary[propertyName] == 0; // in excel column indexes start at 1
+                });
             }
-            return true;
         }
 
         public List<T> Extract(HttpPostedFile importSource)
@@ -44,25 +48,20 @@
             return new List<T>();
         }
 
-        private bool MatchPropertiesAndColumns(ExcelPackage package)
+        private void MatchPropertiesAndColumns(ExcelPackage package)
         {
             var worksheet = package.Workbook.Worksheets.FirstOrDefault();
             for (int column = worksheet.Dimension.Start.Column; column <= worksheet.Dimension.End.Column; column++)
             {
                 var cellValue = worksheet.Cells[1, column].Value;
-                var cellString = cellValue != null ? cellValue.ToString().ToLowerInvariant() : "";
+                var cellString = cellValue != null ? cellValue.ToString().Trim() : string.Empty;
 
-                if (_propertyColumnDictionary.TryGetValue(cellString, out var columnNumber) || columnNumber == 0)
+                if (_propertyColumnDictionary.ContainsKey(cellString))
                 {
-
+                    _propertyColumnDictionary.Remove(cellString);
+                    _propertyColumnDictionary.Add(cellString, column);
                 }
             }
-
-            return _propertyColumnDictionary.Keys.All(propertyName =>
-            {
-                
-                return false;
-            });
         }
     }
 }
