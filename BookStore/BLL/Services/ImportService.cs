@@ -3,6 +3,7 @@
     using BLL.Interfaces;
     using DAL.Interfaces;
     using DTO.Entities;
+    using System;
     using System.Web;
 
     public class ImportService : IImportService
@@ -15,19 +16,23 @@
             _unitOfWork = unitOfWork;
         }
 
-        public void Execute<T>(HttpPostedFile importSource, IValidator<T> validator) where T : Dto
+        public HttpPostedFile Execute<T>(HttpPostedFile importSource, IValidator<T> validator) where T : Dto
         {
             _validator = validator;
 
-            var importFileIsValid = ((IValidator<T>)_validator).Check(importSource);
+            var importFileIsValid = ((IValidator<T>)_validator).Check(importSource, out string failReason);
             if (importFileIsValid)
             {
                 PerformImport<T>(importSource);
-                //return null;
+                return null;
+            }
+            else if (failReason.Length != 0)
+            {
+                throw new ArgumentException(failReason);
             }
             else
             {
-                // return updated file
+                return importSource;
             }
         }
 

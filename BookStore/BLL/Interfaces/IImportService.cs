@@ -5,6 +5,6 @@
 
     public interface IImportService
     {
-        void Execute<T>(HttpPostedFile importSource, IValidator<T> validator) where T : Dto;
+        HttpPostedFile Execute<T>(HttpPostedFile importSource, IValidator<T> validator) where T : Dto;
     }
 }

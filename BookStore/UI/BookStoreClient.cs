@@ -203,7 +203,7 @@
 
             foreach (var prop in properties)
             {
-                if (prop.Name != "Id" && prop.Name != "LibraryId")
+                if (!prop.Name.Contains("Id"))
                 {
                     Console.WriteLine("Please enter book's {0}", prop.Name);
                     var userValue = Console.ReadLine();

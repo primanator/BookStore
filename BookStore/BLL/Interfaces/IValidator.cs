@@ -6,7 +6,7 @@
 
     public interface IValidator
     {
-        bool Check(HttpPostedFile importSource);
+        bool Check(HttpPostedFile importSource, out string failReason);
     }
 
     public interface IValidator<T> : IValidator
