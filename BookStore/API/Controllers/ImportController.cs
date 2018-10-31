@@ -1,21 +1,16 @@
 ﻿namespace API.Controllers
 {
-    using BLL.Interfaces;
-    using DTO.Entities;
-    using Ninject;
     using System.Web;
     using System.Web.Http;
+    using BLL.Factory.Interfaces;
 
     public class ImportController : ApiController
     {
-        private readonly IImportService _importService;
+        private readonly IImportServiceFactory _importServiceFactory;
 
-        [Inject]
-        public IValidator<BookDto> BookValidator { private get; set; }
-
-        public ImportController(IImportService service)
+        public ImportController(IImportServiceFactory importServiceFactory)
         {
-            _importService = service;
+            _importServiceFactory = importServiceFactory;
         }
 
         public IHttpActionResult PostImportBooks()
@@ -27,16 +22,14 @@
             if (httpRequest.Files.Count < 1)
                 return BadRequest("Received no files.");
 
-            var result = _importService.Execute<BookDto>(httpRequest.Files[0], BookValidator);
+            var importService = _importServiceFactory.GetBookImportService();
+            var result = importService.Import(httpRequest.Files[0]);
 
             if (result == null)
             {
                 return Ok("Import successfully performed.");
             }
-            else
-            {
-                return Ok<HttpPostedFile>(result);
-            }
+            return Ok(result);
         }
     }
 }

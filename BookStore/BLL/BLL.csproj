@@ -53,13 +53,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IBookService.cs" />
-    <Compile Include="Interfaces\IImportService.cs" />
-    <Compile Include="Interfaces\IValidator.cs" />
+    <Compile Include="Factory\Implementation\Book\Excel\BookDtoExcelExtractor.cs" />
+    <Compile Include="Factory\Implementation\Book\BookDtoImporter.cs" />
+    <Compile Include="Factory\Interfaces\IImporter.cs" />
+    <Compile Include="Services\Interfaces\IBookService.cs" />
+    <Compile Include="Factory\Interfaces\IExtractor.cs" />
+    <Compile Include="Services\Interfaces\IImportService.cs" />
+    <Compile Include="Factory\Interfaces\IImportServiceFactory.cs" />
+    <Compile Include="Factory\Interfaces\IValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\BookService.cs" />
-    <Compile Include="Services\ImportService.cs" />
-    <Compile Include="Utils\ExcelFileValidator.cs" />
+    <Compile Include="Services\Implementation\BookService.cs" />
+    <Compile Include="Services\Implementation\ImportService.cs" />
+    <Compile Include="Factory\Implementation\ImportServiceFactory.cs" />
+    <Compile Include="Factory\Implementation\Book\Excel\BookDtoExcelValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

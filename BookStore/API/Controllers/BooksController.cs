@@ -1,8 +1,8 @@
 ﻿namespace API.Controllers
 {
     using System.Web.Http;
+    using BLL.Services.Interfaces;
     using DTO.Entities;
-    using BLL.Interfaces;
 
     public class BooksController : ApiController
     {

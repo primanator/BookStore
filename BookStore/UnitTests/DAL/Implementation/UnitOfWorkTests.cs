@@ -32,12 +32,12 @@ namespace UnitTests.DAL.Implementation
 
 
         [Test]
-        public void GetBookRepository_Called_Returns()
+        public void GetRepository_Called_Returns()
         {
             var contextFake = Substitute.For<BookStoreContext>();
             var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWork.BookRepository;
+            var result = unitOfWork.GetRepository<BookDto>();
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOf<IRepository<BookDto>>(result);

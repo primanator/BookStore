@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Results;
 using API.Controllers;
-using BLL.Interfaces;
+using BLL.Services.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
 using DTO.Entities;

@@ -2,13 +2,13 @@
 {
     using System.Data.Entity;
     using Ninject.Modules;
-    using BLL.Interfaces;
-    using BLL.Services;
     using DAL.EF;
     using DAL.Implementation;
     using DAL.Interfaces;
-    using DTO.Entities;
-    using BLL.Utils;
+    using BLL.Services.Implementation;
+    using BLL.Services.Interfaces;
+    using BLL.Factory.Interfaces;
+    using BLL.Factory.Implementation;
 
     public class InjectModule : NinjectModule
     {
@@ -17,8 +17,7 @@
             Bind<DbContext>().To<BookStoreContext>();
             Bind<IUnitOfWork>().To<UnitOfWork>();
             Bind<IBookService>().To<BookService>();
-            Bind<IImportService>().To<ImportService>();
-            Bind<IValidator<BookDto>, ExcelFileValidator<BookDto>>();
+            Bind<IImportServiceFactory>().To<ImportServiceFactory>();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace BLL.Interfaces
+﻿namespace BLL.Services.Interfaces
 {
     using System.Collections.Generic;
     using DTO.Entities;

@@ -1,10 +1,10 @@
-﻿namespace BLL.Services
+﻿namespace BLL.Services.Implementation
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Interfaces;
     using DAL.Interfaces;
-    using System.Linq;
     using DTO.Entities;
     using DTO.QueryBuilders;
 
