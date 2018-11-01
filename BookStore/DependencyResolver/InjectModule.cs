@@ -17,7 +17,7 @@
             Bind<DbContext>().To<BookStoreContext>();
             Bind<IUnitOfWork>().To<UnitOfWork>();
             Bind<IBookService>().To<BookService>();
-            Bind<IImportServiceFactory>().To<ImportServiceFactory>();
+            Bind<IImportServiceFactory>().To<ExcelImportServiceFactory>().Named("Excel");
         }
     }
 }

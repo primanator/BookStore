@@ -3,12 +3,13 @@
     using System.Web;
     using System.Web.Http;
     using BLL.Factory.Interfaces;
+    using Ninject;
 
     public class ImportController : ApiController
     {
         private readonly IImportServiceFactory _importServiceFactory;
 
-        public ImportController(IImportServiceFactory importServiceFactory)
+        public ImportController([Named("Excel")] IImportServiceFactory importServiceFactory)
         {
             _importServiceFactory = importServiceFactory;
         }

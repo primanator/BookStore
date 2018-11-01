@@ -7,11 +7,11 @@
     using BLL.Factory.Implementation.Book;
     using BLL.Factory.Implementation.Book.Excel;
 
-    public class ImportServiceFactory : IImportServiceFactory
+    public class ExcelImportServiceFactory : IImportServiceFactory
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public ImportServiceFactory(IUnitOfWork unitOfWork)
+        public ExcelImportServiceFactory(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
