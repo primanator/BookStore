@@ -15,8 +15,11 @@
 
         public BookService(IUnitOfWork unitOfWork, DtoFilterBuilder<BookDto> builder)
         {
+            if (!(builder is BookDtoFilterBuilder filterBuilder))
+                throw new ArgumentException("Can't cast filter builder to Book-oriented");
+
             _unitOfWork = unitOfWork;
-            _filterBuilder = new BookDtoFilterBuilder();
+            _filterBuilder = filterBuilder;
         }
 
         public void Create(BookDto record)

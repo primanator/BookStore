@@ -6,6 +6,6 @@
 
     public interface IExtractor
     {
-        List<Dto> Extract(HttpPostedFile source);
+        List<Dto> Extract(HttpPostedFile source, object sourceMap);
     }
 }

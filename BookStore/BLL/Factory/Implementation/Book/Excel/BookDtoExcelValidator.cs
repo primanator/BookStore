@@ -12,6 +12,8 @@
     {
         private Dictionary<string, int> _propertyColumnDictionary;
 
+        public object SourceMap => _propertyColumnDictionary;
+
         public BookDtoExcelValidator()
         {
             var dtoProperties = typeof(BookDto).GetProperties()

@@ -24,7 +24,7 @@
             {
                 return source;
             }
-            var importData = _extractor.Extract(source);
+            var importData = _extractor.Extract(source, _validator.SourceMap);
             _importer.Import(importData);
 
             return null;
