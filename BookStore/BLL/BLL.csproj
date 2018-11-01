@@ -64,7 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Implementation\BookService.cs" />
     <Compile Include="Services\Implementation\ImportService.cs" />
-    <Compile Include="Factory\Implementation\ImportServiceFactory.cs" />
+    <Compile Include="Factory\Implementation\ExcelImportServiceFactory.cs" />
     <Compile Include="Factory\Implementation\Book\Excel\BookDtoExcelValidator.cs" />
   </ItemGroup>
   <ItemGroup>
