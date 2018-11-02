@@ -1,4 +1,4 @@
-﻿namespace BLL.Factory.Implementation.Book.Excel
+﻿namespace BLL.Factory.Implementation.Excel.Books
 {
     using System;
     using System.Web;
@@ -51,23 +51,49 @@
             var cellType = typeof(T);
             var cellValue = worksheet.Cells[row, column].Value;
 
-            if (cellType.IsGenericType)
+            if (cellType.IsGenericType) // dto collections
             {
                 var parsedValues = cellValue.ToString().Split(',').ToList();
                 parsedValues.ForEach(str => str.Trim());
-                //
+                var collectionType = cellType.GetGenericArguments().SingleOrDefault();
 
-                return Activator.CreateInstance<T>();
+                if (collectionType == typeof(AuthorDto))
+                {
+                    var authors = new List<AuthorDto>();
+                    // get/create authors
+                }
+                else if (collectionType == typeof(GenreDto))
+                {
+                    var genres = new List<GenreDto>();
+                    // get/create genres
+                }
+
+                return Activator.CreateInstance<T>(); // never really gets here
             }
-            else if (cellType == typeof(Dto))
+            else if (cellType == typeof(Dto)) // other dto properies
             {
                 if (cellType == typeof(LibraryDto))
                 {
-                    //return _unitOfWork.GetRepository<BookDto>().FindBy(book => book.Name == cellValue.ToString());
+                    var libraryRepository = _unitOfWork.GetRepository<LibraryDto>();
+                    var library = libraryRepository.FindBy(lib => lib.Name == cellValue.ToString());
+
+                    if (library != null)
+                    {
+                        return (T)Convert.ChangeType(library, cellType);
+                    }
+
+                    libraryRepository.Insert(new LibraryDto
+                    {
+                        Name = cellValue.ToString()
+                    });
+                    _unitOfWork.Save();
+
+                    var newLibrary = libraryRepository.FindBy(lib => lib.Name == cellValue.ToString());
+                    return (T)Convert.ChangeType(newLibrary, cellType);
                 }
-                return Activator.CreateInstance<T>();
+                return Activator.CreateInstance<T>(); // never really gets here
             }
-            else
+            else // primitive dto properies
             {
                 return (T)Convert.ChangeType(cellValue, cellType);
             }

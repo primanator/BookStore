@@ -22,7 +22,8 @@
 
             _repositoryDictionary = new Dictionary<Type, Object>()
             {
-                { typeof(BookDto), new Repository<Book, BookDto>(this.context) }
+                { typeof(BookDto), new Repository<Book, BookDto>(this.context) },
+                { typeof(LibraryDto), new Repository<Library, LibraryDto>(this.context) }
             };
         }
 

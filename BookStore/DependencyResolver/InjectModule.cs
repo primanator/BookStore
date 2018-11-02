@@ -8,9 +8,9 @@
     using BLL.Services.Implementation;
     using BLL.Services.Interfaces;
     using BLL.Factory.Interfaces;
-    using BLL.Factory.Implementation;
     using DTO.QueryBuilders;
     using DTO.Entities;
+    using BLL.Factory.Implementation.Excel;
 
     public class InjectModule : NinjectModule
     {

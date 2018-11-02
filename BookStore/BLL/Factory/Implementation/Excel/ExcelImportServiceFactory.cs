@@ -1,11 +1,10 @@
-﻿namespace BLL.Factory.Implementation
+﻿namespace BLL.Factory.Implementation.Excel
 {
     using Services.Implementation;
     using Services.Interfaces;
     using DAL.Interfaces;
     using Interfaces;
-    using BLL.Factory.Implementation.Book;
-    using BLL.Factory.Implementation.Book.Excel;
+    using BLL.Factory.Implementation.Excel.Books;
 
     public class ExcelImportServiceFactory : IImportServiceFactory
     {
@@ -18,7 +17,7 @@
 
         public IImportService GetBookImportService()
         {
-            return new ImportService(new BookDtoExcelValidator(), new BookDtoExcelExtractor(), new BookDtoImporter(_unitOfWork));
+            return new ImportService(new BookDtoExcelValidator(), new BookDtoExcelExtractor(_unitOfWork), new BookDtoImporter(_unitOfWork));
         }
     }
 }
