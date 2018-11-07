@@ -1,9 +1,8 @@
 ﻿namespace BLL.Services.Implementation
 {
-    using System;
-    using System.Web;
     using Interfaces;
     using Factory.Interfaces;
+    using System.IO;
 
     public class ImportService : IImportService
     {
@@ -18,25 +17,13 @@
             _importer = importer;
         }
 
-        public HttpPostedFile Import(HttpPostedFile source)
+        public Stream Import(Stream source)
         {
-            if(!Validate(source))
-            {
-                return source;
-            }
-            var importData = _extractor.Extract(source, _validator.SourceMap);
+            var importData = source, _validator.SourceMap);
             _importer.Import(importData);
-
+            _validator.Validate(source);
+            _extractor.Extract();
             return null;
-        }
-
-        private bool Validate(HttpPostedFile source)
-        {
-            if (!_validator.CheckStructure(source, out string failReason))
-            {
-                throw new ArgumentException(failReason);
-            }
-            return _validator.CheckContent(source);
         }
     }
 }

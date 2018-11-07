@@ -1,11 +1,11 @@
 ﻿namespace BLL.Factory.Interfaces
 {
     using System.Collections.Generic;
-    using System.Web;
+    using System.IO;
     using DTO.Entities;
 
     public interface IExtractor
     {
-        List<Dto> Extract(HttpPostedFile source, object sourceMap);
+        List<Dto> Extract(Stream source, object sourceMap);
     }
 }

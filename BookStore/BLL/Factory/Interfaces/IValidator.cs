@@ -1,13 +1,10 @@
 ﻿namespace BLL.Factory.Interfaces
 {
-    using System.Web;
+    using System.IO;
 
     public interface IValidator
     {
-        object SourceMap { get; }
 
-        bool CheckStructure(HttpPostedFile source, out string failReason);
-
-        bool CheckContent(HttpPostedFile source);
+        void Validate(Stream source);
     }
 }

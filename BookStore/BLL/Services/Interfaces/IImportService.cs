@@ -1,9 +1,9 @@
 ﻿namespace BLL.Services.Interfaces
 {
-    using System.Web;
+    using System.IO;
 
     public interface IImportService
     {
-        HttpPostedFile Import(HttpPostedFile source);
+        Stream Import(Stream source);
     }
 }

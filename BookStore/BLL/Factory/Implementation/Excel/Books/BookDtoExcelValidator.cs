@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
-    using System.Web;
     using DTO.Entities;
     using Interfaces;
     using OfficeOpenXml;
@@ -22,10 +22,18 @@
 
             dtoProperties.ForEach(prop => _propertyColumnDictionary.Add(prop.Name, 0));
         }
-
-        public bool CheckStructure(HttpPostedFile source, out string failReason)
+        public Stream Validate(Stream source)
         {
-            using (var package = new ExcelPackage(source.InputStream))
+            if (!CheckStructure(source, out string failReason))
+            {
+                throw new ArgumentException(failReason);
+            }
+            return CheckContent(source);
+        }
+
+        private bool CheckStructure(Stream source, out string failReason)
+        {
+            using (var package = new ExcelPackage(source))
             {
                 if (package.Workbook.Worksheets.Count == 0)
                 {
@@ -52,7 +60,7 @@
             return true;
         }
 
-        public bool CheckContent(HttpPostedFile source)
+        private Stream CheckContent(Stream source)
         {
             throw new NotImplementedException();
         }

@@ -24,7 +24,7 @@
                 return BadRequest("Received no files.");
 
             var importService = _importServiceFactory.GetBookImportService();
-            var result = importService.Import(httpRequest.Files[0]);
+            var result = importService.Import(httpRequest.Files[0].InputStream);
 
             if (result == null)
             {
