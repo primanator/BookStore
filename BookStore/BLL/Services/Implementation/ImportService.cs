@@ -19,10 +19,12 @@
 
         public Stream Import(Stream source)
         {
-            var importData = source, _validator.SourceMap);
-            _importer.Import(importData);
+            //var importData = source, _validator.SourceMap);
+            //_importer.Import(importData);
+            //_extractor.Export();
+            _validator.ImportValidated =+ _extractor.Extract();
+
             _validator.Validate(source);
-            _extractor.Extract();
             return null;
         }
     }

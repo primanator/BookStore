@@ -1,11 +1,11 @@
 ﻿namespace BLL.Factory.Interfaces
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using DTO.Entities;
+    using System;
 
     public interface IExtractor
     {
-        List<Dto> Extract(Stream source, object sourceMap);
+        event EventHandler<EventArgs> ImportExtracted;
+
+        void Extract(object sender, EventArgs e);
     }
 }

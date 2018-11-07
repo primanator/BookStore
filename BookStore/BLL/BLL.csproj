@@ -56,6 +56,7 @@
     <Compile Include="Factory\Implementation\Excel\Books\BookDtoExcelExtractor.cs" />
     <Compile Include="Factory\Implementation\Excel\Books\BookDtoImporter.cs" />
     <Compile Include="Factory\Interfaces\IImporter.cs" />
+    <Compile Include="Models\EventArgs\ImportValidatedEventArgs.cs" />
     <Compile Include="Services\Interfaces\IBookService.cs" />
     <Compile Include="Factory\Interfaces\IExtractor.cs" />
     <Compile Include="Services\Interfaces\IImportService.cs" />

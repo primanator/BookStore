@@ -1,7 +1,6 @@
 ﻿namespace BLL.Factory.Implementation.Excel.Books
 {
     using System;
-    using System.Web;
     using System.Linq;
     using System.Collections.Generic;
     using Interfaces;
@@ -9,8 +8,10 @@
     using DTO.Entities;
     using OfficeOpenXml;
 
-    public class BookDtoExcelExtractor : IExtractor
+    internal class BookDtoExcelExtractor : IExtractor
     {
+        public event EventHandler<EventArgs> ImportExtracted;
+
         private readonly IUnitOfWork _unitOfWork;
 
         public BookDtoExcelExtractor(IUnitOfWork unitOfWork)
@@ -18,7 +19,15 @@
             _unitOfWork = unitOfWork;
         }
 
-        public List<Dto> Extract(HttpPostedFile source, object sourceMap)
+
+        public void Extract()
+        {
+            M();
+        }
+
+        private void ExtractImportData();
+
+        private void M()
         {
             if (!(sourceMap is Dictionary<string, int> castedMap))
                 throw new InvalidCastException("Cant cast sourceMap of imported excel.");
@@ -43,7 +52,6 @@
                     newData.Add(newItem);
                 }
             }
-            return newData;
         }
 
         private T GetCellValue<T>(ExcelWorksheet worksheet, int row, int column)

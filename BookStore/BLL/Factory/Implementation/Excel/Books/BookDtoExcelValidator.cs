@@ -7,12 +7,13 @@
     using DTO.Entities;
     using Interfaces;
     using OfficeOpenXml;
+    using Models.EventArgs;
 
-    public class BookDtoExcelValidator : IValidator
+    internal class BookDtoExcelValidator : IValidator
     {
-        private Dictionary<string, int> _propertyColumnDictionary;
+        public event EventHandler<EventArgs> ImportValidated;
 
-        public object SourceMap => _propertyColumnDictionary;
+        private Dictionary<string, int> _propertyColumnDictionary;
 
         public BookDtoExcelValidator()
         {
@@ -22,18 +23,25 @@
 
             dtoProperties.ForEach(prop => _propertyColumnDictionary.Add(prop.Name, 0));
         }
-        public Stream Validate(Stream source)
+
+        public void Validate(Stream srcStream)
         {
-            if (!CheckStructure(source, out string failReason))
+            if (!CheckStructure(srcStream, out string failReason) || !CheckContent(srcStream))
             {
-                throw new ArgumentException(failReason);
+                throw new ArgumentException(failReason); // ImportException
             }
-            return CheckContent(source);
+
+            ImportValidatedEventArgs args = new ImportValidatedEventArgs
+            {
+                Source = srcStream,
+                SourceMap = _propertyColumnDictionary
+            };
+            ImportValidated?.Invoke(this, args);
         }
 
-        private bool CheckStructure(Stream source, out string failReason)
+        private bool CheckStructure(Stream srcStream, out string failReason)
         {
-            using (var package = new ExcelPackage(source))
+            using (var package = new ExcelPackage(srcStream))
             {
                 if (package.Workbook.Worksheets.Count == 0)
                 {
@@ -60,7 +68,7 @@
             return true;
         }
 
-        private Stream CheckContent(Stream source)
+        private bool CheckContent(Stream srcStream)
         {
             throw new NotImplementedException();
         }
