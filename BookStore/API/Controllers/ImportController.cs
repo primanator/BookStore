@@ -3,7 +3,6 @@
     using System.Web;
     using System.Web.Http;
     using BLL.Factory.Interfaces;
-    using BLL.Models;
     using Ninject;
 
     public class ImportController : ApiController
