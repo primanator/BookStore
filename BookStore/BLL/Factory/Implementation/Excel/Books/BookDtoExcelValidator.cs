@@ -4,16 +4,16 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using BLL.Models;
     using DTO.Entities;
     using Interfaces;
     using OfficeOpenXml;
-    using Models.EventArgs;
 
     internal class BookDtoExcelValidator : IValidator
     {
-        public event EventHandler<EventArgs> ImportValidated;
-
         private Dictionary<string, int> _propertyColumnDictionary;
+
+        public event SuccessfulValidationHandler<ValidationEventArgs> ValidatonPassed;
 
         public BookDtoExcelValidator()
         {
@@ -26,17 +26,17 @@
 
         public void Validate(Stream srcStream)
         {
-            if (!CheckStructure(srcStream, out string failReason) || !CheckContent(srcStream))
+            if (!CheckStructure(srcStream, out string failReason))
             {
                 throw new ArgumentException(failReason); // ImportException
             }
 
-            ImportValidatedEventArgs args = new ImportValidatedEventArgs
+            var args = new ValidationEventArgs
             {
-                Source = srcStream,
+                SourceStream = srcStream,
                 SourceMap = _propertyColumnDictionary
             };
-            ImportValidated?.Invoke(this, args);
+            ValidatonPassed?.Invoke(this, args);
         }
 
         private bool CheckStructure(Stream srcStream, out string failReason)

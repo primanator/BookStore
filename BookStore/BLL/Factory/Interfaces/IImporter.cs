@@ -1,10 +1,9 @@
 ﻿namespace BLL.Factory.Interfaces
 {
-    using System.Collections.Generic;
-    using DTO.Entities;
+    using BLL.Models;
 
-    public interface IImporter
+    internal interface IImporter
     {
-        void Import(List<Dto> importData);
+        void Import(object sender, ExtractionEventArgs args);
     }
 }

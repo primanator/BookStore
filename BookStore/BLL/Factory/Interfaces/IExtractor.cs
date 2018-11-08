@@ -1,11 +1,15 @@
 ﻿namespace BLL.Factory.Interfaces
 {
+    using BLL.Models;
     using System;
 
-    public interface IExtractor
-    {
-        event EventHandler<EventArgs> ImportExtracted;
+    internal delegate void ExtractHandler<TEventArgs>(object sender, ExtractionEventArgs args)
+        where TEventArgs : EventArgs;
 
-        void Extract(object sender, EventArgs e);
+    internal interface IExtractor
+    {
+        event ExtractHandler<ExtractionEventArgs> ExtractionPassed;
+
+        ExtractionEventArgs Extract(object sender, ValidationEventArgs e);
     }
 }

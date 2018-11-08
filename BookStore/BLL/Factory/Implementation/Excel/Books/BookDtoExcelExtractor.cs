@@ -7,10 +7,11 @@
     using DAL.Interfaces;
     using DTO.Entities;
     using OfficeOpenXml;
+    using BLL.Models;
 
     internal class BookDtoExcelExtractor : IExtractor
     {
-        public event EventHandler<EventArgs> ImportExtracted;
+        public event ExtractHandler<ExtractionEventArgs> ExtractionPassed;
 
         private readonly IUnitOfWork _unitOfWork;
 
@@ -20,12 +21,11 @@
         }
 
 
-        public void Extract()
+        public ExtractionEventArgs Extract(object sender, ValidationEventArgs args)
         {
             M();
+            return null;
         }
-
-        private void ExtractImportData();
 
         private void M()
         {

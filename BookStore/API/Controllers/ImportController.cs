@@ -3,6 +3,7 @@
     using System.Web;
     using System.Web.Http;
     using BLL.Factory.Interfaces;
+    using BLL.Models;
     using Ninject;
 
     public class ImportController : ApiController
@@ -24,13 +25,9 @@
                 return BadRequest("Received no files.");
 
             var importService = _importServiceFactory.GetBookImportService();
-            var result = importService.Import(httpRequest.Files[0].InputStream);
+            importService.Import(httpRequest.Files[0].InputStream);
 
-            if (result == null)
-            {
-                return Ok("Import successfully performed.");
-            }
-            return Ok(result);
+            return Ok("Import successfully performed.");
         }
     }
 }

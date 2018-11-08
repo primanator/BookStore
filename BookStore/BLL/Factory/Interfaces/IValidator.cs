@@ -1,11 +1,15 @@
 ﻿namespace BLL.Factory.Interfaces
 {
+    using BLL.Models;
     using System;
     using System.IO;
 
-    public interface IValidator
+    internal delegate ExtractionEventArgs SuccessfulValidationHandler<TEventArgs>(object sender, ValidationEventArgs args)
+        where TEventArgs : EventArgs;
+
+    internal interface IValidator
     {
-        event EventHandler<EventArgs> ImportValidated;
+        event SuccessfulValidationHandler<ValidationEventArgs> ValidatonPassed;
 
         void Validate(Stream source);
     }

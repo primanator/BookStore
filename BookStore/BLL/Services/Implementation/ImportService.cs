@@ -4,7 +4,7 @@
     using Factory.Interfaces;
     using System.IO;
 
-    public class ImportService : IImportService
+    internal class ImportService : IImportService
     {
         private readonly IValidator _validator;
         private readonly IExtractor _extractor;
@@ -17,15 +17,12 @@
             _importer = importer;
         }
 
-        public Stream Import(Stream source)
+        public void Import(Stream srcStream)
         {
-            //var importData = source, _validator.SourceMap);
-            //_importer.Import(importData);
-            //_extractor.Export();
-            _validator.ImportValidated =+ _extractor.Extract();
+            _validator.ValidatonPassed += _extractor.Extract;
+            _extractor.ExtractionPassed += _importer.Import;
 
-            _validator.Validate(source);
-            return null;
+            _validator.Validate(srcStream);
         }
     }
 }

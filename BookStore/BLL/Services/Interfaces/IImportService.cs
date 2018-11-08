@@ -4,6 +4,6 @@
 
     public interface IImportService
     {
-        Stream Import(Stream source);
+        void Import(Stream source);
     }
 }
