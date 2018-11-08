@@ -17,6 +17,7 @@
         public ExcelImportServiceFactory(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _servicesDictionary = new Dictionary<Type, ImportService>();
         }
 
         public IImportService GetBookImportService()

@@ -10,7 +10,7 @@
 
     public class UnitOfWork : IUnitOfWork
     {
-        protected readonly BookStoreContext context;
+        protected readonly BookStoreContext Context;
 
         private Dictionary<Type, Object> _repositoryDictionary { get; }
 
@@ -18,13 +18,8 @@
 
         public UnitOfWork(DbContext context)
         {
-            this.context = context as BookStoreContext ?? throw new ArgumentException("Current Unit Of Work implementation is only confugured to work with " + typeof(BookStoreContext));
-
-            _repositoryDictionary = new Dictionary<Type, Object>()
-            {
-                { typeof(BookDto), new Repository<Book, BookDto>(this.context) },
-                { typeof(LibraryDto), new Repository<Library, LibraryDto>(this.context) }
-            };
+            Context = context as BookStoreContext ?? throw new ArgumentException("Current Unit Of Work implementation is only confugured to work with " + typeof(BookStoreContext));
+            _repositoryDictionary = new Dictionary<Type, object>();
         }
 
         public IRepository<T> GetRepository<T>()
@@ -35,12 +30,15 @@
             if (_repositoryDictionary.TryGetValue(repositoryType, out var repository))
                 return (IRepository<T>)repository;
 
-            return null;
+            repository = new Repository<Book, BookDto>(Context);
+            _repositoryDictionary.Add(repositoryType, repository);
+
+            return (IRepository<T>)repository;
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            Context.SaveChanges();
         }
 
         protected virtual void Dispose(bool disposing)
@@ -49,7 +47,7 @@
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    Context.Dispose();
                 }
             }
             _disposed = true;
