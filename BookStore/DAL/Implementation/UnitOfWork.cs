@@ -19,21 +19,21 @@
         public UnitOfWork(DbContext context)
         {
             Context = context as BookStoreContext ?? throw new ArgumentException("Current Unit Of Work implementation is only confugured to work with " + typeof(BookStoreContext));
-            _repositoryDictionary = new Dictionary<Type, object>();
+
+            _repositoryDictionary = new Dictionary<Type, Object>()
+            {
+                { typeof(BookDto), new Repository<Book, BookDto>(Context) },
+                { typeof(LibraryDto), new Repository<Library, LibraryDto>(Context) }
+            };
         }
 
         public IRepository<T> GetRepository<T>()
             where T: Dto
         {
-            var repositoryType = typeof(T);
-
-            if (_repositoryDictionary.TryGetValue(repositoryType, out var repository))
+            if (_repositoryDictionary.TryGetValue(typeof(T), out var repository))
                 return (IRepository<T>)repository;
 
-            repository = new Repository<Book, BookDto>(Context);
-            _repositoryDictionary.Add(repositoryType, repository);
-
-            return (IRepository<T>)repository;
+            return null;
         }
 
         public void Save()
