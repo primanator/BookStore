@@ -35,6 +35,11 @@
             Db.Set<TEntity>().Add(Mapper.Map<TEntity>(entity));
         }
 
+        public void InsertMultiple(TDto[] entities)
+        {
+            Db.Set<TEntity>().AddRange(Mapper.Map<TEntity[]>(entities));
+        }
+
         public void Update(TDto entity)
         {
             var mappedEntity = Mapper.Map<TEntity>(entity);

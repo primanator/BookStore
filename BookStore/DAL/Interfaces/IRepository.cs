@@ -10,6 +10,7 @@
     {
         List<TDto> FindBy(Expression<Func<TDto, bool>> dtoExpression);
         void Insert(TDto entity);
+        void InsertMultiple(TDto[] entities);
         void Delete(TDto entity);
         void Update(TDto entity);
     }
