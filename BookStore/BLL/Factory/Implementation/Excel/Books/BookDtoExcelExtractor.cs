@@ -120,7 +120,7 @@
             var repository = _unitOfWork.GetRepository<T>();
             var possibleEntry = repository.FindBy(dto => dto.Name == dtoName).SingleOrDefault();
 
-            throw new NotImplementedException();
+            return (T)Convert.ChangeType(possibleEntry, cellType);
         }
     }
 }
