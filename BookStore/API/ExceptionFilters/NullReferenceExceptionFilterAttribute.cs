@@ -1,15 +1,15 @@
-﻿namespace API.Utils
+﻿namespace API.ExceptionFilters
 {
-    using System.Web;
+    using System;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http.Filters;
 
-    public class HttpExceptionFilterAttribute : ExceptionFilterAttribute
+    public class NullReferenceExceptionFilterAttribute : ExceptionFilterAttribute
     {
         public override void OnException(HttpActionExecutedContext context)
         {
-            if (context.Exception is HttpException)
+            if (context.Exception is NullReferenceException)
             {
                 context.Response = new HttpResponseMessage
                 {

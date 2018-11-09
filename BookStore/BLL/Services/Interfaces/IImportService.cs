@@ -2,7 +2,7 @@
 {
     using System.IO;
 
-    public interface IImportService
+    internal interface IImportService
     {
         void Import(Stream source);
     }

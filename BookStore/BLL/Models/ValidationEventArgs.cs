@@ -9,5 +9,7 @@
         public Stream SourceStream { get; set; }
 
         public Dictionary<string, int> SourceMap { get; set; }
+
+        public int EntriesAmount { get; set; }
     }
 }

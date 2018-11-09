@@ -10,6 +10,6 @@
     {
         event ExtractHandler<ExtractionEventArgs> ExtractionPassed;
 
-        ExtractionEventArgs Extract(object sender, ValidationEventArgs e);
+        void Extract(object sender, ValidationEventArgs e);
     }
 }

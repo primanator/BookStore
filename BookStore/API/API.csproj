@@ -130,11 +130,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\ArgumentExceptionFilterAttribute.cs" />
-    <Compile Include="Utils\HttpExceptionFilterAttribute.cs" />
-    <Compile Include="Utils\InvalidOperationExceptionFilterAttribute.cs" />
-    <Compile Include="Utils\NotImplementedExceptionFilterAttribute.cs" />
-    <Compile Include="Utils\NullReferenceExceptionFilterAttribute.cs" />
+    <Compile Include="ExceptionFilters\ArgumentExceptionFilterAttribute.cs" />
+    <Compile Include="ExceptionFilters\HttpExceptionFilterAttribute.cs" />
+    <Compile Include="ExceptionFilters\InvalidOperationExceptionFilterAttribute.cs" />
+    <Compile Include="ExceptionFilters\NotImplementedExceptionFilterAttribute.cs" />
+    <Compile Include="ExceptionFilters\NullReferenceExceptionFilterAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

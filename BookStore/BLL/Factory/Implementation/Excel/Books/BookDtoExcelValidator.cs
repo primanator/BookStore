@@ -11,9 +11,9 @@
 
     internal class BookDtoExcelValidator : IValidator
     {
-        private Dictionary<string, int> _propertyColumnDictionary;
-
         public event SuccessfulValidationHandler<ValidationEventArgs> ValidatonPassed;
+
+        private Dictionary<string, int> _propertyColumnDictionary;
 
         public BookDtoExcelValidator()
         {
@@ -26,9 +26,9 @@
 
         public void Validate(Stream srcStream)
         {
-            if (!CheckStructure(srcStream, out string failReason))
+            if (!CheckStructure(srcStream, out string failReason) || !CheckContent(srcStream))
             {
-                throw new ArgumentException(failReason); // ImportException
+                throw new FormatException(failReason);
             }
 
             var args = new ValidationEventArgs
@@ -64,13 +64,17 @@
                     return false;
                 }
             }
-            failReason = string.Empty;
+            failReason = "There is a mistake in content of the import file. Please review recieved copy.";
             return true;
         }
 
         private bool CheckContent(Stream srcStream)
         {
-            throw new NotImplementedException();
+            using (var package = new ExcelPackage(srcStream))
+            {
+                //
+            }
+            return true;
         }
 
         private bool PropertiesAndColumnsMatch(ExcelPackage package)

@@ -4,7 +4,7 @@
     using System;
     using System.IO;
 
-    internal delegate ExtractionEventArgs SuccessfulValidationHandler<TEventArgs>(object sender, ValidationEventArgs args)
+    internal delegate void SuccessfulValidationHandler<TEventArgs>(object sender, ValidationEventArgs args)
         where TEventArgs : EventArgs;
 
     internal interface IValidator

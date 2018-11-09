@@ -1,7 +1,7 @@
 ﻿namespace API
 {
     using AutoMapper;
-    using Utils;
+    using ExceptionFilters;
     using System.Web.Http;
 
     public class WebApiApplication : System.Web.HttpApplication
