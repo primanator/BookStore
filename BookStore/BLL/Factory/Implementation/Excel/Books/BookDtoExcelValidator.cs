@@ -70,11 +70,7 @@
 
         private bool CheckContent(Stream srcStream)
         {
-            using (var package = new ExcelPackage(srcStream))
-            {
-                //
-            }
-            return true;
+            throw new NotImplementedException();
         }
 
         private bool PropertiesAndColumnsMatch(ExcelPackage package)

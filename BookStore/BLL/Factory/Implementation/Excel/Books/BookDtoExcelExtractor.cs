@@ -45,7 +45,7 @@
             }
 
             var argsOut = new ExtractionEventArgs
-            { 
+            {
                 ExtractedData = newData
             };
             ExtractionPassed?.Invoke(this, argsOut);
@@ -56,68 +56,71 @@
             var cellType = typeof(T);
             var cellValue = worksheet.Cells[row, column].Value;
 
-            if (cellType.IsGenericType) // dto collections
+            if (cellType.IsGenericType) // dto collections as properies
             {
-                return GetCollection<T>(cellType, cellValue);
+                return GetCollection<T>(cellValue, cellType);
             }
-            else if (cellType == typeof(Dto)) // other dto properies
+            else if (cellType == typeof(Dto)) // another dto as property
             {
-                return GetDtoProperty<T>(cellType, cellValue);
+                return GetDtoProperty<T>(cellValue, cellType);
             }
-            else // primitive dto properies
+            else // primitive type properies
             {
                 return (T)Convert.ChangeType(cellValue, cellType);
             }
         }
 
-        private T GetCollection<T>(Type cellType, object cellValue)
+        private T GetCollection<T>(object cellValue, Type cellType)
         {
+            var collectionType = cellType.GetGenericArguments().SingleOrDefault();
             var parsedValues = cellValue.ToString().Split(',').ToList();
             parsedValues.ForEach(str => str.Trim());
-            var collectionType = cellType.GetGenericArguments().SingleOrDefault();
+            List<Dto> collection = new List<Dto>(parsedValues.Count);
 
             if (collectionType == typeof(AuthorDto))
             {
-                var authors = new List<AuthorDto>(parsedValues.Count);
-                var authorsRepository = _unitOfWork.GetRepository<AuthorDto>();
-
-                parsedValues.ForEach(authorName =>
-                {
-                    var possibleAuthor = authorsRepository.FindBy(author => author.Name == authorName).SingleOrDefault();
-                    if (possibleAuthor != null)
-                        authors.Add(possibleAuthor);
-                });
-
-                return (T)Convert.ChangeType(authors, cellType);
+                FillCollection<AuthorDto>(collection, parsedValues);
             }
             else if (collectionType == typeof(GenreDto))
             {
-                var genres = new List<GenreDto>();
-                var genresRepository = _unitOfWork.GetRepository<GenreDto>();
-
-                parsedValues.ForEach(genreName =>
-                {
-                    var possibleGenre = genresRepository.FindBy(genre => genre.Name == genreName).SingleOrDefault();
-                    if (possibleGenre != null)
-                        genres.Add(possibleGenre);
-                });
-
-                return (T)Convert.ChangeType(genres, cellType);
+                FillCollection<GenreDto>(collection, parsedValues);
             }
+
+            return (T)Convert.ChangeType(collection, cellType);
         }
 
-        private T GetDtoProperty<T>(Type cellType, object cellValue)
+        private void FillCollection<T>(List<Dto> collection, List<string> values)
+            where T : Dto
         {
+            var repository = _unitOfWork.GetRepository<T>();
+
+            values.ForEach(importedValue =>
+            {
+                var possibleEntry = repository.FindBy(dto => dto.Name == importedValue).SingleOrDefault();
+                if (possibleEntry != null)
+                    collection.Add(possibleEntry);
+            });
+        }
+
+        private T GetDtoProperty<T>(object cellValue, Type cellType)
+        {
+            T dtoProperty = default(T);
+
             if (cellType == typeof(LibraryDto))
             {
-                var libraryRepository = _unitOfWork.GetRepository<LibraryDto>();
-                var library = libraryRepository.FindBy(lib => lib.Name == cellValue.ToString());
-
-                if (library != null)
-                {
-                    return (T)Convert.ChangeType(library, cellType);
-                }
+                var dtoPropContent = FillDtoProperty<LibraryDto>(cellValue.ToString(), cellType);
+                dtoProperty = (T)Convert.ChangeType(dtoPropContent, cellType);
             }
+            return dtoProperty;
+        }
+
+        private T FillDtoProperty<T>(string dtoName, Type cellType)
+            where T : Dto
+        {
+            var repository = _unitOfWork.GetRepository<T>();
+            var possibleEntry = repository.FindBy(dto => dto.Name == dtoName).SingleOrDefault();
+
+            throw new NotImplementedException();
         }
     }
 }
