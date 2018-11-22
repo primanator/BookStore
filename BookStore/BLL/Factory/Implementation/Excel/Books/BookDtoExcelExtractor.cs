@@ -31,13 +31,13 @@
                 {
                     var newItem = new BookDto
                     {
-                        Isbn = GetSimple<string>(worksheet.Cells[row, argsIn.SourceMap["Isbn"]].Value),
-                        Pages = GetSimple<int>(worksheet.Cells[row, argsIn.SourceMap["Pages"]].Value),
-                        LimitedEdition = GetSimple<bool>(worksheet.Cells[row, argsIn.SourceMap["LimitedEdition"]].Value),
-                        WrittenIn = GetSimple<DateTime>(worksheet.Cells[row, argsIn.SourceMap["WrittenIn"]].Value),
-                        Library = GetDto<LibraryDto>(worksheet.Cells[row, argsIn.SourceMap["Library"]].Value),
-                        Authors = GetCollection<AuthorDto>(worksheet.Cells[row, argsIn.SourceMap["Authors"]].Value),
-                        Genres = GetCollection<GenreDto>(worksheet.Cells[row, argsIn.SourceMap["Genres"]].Value)
+                        Isbn = GetSimple<string>(worksheet.Cells[row, argsIn.SourceMap["isbn"]].Value),
+                        Pages = GetSimple<int>(worksheet.Cells[row, argsIn.SourceMap["pages"]].Value),
+                        LimitedEdition = GetSimple<bool>(worksheet.Cells[row, argsIn.SourceMap["limitededition"]].Value),
+                        WrittenIn = GetSimple<DateTime>(worksheet.Cells[row, argsIn.SourceMap["writtenin"]].Value),
+                        Library = GetDto<LibraryDto>(worksheet.Cells[row, argsIn.SourceMap["library"]].Value),
+                        Authors = GetCollection<AuthorDto>(worksheet.Cells[row, argsIn.SourceMap["authors"]].Value),
+                        Genres = GetCollection<GenreDto>(worksheet.Cells[row, argsIn.SourceMap["genres"]].Value)
                     };
                     newItem.LibraryId = newItem.Library.Id;
                     newData.Add(newItem);

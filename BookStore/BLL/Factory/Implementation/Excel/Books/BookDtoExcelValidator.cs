@@ -11,14 +11,11 @@
 
     internal class BookDtoExcelValidator : IValidator
     {
-        private enum AlphabetLetters
-        {
-            A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
-        };
-
         public event SuccessfulValidationHandler<ValidationEventArgs> ValidatonPassed;
 
         private Dictionary<string, int> _propertyColumnDictionary;
+        private string[] _missingProperties;
+        private int _dtosAmount; // calculate when validating content
 
         public BookDtoExcelValidator()
         {
@@ -26,7 +23,7 @@
                 .Where(prop => !prop.Name.Contains("Id"))
                 .ToList();
 
-            dtoProperties.ForEach(prop => _propertyColumnDictionary.Add(prop.Name, 0));
+            dtoProperties.ForEach(prop => _propertyColumnDictionary.Add(prop.Name.ToLowerInvariant(), 0));
         }
 
         public void Validate(Stream srcStream)
@@ -40,7 +37,7 @@
             {
                 SourceStream = srcStream,
                 SourceMap = _propertyColumnDictionary,
-                EntriesAmount = 1 // calculate when validating content
+                EntriesAmount = _dtosAmount
             };
             ValidatonPassed?.Invoke(this, args);
         }
@@ -77,63 +74,141 @@
 
         private bool CheckContent(Stream srcStream)
         {
-            throw new NotImplementedException();
+            var contentIsOk = true;
+
+            using (var package = new ExcelPackage(srcStream))
+            {
+                var worksheet = package.Workbook.Worksheets.First();
+                for (int row = worksheet.Dimension.Start.Row; row <= worksheet.Dimension.End.Row; row++)
+                {
+                    if (RowContainsValue(worksheet, row))
+                    {
+                        if (CheckIsbn(worksheet, row, _propertyColumnDictionary["isbn"])
+                            && CheckPages(worksheet, row, _propertyColumnDictionary["pages"])
+                            && CheckLimitedEdition(worksheet, row, _propertyColumnDictionary["limitededition"])
+                            && CheckWrittenIn(worksheet, row, _propertyColumnDictionary["writtenin"])
+                            && CheckLibrary(worksheet, row, _propertyColumnDictionary["library"])
+                            && CheckAuthors(worksheet, row, _propertyColumnDictionary["authors"])
+                            && CheckGenres(worksheet, row, _propertyColumnDictionary["genres"]))
+                        {
+                            _dtosAmount++;
+                        }
+                        else
+                        {
+                            contentIsOk = false;
+                        }
+                    }
+                }
+            }
+
+            return contentIsOk;
+        }
+
+        private bool RowContainsValue(ExcelWorksheet worksheet, int row)
+        {
+            var valueFound = false;
+
+            for (int column = worksheet.Dimension.Start.Column; column <= worksheet.Dimension.End.Column; column++)
+            {
+                var cellText = worksheet.Cells[1, column].Text.Trim();
+                if (!string.IsNullOrEmpty(cellText))
+                {
+                    valueFound = true;
+                    break;
+                }
+            }
+
+            return valueFound;
         }
 
         private bool PropertiesAndColumnsMatch(ExcelPackage package)
         {
             var worksheet = package.Workbook.Worksheets.First();
+
             for (int column = worksheet.Dimension.Start.Column; column <= worksheet.Dimension.End.Column; column++)
             {
-                var cellValue = worksheet.Cells[1, column].Text.Trim();
+                var cellText = worksheet.Cells[1, column].Text.Trim().ToLowerInvariant();
 
-                if (_propertyColumnDictionary.TryGetValue(cellValue, out var columnNumber))
+                if (_propertyColumnDictionary.TryGetValue(cellText, out var columnNumber))
                 {
                     if (columnNumber > 0)
                     {
                         return false;
                     }
 
-                    _propertyColumnDictionary.Remove(cellValue);
-                    _propertyColumnDictionary.Add(cellValue, column);
+                    _propertyColumnDictionary.Remove(cellText);
+                    _propertyColumnDictionary.Add(cellText, column);
                 }
             }
+
             return true;
         }
 
         private bool PropertiesMissing()
         {
-            return _propertyColumnDictionary.Keys.Any(propertyName =>
+            _missingProperties = _propertyColumnDictionary.Keys.Where(propertyName =>
             {
                 // in excel column indexes start at 1, so if any column number is 0 - corresponding property is missing in import file
                 return _propertyColumnDictionary[propertyName] == 0;
-            });
+            }).ToArray();
+
+            return _missingProperties.Length > 0;
         }
 
         private void MarkMissingProperties(ExcelPackage package)
         {
-            var missingProperties = _propertyColumnDictionary.Keys.Where(propertyName =>
-            {
-                return _propertyColumnDictionary[propertyName] == 0;
-            }).ToArray();
-
             var worksheet = package.Workbook.Worksheets.First();
             for (int column = worksheet.Dimension.Start.Column, propertyIndex = 0; column <= worksheet.Dimension.End.Column; column++)
             {
-                var cellValue = worksheet.Cells[1, column].Text.Trim();
-                if (string.IsNullOrEmpty(cellValue))
+                var cell = worksheet.Cells[1, column];
+                if (string.IsNullOrEmpty(cell.Text.Trim()))
                 {
-                    var columnLetter = ((AlphabetLetters)column - 1); // in excel column indexes start at 1, but in enum - from 0
-                    var cell = worksheet.DataValidations.AddAnyValidation($"A:{columnLetter}");
-                    cell.ShowErrorMessage = true;
-                    cell.ErrorStyle = OfficeOpenXml.DataValidation.ExcelDataValidationWarningStyle.stop;
-                    cell.ErrorTitle = "Book property is missing";
-                    cell.Error = $"Please provide value for {missingProperties[propertyIndex]}";
-                    cell.AllowBlank = false;
+                    var cellValidataion = worksheet.DataValidations.AddAnyValidation(cell.Address);
+
+                    cellValidataion.ShowErrorMessage = true;
+                    cellValidataion.ErrorStyle = OfficeOpenXml.DataValidation.ExcelDataValidationWarningStyle.stop;
+                    cellValidataion.ErrorTitle = "Book property is missing";
+                    cellValidataion.Error = $"Please provide value for {_missingProperties[propertyIndex]}";
+                    cellValidataion.AllowBlank = false;
 
                     propertyIndex++;
                 }
             }
+        }
+
+        private bool CheckIsbn(ExcelWorksheet worksheet, int row, int column)
+        {
+            return false;
+        }
+
+        private bool CheckPages(ExcelWorksheet worksheet, int row, int column)
+        {
+            return false;
+        }
+
+        private bool CheckGenres(ExcelWorksheet worksheet, int row, int column)
+        {
+            return false;
+        }
+
+        private bool CheckAuthors(ExcelWorksheet worksheet, int row, int column)
+        {
+            return false;
+        }
+
+        private bool CheckLibrary(ExcelWorksheet worksheet, int row, int column)
+        {
+            return false;
+        }
+
+        private bool CheckWrittenIn(ExcelWorksheet worksheet, int row, int column)
+        {
+            return false;
+        }
+
+        private bool CheckLimitedEdition(ExcelWorksheet worksheet, int row, int column)
+        {
+            return false;
         }
     }
 }
