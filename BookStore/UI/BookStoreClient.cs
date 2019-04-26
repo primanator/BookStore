@@ -82,7 +82,7 @@
             using (var formData = new MultipartFormDataContent())
             {
                 formData.Add(fileStreamContent, "importDocument", file.Name);
-                _response = await _client.PostAsync("api/documents", formData);
+                _response = await _client.PostAsync("api/import", formData);
             }
             CheckResponse();
 
@@ -148,7 +148,7 @@
                         try
                         {
                             toImport = new FileInfo(path);
-                            if (toImport.Extension != "xlsx")
+                            if (toImport.Extension != ".xlsx")
                                 throw new ArgumentException("Input file is not in .xlsx format.");
                         }
                         catch(Exception e)

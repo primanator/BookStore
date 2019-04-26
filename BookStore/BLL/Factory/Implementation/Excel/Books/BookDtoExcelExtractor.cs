@@ -26,21 +26,21 @@
 
             using (var package = new ExcelPackage(argsIn.SourceStream))
             {
-                var worksheet = package.Workbook.Worksheets.FirstOrDefault();
+                var worksheet = package.Workbook.Worksheets.First();
                 for (int row = worksheet.Dimension.Start.Row + 1; row <= worksheet.Dimension.End.Row; row++)
                 {
-                    var newItem = new BookDto
+                    newData.Add(new BookDto
                     {
+                        Name = GetSimple<string>(worksheet.Cells[row, argsIn.SourceMap["name"]].Value),
                         Isbn = GetSimple<string>(worksheet.Cells[row, argsIn.SourceMap["isbn"]].Value),
                         Pages = GetSimple<int>(worksheet.Cells[row, argsIn.SourceMap["pages"]].Value),
                         LimitedEdition = GetSimple<bool>(worksheet.Cells[row, argsIn.SourceMap["limitededition"]].Value),
-                        WrittenIn = GetSimple<DateTime>(worksheet.Cells[row, argsIn.SourceMap["writtenin"]].Value),
-                        Library = GetDto<LibraryDto>(worksheet.Cells[row, argsIn.SourceMap["library"]].Value),
-                        Authors = GetCollection<AuthorDto>(worksheet.Cells[row, argsIn.SourceMap["authors"]].Value),
-                        Genres = GetCollection<GenreDto>(worksheet.Cells[row, argsIn.SourceMap["genres"]].Value)
-                    };
-                    newItem.LibraryId = newItem.Library.Id;
-                    newData.Add(newItem);
+                        WrittenIn = GetSimple<DateTime>(worksheet.Cells[row, argsIn.SourceMap["writtenin"]].Text),
+                        LibraryId = 1, // only one library is present for now (newItem.Library.Id)
+                        //Library = GetDto<LibraryDto>(worksheet.Cells[row, argsIn.SourceMap["library"]].Value)//,
+                        //Authors = GetCollection<AuthorDto>(worksheet.Cells[row, argsIn.SourceMap["authors"]].Value),
+                        //Genres = GetCollection<GenreDto>(worksheet.Cells[row, argsIn.SourceMap["genres"]].Value)
+                    });
                 }
             }
 
