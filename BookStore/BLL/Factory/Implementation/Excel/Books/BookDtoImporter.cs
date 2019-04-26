@@ -1,8 +1,8 @@
 ﻿namespace BLL.Factory.Implementation.Excel.Books
 {
     using System.Linq;
-    using BLL.Factory.Interfaces;
-    using BLL.Models;
+    using Interfaces;
+    using Models;
     using DAL.Interfaces;
     using DTO.Entities;
 

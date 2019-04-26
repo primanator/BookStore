@@ -7,7 +7,7 @@
     using DAL.Interfaces;
     using DTO.Entities;
     using OfficeOpenXml;
-    using BLL.Models;
+    using Models;
 
     internal class BookDtoExcelExtractor : IExtractor
     {
