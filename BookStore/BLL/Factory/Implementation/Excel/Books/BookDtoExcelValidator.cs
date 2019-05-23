@@ -25,8 +25,7 @@
                 .ToList();
 
             _propertyColumnDictionary = new Dictionary<string, int>(dtoProperties.Count);
-            dtoProperties.Where(prop => prop.Name.ToLowerInvariant() != "authors" && prop.Name.ToLowerInvariant() != "genres").ToList()
-                .ForEach(prop => _propertyColumnDictionary.Add(prop.Name.ToLowerInvariant(), 0));
+            dtoProperties.ForEach(prop => _propertyColumnDictionary.Add(prop.Name.ToLowerInvariant(), 0));
         }
 
         public void Validate(Stream srcStream)
@@ -90,9 +89,9 @@
                                                | CheckPages(worksheet, worksheet.Cells[row, _propertyColumnDictionary["pages"]].Address)
                                                | CheckLimitedEdition(worksheet, worksheet.Cells[row, _propertyColumnDictionary["limitededition"]].Address)
                                                | CheckWrittenIn(worksheet, worksheet.Cells[row, _propertyColumnDictionary["writtenin"]].Address)
-                                               | CheckLibrary(worksheet, worksheet.Cells[row, _propertyColumnDictionary["library"]].Address);
-                                               //| CheckAuthors(worksheet, worksheet.Cells[row, _propertyColumnDictionary["authors"]].Address)
-                                               //| CheckGenres(worksheet, worksheet.Cells[row, _propertyColumnDictionary["genres"]].Address);
+                                               | CheckLibrary(worksheet, worksheet.Cells[row, _propertyColumnDictionary["library"]].Address)
+                                               | CheckAuthors(worksheet, worksheet.Cells[row, _propertyColumnDictionary["authors"]].Address)
+                                               | CheckGenres(worksheet, worksheet.Cells[row, _propertyColumnDictionary["genres"]].Address);
                     if (dataValidationPassed)
                     {
                         _newBooksAmount++;
@@ -206,39 +205,39 @@
 
         private bool CheckGenres(ExcelWorksheet worksheet, string address)
         {
-            foreach (var possibleGenre in Regex.Matches(worksheet.Cells[address].Text.Trim(), @"(.+?)(?:,|$)").OfType<string>())
+            var genresAreOk = true;
+
+            foreach (var possibleGenre in worksheet.Cells[address].Text.Trim().Split(','))
             {
-                if (!Regex.IsMatch(possibleGenre, @"^[\sA-Za-z]$"))
+                if (Regex.IsMatch(possibleGenre, @"^[\sA-Za-z0-9]$"))
                 {
                     AddCellValidation(worksheet, address, "Invalid Genres content", "Genres value has to be a comma separated list of single-word genres");
-                    return false;
+                    genresAreOk = false;
                 }
             }
-            return true;
+            return genresAreOk;
         }
 
         // Matches T.F. Johnson | John O'Neil | Mary-Kate Johnson
         // Non-Matches sam_johnson | Joe--Bob Jones | dfjsd0rd
         private bool CheckAuthors(ExcelWorksheet worksheet, string address)
         {
-            var cellValue = worksheet.Cells[address].Text.Trim();
-            if (string.IsNullOrEmpty(cellValue))
-                return false;
+            var authorsAreOk = true;
 
-            foreach (var possibleAuthor in Regex.Matches(cellValue, "^([0-9]+,)*[0-9]+$").OfType<string>())
+            foreach (var possibleAuthor in worksheet.Cells[address].Text.Trim().Split(','))
             {
                 if (!Regex.IsMatch(possibleAuthor, @"^[a-zA-Z]+(([\'\,\.\- ][a-zA-Z ])?[a-zA-Z]*)*$"))
                 {
                     AddCellValidation(worksheet, address, "Invalid Authors content", "Authors value has to be a comma separated list of alike names T.F. Johnson | John O'Neil | Mary-Kate Johnson");
-                    return false;
+                    authorsAreOk = false;
                 }
             }
-            return true;
+            return authorsAreOk;
         }
 
         private bool CheckLibrary(ExcelWorksheet worksheet, string address)
         {
-            if (!Regex.IsMatch(worksheet.Cells[address].Text.Trim(), @"[^A-Za-z\ ]"))
+            if (Regex.IsMatch(worksheet.Cells[address].Text.Trim(), @"^[A-Za-z\ ]$"))
             {
                 return true;
             }

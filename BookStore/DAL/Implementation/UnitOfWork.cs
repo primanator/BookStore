@@ -23,7 +23,9 @@
             _repositoryDictionary = new Dictionary<Type, Object>()
             {
                 { typeof(BookDto), new Repository<Book, BookDto>(Context) },
-                { typeof(LibraryDto), new Repository<Library, LibraryDto>(Context) }
+                { typeof(LibraryDto), new Repository<Library, LibraryDto>(Context) },
+                { typeof(AuthorDto), new Repository<Author, AuthorDto>(Context) },
+                { typeof(GenreDto), new Repository<Genre, GenreDto>(Context) }
             };
         }
 

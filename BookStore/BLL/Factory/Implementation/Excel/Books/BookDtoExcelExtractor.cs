@@ -27,7 +27,7 @@
             using (var package = new ExcelPackage(argsIn.SourceStream))
             {
                 var worksheet = package.Workbook.Worksheets.First();
-                for (int row = worksheet.Dimension.Start.Row + 1; row <= worksheet.Dimension.End.Row; row++)
+                for (var row = worksheet.Dimension.Start.Row + 1; row <= worksheet.Dimension.End.Row; row++)
                 {
                     newData.Add(new BookDto
                     {
@@ -37,9 +37,9 @@
                         LimitedEdition = GetSimple<bool>(worksheet.Cells[row, argsIn.SourceMap["limitededition"]].Value),
                         WrittenIn = GetSimple<DateTime>(worksheet.Cells[row, argsIn.SourceMap["writtenin"]].Text),
                         LibraryId = 1, // only one library is present for now (newItem.Library.Id)
-                        //Library = GetDto<LibraryDto>(worksheet.Cells[row, argsIn.SourceMap["library"]].Value)//,
-                        //Authors = GetCollection<AuthorDto>(worksheet.Cells[row, argsIn.SourceMap["authors"]].Value),
-                        //Genres = GetCollection<GenreDto>(worksheet.Cells[row, argsIn.SourceMap["genres"]].Value)
+                        Library = GetDto<LibraryDto>(dto => dto.Id == 1),
+                        Authors = GetCollection<AuthorDto>(worksheet.Cells[row, argsIn.SourceMap["authors"]].Value),
+                        Genres = GetCollection<GenreDto>(worksheet.Cells[row, argsIn.SourceMap["genres"]].Value)
                     });
                 }
             }
@@ -56,11 +56,11 @@
             return (T)Convert.ChangeType(cellValue, typeof(T));
         }
 
-        private T GetDto<T>(object cellValue)
+        private T GetDto<T>(Func<T, bool> func)
             where T : Dto
         {
             var repository = _unitOfWork.GetRepository<T>();
-            return repository.FindBy(dto => dto.Name == cellValue.ToString()).SingleOrDefault();
+            return repository.FindBy(x => func(x)).SingleOrDefault();
         }
 
         private ICollection<T> GetCollection<T>(object cellValue)
@@ -68,7 +68,7 @@
         {
             var repository = _unitOfWork.GetRepository<T>();
             var importedValues = cellValue.ToString().Split(',').ToList();
-            var collection = new List<Dto>(importedValues.Count);
+            var collection = new List<T>(importedValues.Count);
 
             importedValues.ForEach(importedValue =>
             {
