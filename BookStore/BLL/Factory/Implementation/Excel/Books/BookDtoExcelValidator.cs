@@ -17,6 +17,7 @@
         private readonly Dictionary<string, int> _propertyColumnDictionary;
         private string[] _missingProperties;
         private int _newBooksAmount;
+        string x = "";
 
         public BookDtoExcelValidator()
         {
@@ -65,9 +66,19 @@
                     failReason = "Not all properties found in header.";
                     return false;
                 }
+                package.Save();
             }
 
+            M(srcStream);
             return true;
+        }
+
+        void M(Stream stream)
+        {
+            using (var package = new ExcelPackage(stream))
+            {
+                x = package.Workbook.Worksheets.First().Cells[1, 9].Text;
+            }
         }
 
         private bool ContentChecked(Stream srcStream, ref string failReason)

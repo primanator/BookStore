@@ -86,6 +86,13 @@
             }
             CheckResponse();
 
+            var returnedDocument = await _response.Content.ReadAsStreamAsync();
+            using (var fs = new FileStream($"{_response.Content.Headers.ContentDisposition.FileName}.xlsx", FileMode.Create))
+            {
+                returnedDocument.CopyTo(fs);
+                fs.Flush();
+            }
+
             return await _response.Content.ReadAsStringAsync();
         }
 
@@ -151,7 +158,7 @@
                             if (toImport.Extension != ".xlsx")
                                 throw new ArgumentException("Input file is not in .xlsx format.");
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             Console.WriteLine(e.Message);
                             break;

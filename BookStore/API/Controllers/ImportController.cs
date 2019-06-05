@@ -4,6 +4,7 @@
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
@@ -28,22 +29,36 @@
 
             public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
             {
-                var response = _request.CreateResponse(HttpStatusCode.BadRequest);
-
-                using (var memoryStream = new MemoryStream())
+                var result = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    _srcStream.CopyTo(memoryStream);
-                    response.Content = new StreamContent(memoryStream);
-                }
-
-                response.ReasonPhrase = _failReason;
-                response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-                response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                    Content = new StreamContent(_srcStream),
+                    ReasonPhrase = _failReason,
+                    RequestMessage = _request
+                };
+                result.Content.Headers.ContentLength = _srcStream.Length;
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = "validated_import_file"
+                    FileName = "win"
                 };
 
-                return Task.FromResult(response);
+                return Task.FromResult(result);
+                //var response = _request.CreateResponse(HttpStatusCode.BadRequest);
+
+                //using (var memoryStream = new MemoryStream())
+                //{
+                //    _srcStream.CopyTo(memoryStream);
+                //    response.Content = new StreamContent(memoryStream);
+                //}
+
+                //response.ReasonPhrase = _failReason;
+                //response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                //response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                //{
+                //    FileName = "validated_import_file"
+                //};
+
+                //return Task.FromResult(response);
             }
         }
 
@@ -70,8 +85,11 @@
             {
                 importService.Import(importStream);
             }
-            catch(FormatException ex)
+            catch (FormatException ex)
             {
+                httpRequest.RequestContext.HttpContext.Response.Clear();
+                httpRequest.RequestContext.HttpContext.Response.ContentType = "";
+
                 return new FailedImportResult(ex.Message, importStream, Request);
             }
             return Ok("Import successfully performed.");
