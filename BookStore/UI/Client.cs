@@ -6,7 +6,9 @@
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Text;
     using System.Threading.Tasks;
+    using System.Web;
     using DTO.Entities;
 
     internal class Client// : IDisposable
@@ -113,28 +115,21 @@
         {
             var importBytes = File.ReadAllBytes(path);
 
-            WebRequest request = WebRequest.Create(new Uri("http://localhost:50402/api/import"));
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:50402/api/import");
             request.Method = "POST";
-            request.ContentLength = importBytes.Length;
+
             request.ContentType = "application/x-www-form-urlencoded";
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(importBytes, 0, importBytes.Length);
-            dataStream.Close();
+            request.ContentLength = importBytes.Length;
+            Stream newStream = request.GetRequestStream();
+            newStream.Write(importBytes, 0, importBytes.Length);
+            newStream.Close();
 
-            WebResponse response = request.GetResponse();
-            var fileName = response.Headers.Get("fileName");
-            var fileExtension = response.Headers.Get("fileExtension");
+            var response = (HttpWebResponse)request.GetResponse();
 
-            using (var fs = new FileStream($"{fileName + fileExtension}", FileMode.Create))
-            {
-                new StreamReader(response.GetResponseStream())
-                    .BaseStream
-                    .CopyTo(fs);
-
-                fs.Flush();
-            }
-
-            response.Close();
+            Stream objStream = response.GetResponseStream();
+            BinaryReader breader = new BinaryReader(objStream);
+            byte[] data = breader.ReadBytes((int)response.ContentLength);
+            File.WriteAllBytes("excel.xlsx", data);
         }
 
         public void SendRequest(string httpVerb)

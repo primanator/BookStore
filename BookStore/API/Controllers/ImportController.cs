@@ -22,6 +22,7 @@
 
             public FailedImportResult(HttpRequestMessage request, Stream srcStream, string failReason)
             {
+                srcStream.Position = 0;
                 _srcStream = srcStream;
                 _request = request;
                 _failReason = failReason;
@@ -29,7 +30,7 @@
 
             public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
             {
-                var result = new HttpResponseMessage(HttpStatusCode.Created)
+                var result = new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = new StreamContent(_srcStream),
                     ReasonPhrase = _failReason,
@@ -58,16 +59,11 @@
             if (!ModelState.IsValid)
                 return BadRequest("Invalid model state");
 
-            var httpRequest = HttpContext.Current.Request;
-            if (httpRequest.Files.Count < 1)
-                return BadRequest("Received no files.");
-
-            var importService = _importServiceFactory.GetBookImportService();
-            var importStream = httpRequest.Files[0].InputStream;
-
             try
             {
-                importService.Import(importStream);
+                _importServiceFactory
+                    .GetBookImportService()
+                    .Import(HttpContext.Current.Request.InputStream);
             }
             catch (FailedImportException ex)
             {

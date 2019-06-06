@@ -66,8 +66,6 @@
                 failReason = "Not all properties found in header.";
                 return false;
             }
-            package.Save();
-            srcStream.Flush();
 
             return true;
         }
