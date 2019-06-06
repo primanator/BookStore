@@ -57,6 +57,7 @@
     <Compile Include="QueryBuilders\DtoFilterBuilder.cs" />
     <Compile Include="Entities\UserDto.cs" />
     <Compile Include="Utils\ExpressionExtensions.cs" />
+    <Compile Include="Utils\FailedImportException.cs" />
     <Compile Include="Utils\ParameterRebinder.cs" />
   </ItemGroup>
   <ItemGroup>

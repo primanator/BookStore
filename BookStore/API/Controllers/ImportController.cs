@@ -1,6 +1,5 @@
 ﻿namespace API.Controllers
 {
-    using System;
     using System.IO;
     using System.Net;
     using System.Net.Http;
@@ -10,6 +9,7 @@
     using System.Web;
     using System.Web.Http;
     using BLL.Factory.Interfaces;
+    using DTO.Utils;
     using Ninject;
 
     public class ImportController : ApiController
@@ -20,7 +20,7 @@
             private readonly HttpRequestMessage _request;
             private readonly string _failReason;
 
-            public FailedImportResult(string failReason, Stream srcStream, HttpRequestMessage request)
+            public FailedImportResult(HttpRequestMessage request, Stream srcStream, string failReason)
             {
                 _srcStream = srcStream;
                 _request = request;
@@ -29,7 +29,7 @@
 
             public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
             {
-                var result = new HttpResponseMessage(HttpStatusCode.OK)
+                var result = new HttpResponseMessage(HttpStatusCode.Created)
                 {
                     Content = new StreamContent(_srcStream),
                     ReasonPhrase = _failReason,
@@ -39,26 +39,10 @@
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = "win"
+                    FileName = "importFileForEdit"
                 };
 
                 return Task.FromResult(result);
-                //var response = _request.CreateResponse(HttpStatusCode.BadRequest);
-
-                //using (var memoryStream = new MemoryStream())
-                //{
-                //    _srcStream.CopyTo(memoryStream);
-                //    response.Content = new StreamContent(memoryStream);
-                //}
-
-                //response.ReasonPhrase = _failReason;
-                //response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-                //response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
-                //{
-                //    FileName = "validated_import_file"
-                //};
-
-                //return Task.FromResult(response);
             }
         }
 
@@ -85,12 +69,9 @@
             {
                 importService.Import(importStream);
             }
-            catch (FormatException ex)
+            catch (FailedImportException ex)
             {
-                httpRequest.RequestContext.HttpContext.Response.Clear();
-                httpRequest.RequestContext.HttpContext.Response.ContentType = "";
-
-                return new FailedImportResult(ex.Message, importStream, Request);
+                return new FailedImportResult(Request, ex.ImportSource, ex.Message);
             }
             return Ok("Import successfully performed.");
         }

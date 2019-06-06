@@ -9,7 +9,6 @@
     using DTO.Entities;
     using Interfaces;
     using OfficeOpenXml;
-    using DTO.Utils;
 
     internal class BookDtoExcelValidator : IValidator
     {
@@ -26,7 +25,8 @@
                 .ToList();
 
             _propertyColumnDictionary = new Dictionary<string, int>(dtoProperties.Count);
-            dtoProperties.ForEach(prop => _propertyColumnDictionary.Add(prop.Name.ToLowerInvariant(), 0));
+            dtoProperties.Where(prop => prop.Name.ToLowerInvariant() != "authors" && prop.Name.ToLowerInvariant() != "genres").ToList()
+                .ForEach(prop => _propertyColumnDictionary.Add(prop.Name.ToLowerInvariant(), 0));
         }
 
         public void Validate(Stream srcStream)
@@ -34,7 +34,7 @@
             var failReason = string.Empty;
             if (!HeaderChecked(srcStream, ref failReason) || !ContentChecked(srcStream, ref failReason))
             {
-                throw new FailedImportException(srcStream, failReason);
+                throw new FormatException(failReason);
             }
 
             var args = new ValidationEventArgs
@@ -48,26 +48,25 @@
 
         private bool HeaderChecked(Stream srcStream, ref string failReason)
         {
-            var package = new ExcelPackage(srcStream);
-
-            if (package.Workbook.Worksheets.Count == 0)
+            using (var package = new ExcelPackage(srcStream))
             {
-                failReason = "Excel file contains no workheets.";
-                return false;
+                if (package.Workbook.Worksheets.Count == 0)
+                {
+                    failReason = "Excel file contains no workheets.";
+                    return false;
+                }
+                if (package.Workbook.Worksheets.First().Dimension == null)
+                {
+                    failReason = "Workheets contains no cells.";
+                    return false;
+                }
+                if (PropertiesAndColumnsDoNotMatch(package))
+                {
+                    MarkMissingHeaderPropertiesInFile(package);
+                    failReason = "Not all properties found in header.";
+                    return false;
+                }
             }
-            if (package.Workbook.Worksheets.First().Dimension == null)
-            {
-                failReason = "Workheets contains no cells.";
-                return false;
-            }
-            if (PropertiesAndColumnsDoNotMatch(package))
-            {
-                MarkMissingHeaderPropertiesInFile(package);
-                failReason = "Not all properties found in header.";
-                return false;
-            }
-            package.Save();
-            srcStream.Flush();
 
             return true;
         }
@@ -91,9 +90,9 @@
                                                | CheckPages(worksheet, worksheet.Cells[row, _propertyColumnDictionary["pages"]].Address)
                                                | CheckLimitedEdition(worksheet, worksheet.Cells[row, _propertyColumnDictionary["limitededition"]].Address)
                                                | CheckWrittenIn(worksheet, worksheet.Cells[row, _propertyColumnDictionary["writtenin"]].Address)
-                                               | CheckLibrary(worksheet, worksheet.Cells[row, _propertyColumnDictionary["library"]].Address)
-                                               | CheckAuthors(worksheet, worksheet.Cells[row, _propertyColumnDictionary["authors"]].Address)
-                                               | CheckGenres(worksheet, worksheet.Cells[row, _propertyColumnDictionary["genres"]].Address);
+                                               | CheckLibrary(worksheet, worksheet.Cells[row, _propertyColumnDictionary["library"]].Address);
+                                               //| CheckAuthors(worksheet, worksheet.Cells[row, _propertyColumnDictionary["authors"]].Address)
+                                               //| CheckGenres(worksheet, worksheet.Cells[row, _propertyColumnDictionary["genres"]].Address);
                     if (dataValidationPassed)
                     {
                         _newBooksAmount++;
@@ -207,39 +206,39 @@
 
         private bool CheckGenres(ExcelWorksheet worksheet, string address)
         {
-            var genresAreOk = true;
-
-            foreach (var possibleGenre in worksheet.Cells[address].Text.Trim().Split(','))
+            foreach (var possibleGenre in Regex.Matches(worksheet.Cells[address].Text.Trim(), @"(.+?)(?:,|$)").OfType<string>())
             {
-                if (Regex.IsMatch(possibleGenre, @"^[\sA-Za-z0-9]$"))
+                if (!Regex.IsMatch(possibleGenre, @"^[\sA-Za-z]$"))
                 {
                     AddCellValidation(worksheet, address, "Invalid Genres content", "Genres value has to be a comma separated list of single-word genres");
-                    genresAreOk = false;
+                    return false;
                 }
             }
-            return genresAreOk;
+            return true;
         }
 
         // Matches T.F. Johnson | John O'Neil | Mary-Kate Johnson
         // Non-Matches sam_johnson | Joe--Bob Jones | dfjsd0rd
         private bool CheckAuthors(ExcelWorksheet worksheet, string address)
         {
-            var authorsAreOk = true;
+            var cellValue = worksheet.Cells[address].Text.Trim();
+            if (string.IsNullOrEmpty(cellValue))
+                return false;
 
-            foreach (var possibleAuthor in worksheet.Cells[address].Text.Trim().Split(','))
+            foreach (var possibleAuthor in Regex.Matches(cellValue, "^([0-9]+,)*[0-9]+$").OfType<string>())
             {
                 if (!Regex.IsMatch(possibleAuthor, @"^[a-zA-Z]+(([\'\,\.\- ][a-zA-Z ])?[a-zA-Z]*)*$"))
                 {
                     AddCellValidation(worksheet, address, "Invalid Authors content", "Authors value has to be a comma separated list of alike names T.F. Johnson | John O'Neil | Mary-Kate Johnson");
-                    authorsAreOk = false;
+                    return false;
                 }
             }
-            return authorsAreOk;
+            return true;
         }
 
         private bool CheckLibrary(ExcelWorksheet worksheet, string address)
         {
-            if (Regex.IsMatch(worksheet.Cells[address].Text.Trim(), @"^[A-Za-z\ ]$"))
+            if (!Regex.IsMatch(worksheet.Cells[address].Text.Trim(), @"[^A-Za-z\ ]"))
             {
                 return true;
             }
