@@ -22,7 +22,6 @@
 
             public FailedImportResult(HttpRequestMessage request, Stream srcStream, string failReason)
             {
-                srcStream.Position = 0;
                 _srcStream = srcStream;
                 _request = request;
                 _failReason = failReason;
@@ -30,7 +29,8 @@
 
             public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
             {
-                var result = new HttpResponseMessage(HttpStatusCode.OK)
+                _srcStream.Position = 0;
+                var result = new HttpResponseMessage(HttpStatusCode.Created)
                 {
                     Content = new StreamContent(_srcStream),
                     ReasonPhrase = _failReason,

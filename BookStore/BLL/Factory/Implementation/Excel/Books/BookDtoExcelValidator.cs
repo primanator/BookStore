@@ -66,6 +66,7 @@
                 failReason = "Not all properties found in header.";
                 return false;
             }
+            package.Save();
 
             return true;
         }

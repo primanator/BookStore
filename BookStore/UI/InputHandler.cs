@@ -1,34 +1,21 @@
 ﻿namespace UI
 {
     using System;
-    using System.Collections.Generic;
+    using System.Configuration;
     using System.IO;
     using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Text;
-    using System.Threading.Tasks;
-    using System.Web;
     using DTO.Entities;
 
-    internal class Client// : IDisposable
+    internal class InputHandler
     {
-        private Uri _baseAddress;
-        private WebRequest _webRequest;
-        private WebResponse _webResponse;
+        private string _baseUriString;
+        private StringBuilder _stringBuilder;
 
-        public Client(Uri baseAddress, IEnumerable<MediaTypeWithQualityHeaderValue> headers)
+        public InputHandler()
         {
-            _baseAddress = baseAddress;
-            //_client = new HttpClient
-            //{
-            //    BaseAddress = baseAddress
-            //};
-
-            //_client.DefaultRequestHeaders.Accept.Clear();
-
-            //foreach (var header in headers)
-            //    _client.DefaultRequestHeaders.Accept.Add(header);
+            _baseUriString = ConfigurationManager.AppSettings["Uri"];
+            _stringBuilder = new StringBuilder();
         }
 
         //private async Task<BookDto[]> GetAllBooksAsync()
@@ -47,14 +34,6 @@
         //    return await _response.Content.ReadAsAsync<BookDto>();
         //}
 
-        //private async Task<string> PostNewBookAsync(BookDto newBook)
-        //{
-        //    _response = await _client.PostAsJsonAsync("api/books", newBook);
-        //    CheckResponse();
-
-        //    return await _response.Content.ReadAsStringAsync();
-        //}
-
         //private async Task<string> PutUpdateBookAsync(BookDto newBook)
         //{
         //    _response = await _client.PutAsJsonAsync("api/books", newBook);
@@ -71,70 +50,13 @@
         //    return await _response.Content.ReadAsStringAsync();
         //}
 
-        //private async Task<string> PostDocument(FileInfo file)
-        //{
-        //    HttpContent fileStreamContent = null;
-        //    try
-        //    {
-        //        fileStreamContent = new StreamContent(file.OpenRead());
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e.Message);
-        //        return "runtime error occured";
-        //    }
 
-        //    using (var formData = new MultipartFormDataContent())
-        //    {
-        //        formData.Add(fileStreamContent, "importDocument", file.Name);
-        //        _response = await _client.PostAsync("api/import", formData); // CHECK IF DISPOSE DELETES RESPONSE STREAM
-        //    }
-        //    CheckResponse();
-
-        //    var returnedDocument = await _response.Content.ReadAsStreamAsync();
-        //    using (var fs = new FileStream($"{_response.Content.Headers.ContentDisposition.FileName}.xlsx", FileMode.Create))
-        //    {
-        //        returnedDocument.CopyTo(fs);
-        //        fs.Flush();
-        //    }
-
-        //    return await _response.Content.ReadAsStringAsync();
-        //}
-
-        //private void CheckResponse()
-        //{
-        //    if (!_response.IsSuccessStatusCode)
-        //        Console.WriteLine("Request returned with failed status code: " + _response.StatusCode);
-        //}
-
-        //public void Dispose()
-        //{
-        //    _client.Dispose();
-        //}
-        private void PostDocument(string path)
+        public void Process()
         {
-            var importBytes = File.ReadAllBytes(path);
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:50402/api/import");
-            request.Method = "POST";
-
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = importBytes.Length;
-            Stream newStream = request.GetRequestStream();
-            newStream.Write(importBytes, 0, importBytes.Length);
-            newStream.Close();
-
-            var response = (HttpWebResponse)request.GetResponse();
-
-            Stream objStream = response.GetResponseStream();
-            BinaryReader breader = new BinaryReader(objStream);
-            byte[] data = breader.ReadBytes((int)response.ContentLength);
-            File.WriteAllBytes("excel.xlsx", data);
-        }
-
-        public void SendRequest(string httpVerb)
-        {
-            switch (httpVerb.ToLowerInvariant())
+            Console.WriteLine("Enter one of the following commands\nstatistics/manipulate:");
+            var command = Console.ReadLine().ToLowerInvariant();
+            _stringBuilder.AppendLine(command);
+            switch (command)
             {
                 //case "get":
                 //    {
@@ -171,24 +93,48 @@
                 //        Console.WriteLine("Operation result is: " + (string.IsNullOrEmpty(result) ? "succesfull" : result));
                 //        break;
                 //    }
-                case "import":
+                case "manipulate":
                     {
-                        Console.WriteLine("Enter path to the .xlsx file you want to import: ");
-                        var path = Console.ReadLine();
-
-                        try
+                        Console.Clear();
+                        Console.WriteLine($"{_stringBuilder.ToString()}\ncreate/read/update/delete:");
+                        command = Console.ReadLine().ToLowerInvariant();
+                        _stringBuilder.AppendLine(command);
+                        switch (command)
                         {
-                            if (new FileInfo(path).Extension != ".xlsx")
-                                throw new ArgumentException("Input file is not in .xlsx format.");
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                            break;
-                        }
+                            case "create":
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine($"{_stringBuilder.ToString()}\n1/n:");
+                                    command = Console.ReadLine().ToLowerInvariant();
+                                    _stringBuilder.AppendLine(command);
 
-                        PostDocument(path);
-                        //Console.WriteLine("Operation result is: " + (string.IsNullOrEmpty(result) ? "succesfull" : result));
+                                    switch (command)
+                                    {
+                                        case "n":
+                                            {
+                                                Console.Clear();
+                                                Console.WriteLine($"{ _stringBuilder.ToString()}\nEnter path to the .xlsx file you want to import: ");
+                                                var path = Console.ReadLine();
+
+                                                try
+                                                {
+                                                    if (new FileInfo(path).Extension != ".xlsx")
+                                                        throw new ArgumentException("Input file is not in .xlsx format.");
+
+                                                    var requestStatus = new Post(_baseUriString + "/import", null).Send(File.ReadAllBytes(path));
+                                                    Console.WriteLine($"Operation status is {requestStatus}");
+                                                }
+                                                catch (Exception e)
+                                                {
+                                                    Console.WriteLine(e.Message);
+                                                    break;
+                                                }
+                                                break;
+                                            }
+                                    }
+                                    break;
+                                }
+                        }
                         break;
                     }
                 //case "put":
