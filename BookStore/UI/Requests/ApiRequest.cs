@@ -1,7 +1,6 @@
 ﻿namespace UI
 {
     using System;
-    using System.Collections.Specialized;
     using System.Net;
 
     internal abstract class ApiRequest : IDisposable
