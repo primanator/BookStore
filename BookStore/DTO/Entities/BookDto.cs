@@ -9,6 +9,7 @@
         {
             Authors = new HashSet<AuthorDto>();
             Genres = new HashSet<GenreDto>();
+            LibraryId = 1; // only one library is supported for now
         }
 
         public string Isbn { get; set; }

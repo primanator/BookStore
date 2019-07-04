@@ -28,7 +28,7 @@
 
         public void SelfUpdate<T>(T toUpdateWith) where T : Dto
         {
-            if (!TypeProperties.TryGetValue(this.GetType(), out var cachedProperties))
+            if (!TypeProperties.TryGetValue(GetType(), out var cachedProperties))
                 return;
 
             foreach (var property in cachedProperties)
@@ -36,6 +36,43 @@
                 var newValue = property.GetValue(toUpdateWith);
                 if (property.GetValue(this) != newValue)
                     property.SetValue(this, newValue);
+            }
+        }
+
+        public static T GetFromUser<T>() where T : Dto, new()
+        {
+            if (!TypeProperties.TryGetValue(typeof(T), out var cachedProperties))
+                throw new ArgumentException("Type argument can't be used to create Dto from user input. Please use Dto inherited types.");
+
+            var newDto = new T();
+            foreach (var prop in cachedProperties)
+            {
+                if (!prop.Name.Contains("Id"))
+                {
+                    Console.WriteLine("Please enter {0}", prop.Name);
+                    var userValue = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(userValue))
+                        prop.SetValue(newDto, Convert.ChangeType(userValue, prop.PropertyType));
+                }
+            }
+
+            return newDto;
+        }
+
+        public void EditByUser()
+        {
+            if (!TypeProperties.TryGetValue(GetType(), out var cachedProperties))
+                return;
+
+            foreach (var prop in cachedProperties)
+            {
+                if (prop.Name != "Id" && prop.Name != "Name" && prop.Name != "LibraryId")
+                {
+                    Console.WriteLine("Please enter book's {0}", prop.Name);
+                    var userValue = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(userValue))
+                        prop.SetValue(this, Convert.ChangeType(userValue, prop.PropertyType));
+                }
             }
         }
 

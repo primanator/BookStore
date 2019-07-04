@@ -6,10 +6,10 @@
     {
         static void Main(string[] args)
         {
-            var inputHandler = new InputHandler();
+            var requestDesigner = new RequestDesigner();
             while (true)
             {
-                inputHandler.Process();
+                requestDesigner.SetUp();
 
                 Console.ReadKey();
                 Console.Clear();

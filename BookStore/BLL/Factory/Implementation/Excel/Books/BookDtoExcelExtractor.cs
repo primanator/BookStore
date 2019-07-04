@@ -36,8 +36,7 @@
                         Pages = GetSimple<int>(worksheet.Cells[row, argsIn.SourceMap["pages"]].Value),
                         LimitedEdition = GetSimple<bool>(worksheet.Cells[row, argsIn.SourceMap["limitededition"]].Value),
                         WrittenIn = GetSimple<DateTime>(worksheet.Cells[row, argsIn.SourceMap["writtenin"]].Text),
-                        LibraryId = 1, // only one library is present for now (newItem.Library.Id)
-                        Library = GetDto<LibraryDto>(dto => dto.Id == 1),
+                        Library = GetDto<LibraryDto>(dto => dto.Id == 1), // only one library is present for now (newItem.Library.Id)
                         Authors = GetCollection<AuthorDto>(worksheet.Cells[row, argsIn.SourceMap["authors"]].Value),
                         Genres = GetCollection<GenreDto>(worksheet.Cells[row, argsIn.SourceMap["genres"]].Value)
                     });

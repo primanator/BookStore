@@ -1,24 +1,20 @@
 ﻿namespace UI
 {
     using System;
-    using System.Configuration;
-    using System.IO;
-    using System.Net;
     using System.Text;
-    using DTO.Entities;
+    using UI.Requests;
+    using UI.Serializers;
 
-    internal class InputHandler
+    internal class RequestDesigner
     {
-        private string _baseUriString;
         private StringBuilder _commandSaver;
 
-        public InputHandler()
+        public RequestDesigner()
         {
-            _baseUriString = ConfigurationManager.AppSettings["Uri"];
             _commandSaver = new StringBuilder();
         }
 
-        public void Process()
+        public void SetUp()
         {
             Console.WriteLine("Enter one of the following commands\nstatistics/manipulate:");
             var command = Console.ReadLine().ToLowerInvariant();
@@ -45,15 +41,10 @@
                                         case "n":
                                             {
                                                 Console.Clear();
-                                                Console.WriteLine($"{ _commandSaver.ToString()}\nEnter path to the .xlsx file you want to import: ");
-                                                var path = Console.ReadLine();
-
+                                                
                                                 try
                                                 {
-                                                    if (new FileInfo(path).Extension != ".xlsx")
-                                                        throw new ArgumentException("Input file is not in .xlsx format.");
-
-                                                    var requestStatus = new Post(_baseUriString + "/import", null).Send(File.ReadAllBytes(path));
+                                                    var requestStatus = new PostRequest(new XlsxSerializer(), null, "/import").Send();
                                                     Console.WriteLine($"Operation status is {requestStatus}");
                                                 }
                                                 catch (Exception e)
@@ -75,45 +66,6 @@
                         break;
                     }
             }
-        }
-
-        public static BookDto GetBookFromUserInput()
-        {
-            BookDto newBook = new BookDto();
-
-            var properties = newBook.GetType().GetProperties();
-
-            foreach (var prop in properties)
-            {
-                if (!prop.Name.Contains("Id"))
-                {
-                    Console.WriteLine("Please enter book's {0}", prop.Name);
-                    var userValue = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(userValue))
-                        prop.SetValue(newBook, Convert.ChangeType(userValue, prop.PropertyType));
-                }
-            }
-
-            newBook.LibraryId = 1;
-            return newBook;
-        }
-
-        public static BookDto CopyBookWithUserUpdates(BookDto bookToCopy)
-        {
-            var properties = bookToCopy.GetType().GetProperties();
-
-            foreach (var prop in properties)
-            {
-                if (prop.Name != "Id" && prop.Name != "Name" && prop.Name != "LibraryId")
-                {
-                    Console.WriteLine("Please enter book's {0}", prop.Name);
-                    var userValue = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(userValue))
-                        prop.SetValue(bookToCopy, Convert.ChangeType(userValue, prop.PropertyType));
-                }
-            }
-
-            return bookToCopy;
         }
     }
 }
