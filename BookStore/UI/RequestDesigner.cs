@@ -20,94 +20,46 @@
             Generic("Enter one of the following commands\nstatistics/manipulate:", new Dictionary<string, Action>
                 {
                     {
-                        "statistics", () =>
+                        "manipulate", () =>
                         {
                             Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:", new Dictionary<string, Action>
                             {
                                 {
-                                    "create", () => 
+                                    "create", () =>
                                     {
                                         Generic($"{_commandSaver.ToString()}\n1/N:", new Dictionary<string, Action>
                                         {
                                             {
-                                                "1", () => { }
+                                                "1", () => {  }
                                             },
                                             {
-                                                "N", () => { }
+                                                "N", () => { new PostRequest(new XlsxSerializer(), null, "/import").Send(); }
                                             }
                                         });
+                                    }
+                                },
+                                {
+                                    "read", () =>
+                                    {
+
+                                    }
+                                },
+                                {
+                                    "update", () =>
+                                    {
+
+                                    }
+                                },
+                                {
+                                    "delete", () =>
+                                    {
+
                                     }
                                 }
                             });
                         }
                     },
                 });
-
-
-            //Generic("Enter one of the following commands\nstatistics/manipulate:",
-            //    new Dictionary<string, Action>
-            //    {
-            //        {
-            //        "n", () =>
-            //            {
-            //                Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:",
-            //                    new Dictionary<string, Action>
-            //                    {
-
-            //                    }
-            //() => { Generic($"{_commandSaver.ToString()}\n1/n:", N); });
-            //        }
-            //    }
-            //});
-        }
-
-        //"n", () =>
-        //{
-        //    Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:",
-        //        new Dictionary<string, Action>
-        //        {
-        //            {
-        //                () => { Generic($"{_commandSaver.ToString()}\n1/n:", N);
-        //                });
-        //            }
-        //        }
-        //}
-
-        private void Manipulate()
-        {
-            string command;
-            Console.Clear();
-            Console.WriteLine($"{_commandSaver.ToString()}\ncreate/read/update/delete:");
-            command = Console.ReadLine().ToLowerInvariant();
-            _commandSaver.AppendLine(command);
-
-            switch (command)
-            {
-                case "create":
-                    {
-                        Create();
-
-                        break;
-                    }
-            }
-        }
-
-        private void Create()
-        {
-            string command;
-            Console.Clear();
-            Console.WriteLine($"{_commandSaver.ToString()}\n1/n:");
-            command = Console.ReadLine().ToLowerInvariant();
-            _commandSaver.AppendLine(command);
-
-            switch (command)
-            {
-                case "n":
-                    {
-                        N();
-                        break;
-                    }
-            }
         }
 
         private void Generic(string text, Dictionary<string, Action> actions)
@@ -117,9 +69,9 @@
             var command = Console.ReadLine().ToLowerInvariant();
             _commandSaver.AppendLine(command);
 
-            if (actions.TryGetValue(command, out Action a))
+            if (actions.TryGetValue(command, out Action act))
             {
-                a();
+                act();
             }
             else
             {
@@ -127,20 +79,15 @@
             }
         }
 
-        private static void N()
-        {
-            Console.Clear();
-
-            try
-            {
-                var requestStatus = new PostRequest(new XlsxSerializer(), null, "/import").Send();
-                Console.WriteLine($"Operation status is {requestStatus}");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return;
-            }
-        }
+        //try
+        //{
+        //    var requestStatus = new PostRequest(new XlsxSerializer(), null, "/import").Send();
+        //    Console.WriteLine($"Operation status is {requestStatus}");
+        //}
+        //catch (Exception e)
+        //{
+        //    Console.WriteLine(e.Message);
+        //    return;
+        //}
     }
 }
