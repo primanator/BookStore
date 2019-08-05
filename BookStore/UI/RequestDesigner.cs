@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace UI
+﻿namespace UI
 {
+    using System.Collections.Generic;
     using System;
     using System.Text;
     using UI.Requests;
@@ -18,36 +17,61 @@ namespace UI
 
         public void SetUp()
         {
-            Generic("Enter one of the following commands\nstatistics/manipulate:", 
-                new Dictionary<string, Action>
+            Generic("Enter one of the following commands\nstatistics/manipulate:", new Dictionary<string, Action>
                 {
                     {
-                    "n", () =>
+                        "statistics", () =>
                         {
-                            Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:",
-                                new Dictionary<string, Action>
+                            Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:", new Dictionary<string, Action>
+                            {
                                 {
+                                    "create", () => 
                                     {
-                                        () => { Generic($"{_commandSaver.ToString()}\n1/n:", N); });
+                                        Generic($"{_commandSaver.ToString()}\n1/N:", new Dictionary<string, Action>
+                                        {
+                                            {
+                                                "1", () => { }
+                                            },
+                                            {
+                                                "N", () => { }
+                                            }
+                                        });
                                     }
                                 }
+                            });
                         }
-                    }
-    }
-            );
+                    },
+                });
 
-            //"n", () =>
-            //{
-            //    Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:",
-            //        new Dictionary<string, Action>
+
+            //Generic("Enter one of the following commands\nstatistics/manipulate:",
+            //    new Dictionary<string, Action>
+            //    {
             //        {
+            //        "n", () =>
             //            {
-            //                () => { Generic($"{_commandSaver.ToString()}\n1/n:", N);
-            //                });
-            //            }
+            //                Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:",
+            //                    new Dictionary<string, Action>
+            //                    {
+
+            //                    }
+            //() => { Generic($"{_commandSaver.ToString()}\n1/n:", N); });
             //        }
-            //}
+            //    }
+            //});
         }
+
+        //"n", () =>
+        //{
+        //    Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:",
+        //        new Dictionary<string, Action>
+        //        {
+        //            {
+        //                () => { Generic($"{_commandSaver.ToString()}\n1/n:", N);
+        //                });
+        //            }
+        //        }
+        //}
 
         private void Manipulate()
         {
@@ -85,7 +109,6 @@ namespace UI
                     }
             }
         }
-
 
         private void Generic(string text, Dictionary<string, Action> actions)
         {
