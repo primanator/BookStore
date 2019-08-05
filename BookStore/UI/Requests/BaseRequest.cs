@@ -4,17 +4,18 @@
     using System.Configuration;
     using System.IO;
     using System.Net;
+    using UI.Interfaces;
 
-    internal abstract class BaseRequest : IDisposable
+    internal abstract class BaseRequest : IRequest, IDisposable
     {
+        protected IPackageSerializer _packageSerializer;
         protected WebRequest _webRequest;
         protected WebResponse _webResponse;
 
-        protected BaseRequest(WebHeaderCollection headers, string requestUriString)
+        protected BaseRequest(IPackageSerializer packageSerializer, WebHeaderCollection headers, string requestUriString)
         {
-            var baseUriString = ConfigurationManager.AppSettings["Uri"];
-
-            _webRequest = WebRequest.Create(baseUriString + requestUriString);
+            _packageSerializer = packageSerializer;
+            _webRequest = WebRequest.Create(ConfigurationManager.AppSettings["Uri"] + requestUriString);
             _webRequest.Headers = headers ?? new WebHeaderCollection();
         }
 
@@ -36,6 +37,23 @@
                 responseBytes = binaryReader.ReadBytes(responseLength);
             }
             return responseBytes;
+        }
+
+        public void Send()
+        {
+            WriteBytesToRequest(_packageSerializer.GetBytes());
+
+            var httpWebResponse = (HttpWebResponse)_webRequest.GetResponse();
+            if (httpWebResponse.StatusCode == HttpStatusCode.Created)
+            {
+                var data = ReadBytesFromResponse();
+                _packageSerializer.SaveBytes(data);
+            }
+            if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+            {
+                var data = ReadBytesFromResponse();
+                Console.WriteLine(data);
+            }
         }
 
         public void Dispose()

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Reflection;
     using System.Linq;
+    using System.Text;
 
     public abstract class Dto
     {
@@ -78,7 +79,14 @@
 
         public override string ToString()
         {
-            return $"{GetType().Name} - {Id}";
+            var stateBuilder = new StringBuilder();
+
+            foreach (var property in TypeProperties[GetType()])
+            {
+                stateBuilder.AppendLine($"{property.Name} - {property.GetValue(this)}\n");
+            }
+
+            return stateBuilder.ToString();
         }
     }
 }

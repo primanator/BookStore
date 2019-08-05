@@ -55,10 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="RequestDesigner.cs" />
+    <Compile Include="Requests\GetRequest.cs" />
     <Compile Include="Serializers\XlsxSerializer.cs" />
-    <Compile Include="Serializers\IPackageSerializer.cs" />
+    <Compile Include="Interfaces\IPackageSerializer.cs" />
     <Compile Include="Requests\PostRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\BaseRequest.cs" />

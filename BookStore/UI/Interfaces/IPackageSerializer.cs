@@ -1,4 +1,4 @@
-﻿namespace UI.Serializers
+﻿namespace UI.Interfaces
 {
     public interface IPackageSerializer
     {
