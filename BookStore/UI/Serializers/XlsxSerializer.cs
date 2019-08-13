@@ -2,9 +2,9 @@
 {
     using System;
     using System.IO;
-    using UI.Interfaces;
+    using UI.Serializers.Interfaces;
 
-    internal class XlsxSerializer : IPackageSerializer
+    internal class XlsxSerializer : IContentSerializer
     {
         private readonly string _package;
 
@@ -14,15 +14,15 @@
             _package = Console.ReadLine();
         }
 
-        public byte[] GetBytes()
+        public void ReadBytes(byte[] data)
+        {
+            File.WriteAllBytes("returnedDoc.xlsx", data);
+        }
+
+        public byte[] ToBytes()
         {
             CheckPackage();
             return File.ReadAllBytes(_package);
-        }
-
-        public void SaveBytes(byte[] data)
-        {
-            File.WriteAllBytes("returnedDoc.xlsx", data);
         }
 
         private void CheckPackage()

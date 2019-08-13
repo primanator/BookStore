@@ -1,4 +1,4 @@
-﻿namespace UI.Interfaces
+﻿namespace UI.Requests.Interfaces
 {
     public interface IRequest
     {

@@ -3,15 +3,16 @@
     using System.Collections.Generic;
     using System;
     using System.Text;
-    using UI.Requests;
-    using UI.Serializers;
+    using UI.Factory.Requests;
 
     internal class RequestDesigner
     {
+        private readonly IRequestFactory _requestFactory;
         private readonly StringBuilder _commandSaver;
 
-        public RequestDesigner()
+        public RequestDesigner(IRequestFactory requestFactory)
         {
+            _requestFactory = requestFactory;
             _commandSaver = new StringBuilder();
         }
 
@@ -22,14 +23,22 @@
                 { "manipulate", () => {
                     Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:", new Dictionary<string, Action>
                     {
-                        { "create", () => { SetUpSingleAndMultipleRequestAction(
-                            null,
-                            () => new PostRequest(new XlsxSerializer(), null, "/import").Send()); }},
-                        { "read", () => { SetUpSingleAndMultipleRequestAction(
-                            () => new GetRequest(null, "?name=" + Console.ReadLine()).Send(),
-                            () => new GetRequest(null, string.Empty).Send()); }},
-                        { "update", () => { } },
-                        { "delete", () => { } }
+                        { "create", () => { SetUpSingleAndMultipleRequestActions(
+                            () => _requestFactory.PostRequest().Send(),
+                            () => _requestFactory.PostMultipleRequest().Send());
+                        }},
+                        { "read", () => { SetUpSingleAndMultipleRequestActions(
+                            () => _requestFactory.GetRequest().Send(),
+                            () => _requestFactory.GetAllRequest().Send());
+                        }},
+                        { "update", () => { SetUpSingleAndMultipleRequestActions(
+                            () => _requestFactory.PutRequest().Send(),
+                            null);
+                        }},
+                        { "delete", () => { SetUpSingleAndMultipleRequestActions(
+                            () => _requestFactory.DeleteRequest().Send(),
+                            null);
+                        }}
                     });
                 }},
             });
@@ -52,7 +61,7 @@
             }
         }
 
-        private void SetUpSingleAndMultipleRequestAction(Action requestSingleAction, Action requestMultipleAction)
+        private void SetUpSingleAndMultipleRequestActions(Action requestSingleAction, Action requestMultipleAction)
         {
             var actionDictionary = new Dictionary<string, Action>();
 
