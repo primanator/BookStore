@@ -5,9 +5,10 @@
     using UI.Requests.Interfaces;
     using UI.Serializers.Interfaces;
 
-    internal class Post : BaseRequest, IRequest
+    internal class Post<Ts, Td> : BaseRequest<Ts, Td>, IRequest
     {
-        public Post(IContentSerializer contentSerializer, WebHeaderCollection headers, string requestUriString) : base(contentSerializer, headers, requestUriString)
+        public Post(IGenericContentSerializer<Ts, Td> contentSerializer, WebHeaderCollection headers, string requestUriString)
+            : base(contentSerializer, headers, requestUriString)
         {
             _webRequest.Method = "POST";
             _webRequest.ContentType = "application/x-www-form-urlencoded";

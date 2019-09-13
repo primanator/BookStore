@@ -5,9 +5,10 @@
     using UI.Requests.Interfaces;
     using UI.Serializers.Interfaces;
 
-    internal class Delete : BaseRequest, IRequest
+    internal class Delete<Ts, Td> : BaseRequest<Ts, Td>, IRequest
     {
-        public Delete(IContentSerializer contentSerializer, WebHeaderCollection headers, string requestUriString) : base(contentSerializer, headers, requestUriString)
+        public Delete(IGenericContentSerializer<Ts, Td> contentSerializer, WebHeaderCollection headers, string requestUriString)
+            : base(contentSerializer, headers, requestUriString)
         {
             _webRequest.Method = "DELETE";
         }

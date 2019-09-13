@@ -1,19 +1,18 @@
 ﻿namespace UI.Factory.Requests
 {
+    using DTO.Entities;
     using UI.Requests.Interfaces;
 
     public interface IRequestFactory
     {
-        IRequest GetRequest();
+        IRequest GetRequest<T>() where T : Dto, new();
 
-        IRequest GetAllRequest();
+        IRequest PostRequest<T>() where T : Dto, new();
 
-        IRequest PostRequest();
+        IRequest PostWithXlsx<T>() where T : Dto, new();
 
-        IRequest PostMultipleRequest();
+        IRequest PutRequest<T>() where T : Dto, new();
 
-        IRequest DeleteRequest();
-
-        IRequest PutRequest();
+        IRequest DeleteRequest<T>() where T : Dto, new();
     }
 }

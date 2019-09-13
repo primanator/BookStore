@@ -1,17 +1,21 @@
 ﻿namespace UI.Factory.Serializers
 {
+    using DTO.Entities;
+    using UI.Serializers;
     using UI.Serializers.Interfaces;
 
     internal class ContentSerializerFactory : ISerializerFactory
     {
-        public IContentSerializer GetEntitySerializer()
+        public  IGenericContentSerializer<Ts, Td> GetEntitySerializer<Ts, Td>()
+            where Ts : Dto, new()
+            where Td : Ts
         {
-            throw new System.NotImplementedException();
+            return new DtoSerializer<Ts, Td>();
         }
 
-        public IContentSerializer GetXlsxSerializer()
+        public IGenericContentSerializer<string, string> GetXlsxSerializer()
         {
-            throw new System.NotImplementedException();
+            return new XlsxSerializer<string, string>();
         }
     }
 }

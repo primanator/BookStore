@@ -5,9 +5,10 @@
     using UI.Requests.Interfaces;
     using UI.Serializers.Interfaces;
 
-    internal class Put : BaseRequest, IRequest
+    internal class Put<Ts, Td> : BaseRequest<Ts, Td>, IRequest
     {
-        public Put(IContentSerializer contentSerializer, WebHeaderCollection headers, string requestUriString) : base(contentSerializer, headers, requestUriString)
+        public Put(IGenericContentSerializer<Ts, Td> contentSerializer, WebHeaderCollection headers, string requestUriString)
+            : base(contentSerializer, headers, requestUriString)
         {
             _webRequest.Method = "PUT";
         }

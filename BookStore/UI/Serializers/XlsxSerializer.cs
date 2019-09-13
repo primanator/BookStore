@@ -4,30 +4,34 @@
     using System.IO;
     using UI.Serializers.Interfaces;
 
-    internal class XlsxSerializer : IContentSerializer
+    internal class XlsxSerializer<Ts, Td> : IGenericContentSerializer<Ts, Td>
+        where Ts : class
+        where Td : Ts
     {
-        private readonly string _package;
-
-        public XlsxSerializer()
+        public Ts GetContent()
         {
             Console.WriteLine("\nEnter path to the .xlsx file you want to import: ");
-            _package = Console.ReadLine();
+            return Console.ReadLine() as Ts;
         }
 
-        public void ReadBytes(byte[] data)
+        public byte[] ToBytes(Ts target)
+        {
+            var targetStr = target as string ?? throw new ArgumentOutOfRangeException("Path to the imported file should be passed as a string.");
+
+            CheckTarget(targetStr);
+
+            return File.ReadAllBytes(targetStr);
+        }
+
+        public Td FromBytes(byte[] data)
         {
             File.WriteAllBytes("returnedDoc.xlsx", data);
+            return (Td)(object)"File succesfully imported";
         }
 
-        public byte[] ToBytes()
+        private void CheckTarget(string packagePath)
         {
-            CheckPackage();
-            return File.ReadAllBytes(_package);
-        }
-
-        private void CheckPackage()
-        {
-            if (new FileInfo(_package).Extension != ".xlsx")
+            if (new FileInfo(packagePath).Extension != ".xlsx")
                 throw new ArgumentException("Input file is not in .xlsx format.");
         }
     }

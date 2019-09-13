@@ -1,8 +1,10 @@
 ﻿namespace UI.Factory.Requests
 {
+    using DTO.Entities;
     using System;
     using System.Configuration;
     using UI.Factory.Serializers;
+    using UI.Requests;
     using UI.Requests.Interfaces;
 
     internal class WebRequestFactory : IRequestFactory
@@ -20,34 +22,35 @@
             }
         }
 
-        public IRequest DeleteRequest()
+        public IRequest DeleteRequest<T>() where T: Dto, new()
         {
-            throw new System.NotImplementedException();
+            var dtoSerializer = _serializerFactory.GetEntitySerializer<T, T>();
+            return new Delete<T, T>(dtoSerializer, null, "books");
         }
 
-        public IRequest GetAllRequest()
+        public IRequest GetRequest<T>() where T : Dto, new()
         {
-            throw new System.NotImplementedException();
+            var dtoSerializer = _serializerFactory.GetEntitySerializer<T, T>();
+            return new Get<T, T>(dtoSerializer, null, "books");
         }
 
-        public IRequest GetRequest()
+        public IRequest PostWithXlsx<T>() where T : Dto, new()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+            //var xlsxSerializer = _serializerFactory.GetXlsxSerializer();
+            //return new Post<T, T>(xlsxSerializer, null, "import");
         }
 
-        public IRequest PostMultipleRequest()
+        public IRequest PostRequest<T>() where T : Dto, new()
         {
-            throw new System.NotImplementedException();
+            var dtoSerializer = _serializerFactory.GetEntitySerializer<T, T>();
+            return new Post<T, T>(dtoSerializer, null, "books");
         }
 
-        public IRequest PostRequest()
+        public IRequest PutRequest<T>() where T : Dto, new()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public IRequest PutRequest()
-        {
-            throw new System.NotImplementedException();
+            var dtoSerializer = _serializerFactory.GetEntitySerializer<T, T>();
+            return new Put<T, T>(dtoSerializer, null, "books");
         }
     }
 }
