@@ -65,7 +65,8 @@
     <Compile Include="Requests\Get.cs" />
     <Compile Include="Requests\Delete.cs" />
     <Compile Include="Requests\Put.cs" />
-    <Compile Include="Serializers\Interfaces\IContentSerializer.cs" />
+    <Compile Include="Serializers\DtoSerializer.cs" />
+    <Compile Include="Serializers\Interfaces\IGenericContentSerializer.cs" />
     <Compile Include="Requests\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\Infrastructure\BaseRequest.cs" />
