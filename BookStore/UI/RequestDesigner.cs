@@ -34,7 +34,7 @@
                         }},
                         { "update", () => { SetUpSingleAndMultipleRequestActions(
                             () => _requestFactory.PutRequest<BookDto>().Send(),
-                            null);
+                            () => _requestFactory.PostWithXlsx<string>().Send());
                         }},
                         { "delete", () => { SetUpSingleAndMultipleRequestActions(
                             () => _requestFactory.DeleteRequest<BookDto>().Send(),

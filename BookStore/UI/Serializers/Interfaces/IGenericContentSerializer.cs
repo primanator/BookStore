@@ -1,11 +1,9 @@
 ﻿namespace UI.Serializers.Interfaces
 {
-    public interface IGenericContentSerializer<Ts, Td>
+    public interface IGenericContentSerializer<T>
     {
-        Ts GetContent();
+        byte[] ToBytes(T target);
 
-        byte[] ToBytes(Ts target);
-
-        Td FromBytes(byte[] data);
+        T FromBytes(byte[] data);
     }
 }

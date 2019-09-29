@@ -6,13 +6,14 @@
     using UI.Requests.Interfaces;
     using UI.Serializers.Interfaces;
 
-    internal abstract class BaseRequest<Ts, Td> : IRequest, IDisposable
+    internal abstract class BaseRequest<T> : IRequest, IDisposable
     {
-        protected IGenericContentSerializer<Ts, Td> _contentSerializer;
+        protected IGenericContentSerializer<T> _contentSerializer;
         protected WebRequest _webRequest;
         protected WebResponse _webResponse;
+        protected T RequestObj;
 
-        protected BaseRequest(IGenericContentSerializer<Ts, Td> contentSerializer, WebHeaderCollection headers, string requestUriString)
+        protected BaseRequest(IGenericContentSerializer<T> contentSerializer, WebHeaderCollection headers, string requestUriString)
         {
             _contentSerializer = contentSerializer;
             _webRequest = WebRequest.Create(requestUriString);
@@ -21,10 +22,6 @@
 
         public void Send()
         {
-            var requestObj = _contentSerializer.GetContent();
-            var requestBytes = _contentSerializer.ToBytes(requestObj);
-            WriteBytesToRequest(requestBytes);
-
             try
             {
                 _webResponse = _webRequest.GetResponse();
@@ -40,7 +37,7 @@
             }
         }
 
-        private void WriteBytesToRequest(byte[] importBytes)
+        protected void WriteBytesToRequest(byte[] importBytes)
         {
             _webRequest.ContentLength = importBytes.Length;
             var requestStream = _webRequest.GetRequestStream();

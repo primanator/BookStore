@@ -1,20 +1,12 @@
 ﻿namespace UI.Serializers
 {
-    using DTO.Entities;
     using Interfaces;
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
 
-    internal class DtoSerializer<Ts, Td> : IGenericContentSerializer<Ts, Td>
-        where Ts : Dto, new()
-        where Td : Ts
+    internal class DtoSerializer<T> : IGenericContentSerializer<T>
     {
-        public Ts GetContent()
-        {
-            return Dto.GetFromUser<Ts>();
-        }
-
-        public byte[] ToBytes(Ts target)
+        public byte[] ToBytes(T target)
         {
             if (target == null)
                 return null;
@@ -27,16 +19,16 @@
             }
         }
 
-        public Td FromBytes(byte[] data)
+        public T FromBytes(byte[] data)
         {
             if (data == null)
-                return default(Td);
+                return default(T);
 
             using (var memoryStream = new MemoryStream())
             {
                 var binaryFormatter = new BinaryFormatter();
                 var deserializedObj = binaryFormatter.Deserialize(memoryStream);
-                return (Td)deserializedObj;
+                return (T)deserializedObj;
             }
         }
     }

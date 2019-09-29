@@ -9,10 +9,10 @@
 
         IRequest PostRequest<T>() where T : Dto, new();
 
-        IRequest PostWithXlsx<T>() where T : Dto, new();
-
         IRequest PutRequest<T>() where T : Dto, new();
 
         IRequest DeleteRequest<T>() where T : Dto, new();
+
+        IRequest PostWithXlsx<T>();
     }
 }

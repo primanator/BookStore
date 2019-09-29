@@ -55,10 +55,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factory\Requests\WebRequestFactory.cs" />
-    <Compile Include="Factory\Requests\IRequestFactory.cs" />
-    <Compile Include="Factory\Serializers\ISerializerFactory.cs" />
-    <Compile Include="Factory\Serializers\ContentSerializerFactory.cs" />
+    <Compile Include="Factories\ContentExtractors\ContentExtractorFactory.cs" />
+    <Compile Include="Factories\ContentExtractors\IContentExtractorFactory.cs" />
+    <Compile Include="Factories\Requests\WebRequestFactory.cs" />
+    <Compile Include="Factories\Requests\IRequestFactory.cs" />
+    <Compile Include="Factories\Serializers\ISerializerFactory.cs" />
+    <Compile Include="Factories\Serializers\ContentSerializerFactory.cs" />
+    <Compile Include="ContentExctractors\DtoContentExtractor.cs" />
+    <Compile Include="ContentExctractors\FileContentExtractor.cs" />
+    <Compile Include="ContentExctractors\Interfaces\IContentExtractor.cs" />
     <Compile Include="Requests\Interfaces\IRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="RequestDesigner.cs" />

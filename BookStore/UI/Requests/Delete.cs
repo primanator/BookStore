@@ -1,16 +1,18 @@
 ﻿namespace UI.Requests
 {
     using System.Net;
+    using UI.ContentExtractors.Interfaces;
     using UI.Requests.Infrastructure;
     using UI.Requests.Interfaces;
     using UI.Serializers.Interfaces;
 
-    internal class Delete<Ts, Td> : BaseRequest<Ts, Td>, IRequest
+    internal class Delete<T> : BaseRequest<T>, IRequest
     {
-        public Delete(IGenericContentSerializer<Ts, Td> contentSerializer, WebHeaderCollection headers, string requestUriString)
+        public Delete(IGenericContentSerializer<T> contentSerializer, IContentExtractor<T> contentExtractor, WebHeaderCollection headers, string requestUriString)
             : base(contentSerializer, headers, requestUriString)
         {
             _webRequest.Method = "DELETE";
+            RequestObj = (T)(object)contentExtractor.GetContentName();
         }
     }
 }
