@@ -29,35 +29,35 @@
         {
             var dtoSerializer = _serializerFactory.GetEntitySerializer<T>();
             var contentExtractor = _contentExtractorFactory.GetDtoContentExtractor<T>();
-            return new Delete<T>(dtoSerializer, contentExtractor, null, "books");
+            return new Delete<T>(dtoSerializer, contentExtractor, null, $"{_baseUri}/books");
         }
 
         public IRequest GetRequest<T>() where T : Dto, new()
         {
             var dtoSerializer = _serializerFactory.GetEntitySerializer<T>();
             var contentExtractor = _contentExtractorFactory.GetDtoContentExtractor<T>();
-            return new Get<T>(dtoSerializer, contentExtractor, null, "books");
+            return new Get<T>(dtoSerializer, contentExtractor, null, $"{_baseUri}/books");
         }
 
         public IRequest PostRequest<T>() where T : Dto, new()
         {
             var dtoSerializer = _serializerFactory.GetEntitySerializer<T>();
             var contentExtractor = _contentExtractorFactory.GetDtoContentExtractor<T>();
-            return new Post<T>(dtoSerializer, contentExtractor, null, "books");
+            return new Post<T>(dtoSerializer, contentExtractor, null, $"{_baseUri}/books");
         }
 
         public IRequest PutRequest<T>() where T : Dto, new()
         {
             var dtoSerializer = _serializerFactory.GetEntitySerializer<T>();
             var contentExtractor = _contentExtractorFactory.GetDtoContentExtractor<T>();
-            return new Put<T>(dtoSerializer, contentExtractor, null, "books");
+            return new Put<T>(dtoSerializer, contentExtractor, null, $"{_baseUri}/books");
         }
 
         public IRequest PostWithXlsx<T>()
         {
             var xlsxSerializer = _serializerFactory.GetXlsxSerializer<T>();
             var contentExtractor = _contentExtractorFactory.GetFileContentExtractor<T>();
-            return new Post<T>(xlsxSerializer, contentExtractor, null, "import");
+            return new Post<T>(xlsxSerializer, contentExtractor, null, $"{_baseUri}/import");
         }
     }
 }
