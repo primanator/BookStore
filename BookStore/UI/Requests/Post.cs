@@ -1,29 +1,23 @@
 ﻿namespace UI.Requests
 {
-    using DTO.Entities;
     using System.Net;
-    using UI.ContentExtractors.Interfaces;
+    using UI.ContentProviders.Interfaces;
     using UI.Requests.Infrastructure;
     using UI.Requests.Interfaces;
     using UI.Serializers.Interfaces;
 
     internal class Post<T> : BaseRequest<T>, IRequest
     {
-        public Post(IGenericContentSerializer<T> contentSerializer, IContentExtractor<T> contentExtractor, WebHeaderCollection headers, string requestUriString)
-            : base(contentSerializer, headers, requestUriString)
+        public Post(IGenericContentSerializer<T> contentSerializer, IContentProvider<T> contentProvider)
+            : base(contentSerializer)
         {
-            _webRequest.Method = "POST";
-            _webRequest.ContentType = "application/x-www-form-urlencoded";
+            WebRequest = WebRequest.Create($"{BaseUri}/{contentProvider.GetName()}");
+            WebRequest.Headers = contentProvider.GetHeaders();
+            WebRequest.Method = "POST";
+            WebRequest.ContentType = "application/x-www-form-urlencoded";
 
-            if (typeof(T).IsSubclassOf(typeof(Dto)))
-            {
-                RequestObj = contentExtractor.GetFullContent();
-                WriteBytesToRequest(_contentSerializer.ToBytes(RequestObj));
-            }
-            else
-            {
-                RequestObj = (T)(object)contentExtractor.GetContentName();
-            }
+            var requestObj = contentProvider.GetContent();
+            WriteBytesToRequest(contentSerializer.ToBytes(requestObj));
         }
     }
 }

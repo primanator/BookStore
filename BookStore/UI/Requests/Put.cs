@@ -1,19 +1,22 @@
 ﻿namespace UI.Requests
 {
     using System.Net;
-    using UI.ContentExtractors.Interfaces;
+    using UI.ContentProviders.Interfaces;
     using UI.Requests.Infrastructure;
     using UI.Requests.Interfaces;
     using UI.Serializers.Interfaces;
 
     internal class Put<T> : BaseRequest<T>, IRequest
     {
-        public Put(IGenericContentSerializer<T> contentSerializer, IContentExtractor<T> contentExtractor, WebHeaderCollection headers, string requestUriString)
-            : base(contentSerializer, headers, requestUriString)
+        public Put(IGenericContentSerializer<T> contentSerializer, IContentProvider<T> contentProvider)
+            : base(contentSerializer)
         {
-            _webRequest.Method = "PUT";
-            RequestObj = contentExtractor.GetFullContent();
-            WriteBytesToRequest(_contentSerializer.ToBytes(RequestObj));
+            WebRequest = WebRequest.Create($"{BaseUri}/{contentProvider.GetName()}");
+            WebRequest.Headers = contentProvider.GetHeaders();
+            WebRequest.Method = "PUT";
+
+            var requestObj = contentProvider.GetContent();
+            WriteBytesToRequest(contentSerializer.ToBytes(requestObj));
         }
     }
 }
