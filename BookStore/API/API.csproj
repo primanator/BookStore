@@ -47,9 +47,6 @@
     <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="DependencyResolver">
-      <HintPath>..\DependencyResolver\bin\Debug\DependencyResolver.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -152,6 +149,10 @@
     <ProjectReference Include="..\BLL\BLL.csproj">
       <Project>{2636707F-7473-436C-9195-3589A7B9F754}</Project>
       <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DependencyResolver\DependencyResolver.csproj">
+      <Project>{0053166A-3531-4027-999A-A4034FC1A6C3}</Project>
+      <Name>DependencyResolver</Name>
     </ProjectReference>
     <ProjectReference Include="..\DTO\DTO.csproj">
       <Project>{1825B9AD-0738-421E-83B0-F41F630CD0D7}</Project>

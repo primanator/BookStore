@@ -4,7 +4,7 @@
 
     public interface ISerializerFactory
     {
-        IGenericContentSerializer<T> GetEntitySerializer<T>();
+        IGenericContentSerializer<T> GetContractSerializer<T>();
 
         IGenericContentSerializer<T> GetXlsxSerializer<T>();
     }

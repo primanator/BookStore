@@ -61,7 +61,7 @@
     <Compile Include="Factories\Requests\IRequestFactory.cs" />
     <Compile Include="Factories\Serializers\ISerializerFactory.cs" />
     <Compile Include="Factories\Serializers\ContentSerializerFactory.cs" />
-    <Compile Include="ContentProviders\DtoContentProvider.cs" />
+    <Compile Include="ContentProviders\ContractContentProvider.cs" />
     <Compile Include="ContentProviders\FileContentProvider.cs" />
     <Compile Include="ContentProviders\Interfaces\IContentProvider.cs" />
     <Compile Include="Requests\Interfaces\IRequest.cs" />
@@ -81,6 +81,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj">
+      <Project>{1825B9AD-0738-421E-83B0-F41F630CD0D7}</Project>
+      <Name>Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

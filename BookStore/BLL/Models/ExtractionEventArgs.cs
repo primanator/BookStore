@@ -1,11 +1,11 @@
 ﻿namespace BLL.Models
 {
-    using DTO.Entities;
+    using Contracts.Models;
     using System;
     using System.Collections.Generic;
 
     internal class ExtractionEventArgs : EventArgs
     {
-        public List<Dto> ExtractedData { get; set; }
+        public List<BaseContract> ExtractedData { get; set; }
     }
 }

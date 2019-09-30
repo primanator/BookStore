@@ -1,6 +1,6 @@
 ﻿namespace DAL.Migrations
 {
-    using DTO_EF.Entities;
+    using DTO.Models;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;
@@ -23,208 +23,208 @@
             if (context.Countries.FirstOrDefault() != null)
                 return;
 
-            IEnumerable<Country> countries = new[]
+            IEnumerable<CountryDto> countries = new[]
             {
-                new Country() { Name = "China" },
-                new Country() { Name = "India" },
-                new Country() { Name = "United States of America" },
-                new Country() { Name = "Indonesia" },
-                new Country() { Name = "Brazil" },
-                new Country() { Name = "Pakistan" },
-                new Country() { Name = "Nigeria" },
-                new Country() { Name = "Bangladesh" },
-                new Country() { Name = "Russia" },
-                new Country() { Name = "Mexico" },
-                new Country() { Name = "Japan" },
-                new Country() { Name = "Ethiopia" },
-                new Country() { Name = "Philippines" },
-                new Country() { Name = "Egypt" },
-                new Country() { Name = "Viet Nam" },
-                new Country() { Name = "DR Congo" },
-                new Country() { Name = "Germany" },
-                new Country() { Name = "Iran" },
-                new Country() { Name = "Turkey" },
-                new Country() { Name = "Thailand" },
-                new Country() { Name = "United Kingdom" },
-                new Country() { Name = "France" },
-                new Country() { Name = "Italy" },
-                new Country() { Name = "Tanzania" },
-                new Country() { Name = "South Africa" },
-                new Country() { Name = "Myanmar" },
-                new Country() { Name = "South Korea" },
-                new Country() { Name = "Kenya" },
-                new Country() { Name = "Colombia" },
-                new Country() { Name = "Spain" },
-                new Country() { Name = "Argentina" },
-                new Country() { Name = "Uganda" },
-                new Country() { Name = "Ukraine" },
-                new Country() { Name = "Algeria" },
-                new Country() { Name = "Sudan" },
-                new Country() { Name = "Iraq" },
-                new Country() { Name = "Poland" },
-                new Country() { Name = "Canada" },
-                new Country() { Name = "Afghanistan" },
-                new Country() { Name = "Morocco" },
-                new Country() { Name = "Saudi Arabia" },
-                new Country() { Name = "Peru" },
-                new Country() { Name = "Venezuela" },
-                new Country() { Name = "Uzbekistan" },
-                new Country() { Name = "Malaysia" },
-                new Country() { Name = "Angola" },
-                new Country() { Name = "Mozambique" },
-                new Country() { Name = "Nepal" },
-                new Country() { Name = "Ghana" },
-                new Country() { Name = "Yemen" },
-                new Country() { Name = "Madagascar" },
-                new Country() { Name = "North Korea" },
-                new Country() { Name = "Côte d'Ivoire" },
-                new Country() { Name = "Australia" },
-                new Country() { Name = "Cameroon" },
-                new Country() { Name = "Niger" },
-                new Country() { Name = "Sri Lanka" },
-                new Country() { Name = "Burkina Faso" },
-                new Country() { Name = "Romania" },
-                new Country() { Name = "Malawi" },
-                new Country() { Name = "Mali" },
-                new Country() { Name = "Kazakhstan" },
-                new Country() { Name = "Syria" },
-                new Country() { Name = "Chile" },
-                new Country() { Name = "Zambia" },
-                new Country() { Name = "Guatemala" },
-                new Country() { Name = "Netherlands" },
-                new Country() { Name = "Zimbabwe" },
-                new Country() { Name = "Ecuador" },
-                new Country() { Name = "Senegal" },
-                new Country() { Name = "Cambodia" },
-                new Country() { Name = "Chad" },
-                new Country() { Name = "Somalia" },
-                new Country() { Name = "Guinea" },
-                new Country() { Name = "South Sudan" },
-                new Country() { Name = "Rwanda" },
-                new Country() { Name = "Tunisia" },
-                new Country() { Name = "Belgium" },
-                new Country() { Name = "Cuba" },
-                new Country() { Name = "Benin" },
-                new Country() { Name = "Burundi" },
-                new Country() { Name = "Bolivia" },
-                new Country() { Name = "Greece" },
-                new Country() { Name = "Haiti" },
-                new Country() { Name = "Dominican Republic" },
-                new Country() { Name = "Czech Republic" },
-                new Country() { Name = "Portugal" },
-                new Country() { Name = "Sweden" },
-                new Country() { Name = "Azerbaijan" },
-                new Country() { Name = "Jordan" },
-                new Country() { Name = "Hungary" },
-                new Country() { Name = "United Arab Emirates" },
-                new Country() { Name = "Belarus" },
-                new Country() { Name = "Honduras" },
-                new Country() { Name = "Tajikistan" },
-                new Country() { Name = "Serbia" },
-                new Country() { Name = "Austria" },
-                new Country() { Name = "Switzerland" },
-                new Country() { Name = "Israel" },
-                new Country() { Name = "Papua New Guinea" },
-                new Country() { Name = "Togo" },
-                new Country() { Name = "Sierra Leone" },
-                new Country() { Name = "Bulgaria" },
-                new Country() { Name = "Laos" },
-                new Country() { Name = "Paraguay" },
-                new Country() { Name = "Libya" },
-                new Country() { Name = "El Salvador" },
-                new Country() { Name = "Nicaragua" },
-                new Country() { Name = "Kyrgyzstan" },
-                new Country() { Name = "Lebanon" },
-                new Country() { Name = "Turkmenistan" },
-                new Country() { Name = "Singapore" },
-                new Country() { Name = "Denmark" },
-                new Country() { Name = "Finland" },
-                new Country() { Name = "Slovakia" },
-                new Country() { Name = "Congo" },
-                new Country() { Name = "Norway" },
-                new Country() { Name = "Eritrea" },
-                new Country() { Name = "State of Palestine" },
-                new Country() { Name = "Costa Rica" },
-                new Country() { Name = "Liberia" },
-                new Country() { Name = "Oman" },
-                new Country() { Name = "Ireland" },
-                new Country() { Name = "New Zealand" },
-                new Country() { Name = "Central African Republic" },
-                new Country() { Name = "Mauritania" },
-                new Country() { Name = "Kuwait" },
-                new Country() { Name = "Croatia" },
-                new Country() { Name = "Panama" },
-                new Country() { Name = "Moldova" },
-                new Country() { Name = "Georgia" },
-                new Country() { Name = "Bosnia & Herzegovina" },
-                new Country() { Name = "Uruguay" },
-                new Country() { Name = "Mongolia" },
-                new Country() { Name = "Albania" },
-                new Country() { Name = "Armenia" },
-                new Country() { Name = "Jamaica" },
-                new Country() { Name = "Lithuania" },
-                new Country() { Name = "Qatar" },
-                new Country() { Name = "Namibia" },
-                new Country() { Name = "Botswana" },
-                new Country() { Name = "Lesotho" },
-                new Country() { Name = "Gambia" },
-                new Country() { Name = "Macedonia" },
-                new Country() { Name = "Slovenia" },
-                new Country() { Name = "Gabon" },
-                new Country() { Name = "Latvia" },
-                new Country() { Name = "Guinea-Bissau" },
-                new Country() { Name = "Bahrain" },
-                new Country() { Name = "Swaziland" },
-                new Country() { Name = "Trinidad and Tobago" },
-                new Country() { Name = "Timor-Leste" },
-                new Country() { Name = "Equatorial Guinea" },
-                new Country() { Name = "Estonia" },
-                new Country() { Name = "Mauritius" },
-                new Country() { Name = "Cyprus" },
-                new Country() { Name = "Djibouti" },
-                new Country() { Name = "Fiji" },
-                new Country() { Name = "Comoros" },
-                new Country() { Name = "Bhutan" },
-                new Country() { Name = "Guyana" },
-                new Country() { Name = "Montenegro" },
-                new Country() { Name = "Solomon Islands" },
-                new Country() { Name = "Luxembourg" },
-                new Country() { Name = "Suriname" },
-                new Country() { Name = "Cabo Verde" },
-                new Country() { Name = "Maldives" },
-                new Country() { Name = "Brunei" },
-                new Country() { Name = "Malta" },
-                new Country() { Name = "Bahamas" },
-                new Country() { Name = "Belize" },
-                new Country() { Name = "Iceland" },
-                new Country() { Name = "Barbados" },
-                new Country() { Name = "Vanuatu" },
-                new Country() { Name = "Sao Tome & Principe" },
-                new Country() { Name = "Samoa" },
-                new Country() { Name = "Saint Lucia" },
-                new Country() { Name = "Kiribati" },
-                new Country() { Name = "St. Vincent & Grenadines" },
-                new Country() { Name = "Tonga" },
-                new Country() { Name = "Grenada" },
-                new Country() { Name = "Micronesia" },
-                new Country() { Name = "Antigua and Barbuda" },
-                new Country() { Name = "Seychelles" },
-                new Country() { Name = "Andorra" },
-                new Country() { Name = "Dominica" },
-                new Country() { Name = "Saint Kitts & Nevis" },
-                new Country() { Name = "Marshall Islands" },
-                new Country() { Name = "Monaco" },
-                new Country() { Name = "Liechtenstein" },
-                new Country() { Name = "San Marino" },
-                new Country() { Name = "Palau" },
-                new Country() { Name = "Nauru" },
-                new Country() { Name = "Tuvalu" },
-                new Country() { Name = "Holy See" }
+                new CountryDto() { Name = "China" },
+                new CountryDto() { Name = "India" },
+                new CountryDto() { Name = "United States of America" },
+                new CountryDto() { Name = "Indonesia" },
+                new CountryDto() { Name = "Brazil" },
+                new CountryDto() { Name = "Pakistan" },
+                new CountryDto() { Name = "Nigeria" },
+                new CountryDto() { Name = "Bangladesh" },
+                new CountryDto() { Name = "Russia" },
+                new CountryDto() { Name = "Mexico" },
+                new CountryDto() { Name = "Japan" },
+                new CountryDto() { Name = "Ethiopia" },
+                new CountryDto() { Name = "Philippines" },
+                new CountryDto() { Name = "Egypt" },
+                new CountryDto() { Name = "Viet Nam" },
+                new CountryDto() { Name = "DR Congo" },
+                new CountryDto() { Name = "Germany" },
+                new CountryDto() { Name = "Iran" },
+                new CountryDto() { Name = "Turkey" },
+                new CountryDto() { Name = "Thailand" },
+                new CountryDto() { Name = "United Kingdom" },
+                new CountryDto() { Name = "France" },
+                new CountryDto() { Name = "Italy" },
+                new CountryDto() { Name = "Tanzania" },
+                new CountryDto() { Name = "South Africa" },
+                new CountryDto() { Name = "Myanmar" },
+                new CountryDto() { Name = "South Korea" },
+                new CountryDto() { Name = "Kenya" },
+                new CountryDto() { Name = "Colombia" },
+                new CountryDto() { Name = "Spain" },
+                new CountryDto() { Name = "Argentina" },
+                new CountryDto() { Name = "Uganda" },
+                new CountryDto() { Name = "Ukraine" },
+                new CountryDto() { Name = "Algeria" },
+                new CountryDto() { Name = "Sudan" },
+                new CountryDto() { Name = "Iraq" },
+                new CountryDto() { Name = "Poland" },
+                new CountryDto() { Name = "Canada" },
+                new CountryDto() { Name = "Afghanistan" },
+                new CountryDto() { Name = "Morocco" },
+                new CountryDto() { Name = "Saudi Arabia" },
+                new CountryDto() { Name = "Peru" },
+                new CountryDto() { Name = "Venezuela" },
+                new CountryDto() { Name = "Uzbekistan" },
+                new CountryDto() { Name = "Malaysia" },
+                new CountryDto() { Name = "Angola" },
+                new CountryDto() { Name = "Mozambique" },
+                new CountryDto() { Name = "Nepal" },
+                new CountryDto() { Name = "Ghana" },
+                new CountryDto() { Name = "Yemen" },
+                new CountryDto() { Name = "Madagascar" },
+                new CountryDto() { Name = "North Korea" },
+                new CountryDto() { Name = "Côte d'Ivoire" },
+                new CountryDto() { Name = "Australia" },
+                new CountryDto() { Name = "Cameroon" },
+                new CountryDto() { Name = "Niger" },
+                new CountryDto() { Name = "Sri Lanka" },
+                new CountryDto() { Name = "Burkina Faso" },
+                new CountryDto() { Name = "Romania" },
+                new CountryDto() { Name = "Malawi" },
+                new CountryDto() { Name = "Mali" },
+                new CountryDto() { Name = "Kazakhstan" },
+                new CountryDto() { Name = "Syria" },
+                new CountryDto() { Name = "Chile" },
+                new CountryDto() { Name = "Zambia" },
+                new CountryDto() { Name = "Guatemala" },
+                new CountryDto() { Name = "Netherlands" },
+                new CountryDto() { Name = "Zimbabwe" },
+                new CountryDto() { Name = "Ecuador" },
+                new CountryDto() { Name = "Senegal" },
+                new CountryDto() { Name = "Cambodia" },
+                new CountryDto() { Name = "Chad" },
+                new CountryDto() { Name = "Somalia" },
+                new CountryDto() { Name = "Guinea" },
+                new CountryDto() { Name = "South Sudan" },
+                new CountryDto() { Name = "Rwanda" },
+                new CountryDto() { Name = "Tunisia" },
+                new CountryDto() { Name = "Belgium" },
+                new CountryDto() { Name = "Cuba" },
+                new CountryDto() { Name = "Benin" },
+                new CountryDto() { Name = "Burundi" },
+                new CountryDto() { Name = "Bolivia" },
+                new CountryDto() { Name = "Greece" },
+                new CountryDto() { Name = "Haiti" },
+                new CountryDto() { Name = "Dominican Republic" },
+                new CountryDto() { Name = "Czech Republic" },
+                new CountryDto() { Name = "Portugal" },
+                new CountryDto() { Name = "Sweden" },
+                new CountryDto() { Name = "Azerbaijan" },
+                new CountryDto() { Name = "Jordan" },
+                new CountryDto() { Name = "Hungary" },
+                new CountryDto() { Name = "United Arab Emirates" },
+                new CountryDto() { Name = "Belarus" },
+                new CountryDto() { Name = "Honduras" },
+                new CountryDto() { Name = "Tajikistan" },
+                new CountryDto() { Name = "Serbia" },
+                new CountryDto() { Name = "Austria" },
+                new CountryDto() { Name = "Switzerland" },
+                new CountryDto() { Name = "Israel" },
+                new CountryDto() { Name = "Papua New Guinea" },
+                new CountryDto() { Name = "Togo" },
+                new CountryDto() { Name = "Sierra Leone" },
+                new CountryDto() { Name = "Bulgaria" },
+                new CountryDto() { Name = "Laos" },
+                new CountryDto() { Name = "Paraguay" },
+                new CountryDto() { Name = "Libya" },
+                new CountryDto() { Name = "El Salvador" },
+                new CountryDto() { Name = "Nicaragua" },
+                new CountryDto() { Name = "Kyrgyzstan" },
+                new CountryDto() { Name = "Lebanon" },
+                new CountryDto() { Name = "Turkmenistan" },
+                new CountryDto() { Name = "Singapore" },
+                new CountryDto() { Name = "Denmark" },
+                new CountryDto() { Name = "Finland" },
+                new CountryDto() { Name = "Slovakia" },
+                new CountryDto() { Name = "Congo" },
+                new CountryDto() { Name = "Norway" },
+                new CountryDto() { Name = "Eritrea" },
+                new CountryDto() { Name = "State of Palestine" },
+                new CountryDto() { Name = "Costa Rica" },
+                new CountryDto() { Name = "Liberia" },
+                new CountryDto() { Name = "Oman" },
+                new CountryDto() { Name = "Ireland" },
+                new CountryDto() { Name = "New Zealand" },
+                new CountryDto() { Name = "Central African Republic" },
+                new CountryDto() { Name = "Mauritania" },
+                new CountryDto() { Name = "Kuwait" },
+                new CountryDto() { Name = "Croatia" },
+                new CountryDto() { Name = "Panama" },
+                new CountryDto() { Name = "Moldova" },
+                new CountryDto() { Name = "Georgia" },
+                new CountryDto() { Name = "Bosnia & Herzegovina" },
+                new CountryDto() { Name = "Uruguay" },
+                new CountryDto() { Name = "Mongolia" },
+                new CountryDto() { Name = "Albania" },
+                new CountryDto() { Name = "Armenia" },
+                new CountryDto() { Name = "Jamaica" },
+                new CountryDto() { Name = "Lithuania" },
+                new CountryDto() { Name = "Qatar" },
+                new CountryDto() { Name = "Namibia" },
+                new CountryDto() { Name = "Botswana" },
+                new CountryDto() { Name = "Lesotho" },
+                new CountryDto() { Name = "Gambia" },
+                new CountryDto() { Name = "Macedonia" },
+                new CountryDto() { Name = "Slovenia" },
+                new CountryDto() { Name = "Gabon" },
+                new CountryDto() { Name = "Latvia" },
+                new CountryDto() { Name = "Guinea-Bissau" },
+                new CountryDto() { Name = "Bahrain" },
+                new CountryDto() { Name = "Swaziland" },
+                new CountryDto() { Name = "Trinidad and Tobago" },
+                new CountryDto() { Name = "Timor-Leste" },
+                new CountryDto() { Name = "Equatorial Guinea" },
+                new CountryDto() { Name = "Estonia" },
+                new CountryDto() { Name = "Mauritius" },
+                new CountryDto() { Name = "Cyprus" },
+                new CountryDto() { Name = "Djibouti" },
+                new CountryDto() { Name = "Fiji" },
+                new CountryDto() { Name = "Comoros" },
+                new CountryDto() { Name = "Bhutan" },
+                new CountryDto() { Name = "Guyana" },
+                new CountryDto() { Name = "Montenegro" },
+                new CountryDto() { Name = "Solomon Islands" },
+                new CountryDto() { Name = "Luxembourg" },
+                new CountryDto() { Name = "Suriname" },
+                new CountryDto() { Name = "Cabo Verde" },
+                new CountryDto() { Name = "Maldives" },
+                new CountryDto() { Name = "Brunei" },
+                new CountryDto() { Name = "Malta" },
+                new CountryDto() { Name = "Bahamas" },
+                new CountryDto() { Name = "Belize" },
+                new CountryDto() { Name = "Iceland" },
+                new CountryDto() { Name = "Barbados" },
+                new CountryDto() { Name = "Vanuatu" },
+                new CountryDto() { Name = "Sao Tome & Principe" },
+                new CountryDto() { Name = "Samoa" },
+                new CountryDto() { Name = "Saint Lucia" },
+                new CountryDto() { Name = "Kiribati" },
+                new CountryDto() { Name = "St. Vincent & Grenadines" },
+                new CountryDto() { Name = "Tonga" },
+                new CountryDto() { Name = "Grenada" },
+                new CountryDto() { Name = "Micronesia" },
+                new CountryDto() { Name = "Antigua and Barbuda" },
+                new CountryDto() { Name = "Seychelles" },
+                new CountryDto() { Name = "Andorra" },
+                new CountryDto() { Name = "Dominica" },
+                new CountryDto() { Name = "Saint Kitts & Nevis" },
+                new CountryDto() { Name = "Marshall Islands" },
+                new CountryDto() { Name = "Monaco" },
+                new CountryDto() { Name = "Liechtenstein" },
+                new CountryDto() { Name = "San Marino" },
+                new CountryDto() { Name = "Palau" },
+                new CountryDto() { Name = "Nauru" },
+                new CountryDto() { Name = "Tuvalu" },
+                new CountryDto() { Name = "Holy See" }
             };
 
-            IEnumerable<Author> authors = new[]
+            IEnumerable<AuthorDto> authors = new[]
             {
-                new Author()
+                new AuthorDto()
                 {
                     Name = "Ernest Miller Hemingway",
                     Gender = "Male",
@@ -233,7 +233,7 @@
                     Country = countries.FirstOrDefault(c => c.Name == "United States of America"),
                     CountryId = countries.FirstOrDefault(c => c.Name == "United States of America").Id
                 },
-                new Author()
+                new AuthorDto()
                 {
                     Name = "John Griffith London",
                     Gender = "Male",
@@ -242,7 +242,7 @@
                     Country = countries.FirstOrDefault(c => c.Name == "United States of America"),
                     CountryId = countries.FirstOrDefault(c => c.Name == "United States of America").Id
                 },
-                new Author()
+                new AuthorDto()
                 {
                     Name = "Dame Agatha Mary Clarissa Christie",
                     Gender = "Female",
@@ -253,37 +253,37 @@
                 }
             };
 
-            IEnumerable<Genre> genres = new[]
+            IEnumerable<GenreDto> genres = new[]
             {
-                new Genre() { Name = "Asemic writing" },
-                new Genre() { Name = "Comedy" },
-                new Genre() { Name = "Drama" },
-                new Genre() { Name = "Horror fiction" },
-                new Genre() { Name = "Literary realism" },
-                new Genre() { Name = "Romance" },
-                new Genre() { Name = "Satire" },
-                new Genre() { Name = "Tragedy" },
-                new Genre() { Name = "Tragicomedy" },
-                new Genre() { Name = "Fantasy" },
-                new Genre() { Name = "Mythology" },
-                new Genre() { Name = "Adventure" }
+                new GenreDto() { Name = "Asemic writing" },
+                new GenreDto() { Name = "Comedy" },
+                new GenreDto() { Name = "Drama" },
+                new GenreDto() { Name = "Horror fiction" },
+                new GenreDto() { Name = "Literary realism" },
+                new GenreDto() { Name = "Romance" },
+                new GenreDto() { Name = "Satire" },
+                new GenreDto() { Name = "Tragedy" },
+                new GenreDto() { Name = "Tragicomedy" },
+                new GenreDto() { Name = "Fantasy" },
+                new GenreDto() { Name = "Mythology" },
+                new GenreDto() { Name = "Adventure" }
             };
 
-            IEnumerable<LiteratureForm> literatureForms = new[]
+            IEnumerable<LiteratureFormDto> literatureForms = new[]
             {
-                new LiteratureForm()
+                new LiteratureFormDto()
                 {
                     Name = "Prose",
-                    Authors = new HashSet<Author>(authors)
+                    Authors = new HashSet<AuthorDto>(authors)
                 },
-                new LiteratureForm() { Name = "Poetry" }
+                new LiteratureFormDto() { Name = "Poetry" }
             };
 
-            IEnumerable<Library> libraries = new[] { new Library() };
+            IEnumerable<LibraryDto> libraries = new[] { new LibraryDto() };
 
-            IEnumerable<Book> books = new[]
+            IEnumerable<BookDto> books = new[]
             {
-                new Book()
+                new BookDto()
                 {
                     Name = "Son of the Wolf",
                     Isbn = "0891906541",
@@ -292,16 +292,16 @@
                     WrittenIn = new DateTime(1911, 1, 1),
                     Library = libraries.FirstOrDefault(),
                     LibraryId = libraries.FirstOrDefault().Id,
-                    Authors = new HashSet<Author>(new []
+                    Authors = new HashSet<AuthorDto>(new []
                     {
                         authors.FirstOrDefault(a => a.Name == "John Griffith London")
                     }),
-                    Genres = new HashSet<Genre>(new []
+                    Genres = new HashSet<GenreDto>(new []
                     {
                         genres.FirstOrDefault(g => g.Name == "Adventure")
                     })
                 },
-                new Book()
+                new BookDto()
                 {
                     Name = "The Old Man and the Sea",
                     Isbn = "0684801221",
@@ -310,16 +310,16 @@
                     WrittenIn = new DateTime(1951, 1, 1),
                     Library = libraries.FirstOrDefault(),
                     LibraryId = libraries.FirstOrDefault().Id,
-                    Authors = new HashSet<Author>(new []
+                    Authors = new HashSet<AuthorDto>(new []
                     {
                         authors.FirstOrDefault(a => a.Name == "Ernest Miller Hemingway")
                     }),
-                    Genres = new HashSet<Genre>(new []
+                    Genres = new HashSet<GenreDto>(new []
                     {
                         genres.FirstOrDefault(g => g.Name == "Adventure")
                     })
                 },
-                new Book()
+                new BookDto()
                 {
                     Name = "Murder on the Orient Express",
                     Isbn = "0062073508",
@@ -328,20 +328,20 @@
                     WrittenIn = new DateTime(1936, 1, 1),
                     Library = libraries.FirstOrDefault(),
                     LibraryId = libraries.FirstOrDefault().Id,
-                    Authors = new HashSet<Author>(new []
+                    Authors = new HashSet<AuthorDto>(new []
                     {
                         authors.FirstOrDefault(a => a.Name == "Dame Agatha Mary Clarissa Christie")
                     }),
-                    Genres = new HashSet<Genre>(new []
+                    Genres = new HashSet<GenreDto>(new []
                     {
                         genres.FirstOrDefault(g => g.Name == "Drama")
                     })
                 }
             };
 
-            IEnumerable<User> users = new[]
+            IEnumerable<UserDto> users = new[]
             {
-                new User()
+                new UserDto()
                 {
                     Name = "Oleksii Prymolonnyi",
                     Nickname = "primanator",
@@ -353,7 +353,7 @@
                     Library = libraries.FirstOrDefault(),
                     LibraryId =  libraries.FirstOrDefault().Id,
                 },
-                new User()
+                new UserDto()
                 {
                     Name = "John Smith",
                     Nickname = "johny",
@@ -367,20 +367,20 @@
                 }
             };
 
-            Author[] authorsArr = authors.ToArray();
+            AuthorDto[] authorsArr = authors.ToArray();
             for (int i = 0; i < authorsArr.Length; i++)
             {
-                authorsArr[i].LiteratureForms = new HashSet<LiteratureForm>(new[]
+                authorsArr[i].LiteratureForms = new HashSet<LiteratureFormDto>(new[]
                 {
                     literatureForms.FirstOrDefault(lf => lf.Name == "Prose")
                 });
             }
             authors = authorsArr;
 
-            foreach (Book book in books)
+            foreach (BookDto book in books)
                 libraries.FirstOrDefault().Books.Add(book);
 
-            foreach (User user in users)
+            foreach (UserDto user in users)
                 libraries.FirstOrDefault().Users.Add(user);
 
 

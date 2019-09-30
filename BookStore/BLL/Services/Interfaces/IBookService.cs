@@ -1,17 +1,17 @@
 ﻿namespace BLL.Services.Interfaces
 {
+    using Contracts.Models;
     using System.Collections.Generic;
-    using DTO.Entities;
 
     public interface IBookService
     {
-        void Create(BookDto record);
+        void Create(Book record);
 
-        void Update(BookDto record);
+        void Update(Book record);
 
-        IEnumerable<BookDto> GetAll();
+        IEnumerable<Book> GetAll();
 
-        BookDto GetSingle(string title);
+        Book GetSingle(string title);
 
         void Delete(string title);
     }

@@ -1,13 +1,13 @@
 ﻿namespace UI.Factories.ContentProviders
 {
-    using DTO.Entities;
+    using Contracts.Models;
     using UI.ContentProviders;
     using UI.ContentProviders.Interfaces;
 
     internal class ContentProviderFactory : IContentProviderFactory
     {
-        public IContentProvider<T> GetDtoContentProvider<T>()
-            where T: Dto, new()
+        public IContentProvider<T> GetContractContentProvider<T>()
+            where T: BaseContract, new()
         {
             return new DtoContentProvider<T>();
         }

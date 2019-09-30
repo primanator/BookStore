@@ -1,7 +1,7 @@
 ﻿namespace DAL.Implementation
 {
-    using DTO.Entities;
-    using DTO_EF.Entities;
+    using Contracts.Models;
+    using DTO.Models;
     using EF;
     using Interfaces;
     using System;
@@ -22,15 +22,15 @@
 
             _repositoryDictionary = new Dictionary<Type, Object>()
             {
-                { typeof(BookDto), new Repository<Book, BookDto>(Context) },
-                { typeof(LibraryDto), new Repository<Library, LibraryDto>(Context) },
-                { typeof(AuthorDto), new Repository<Author, AuthorDto>(Context) },
-                { typeof(GenreDto), new Repository<Genre, GenreDto>(Context) }
+                { typeof(Book), new Repository<BookDto, Book>(Context) },
+                { typeof(Library), new Repository<LibraryDto, Library>(Context) },
+                { typeof(Author), new Repository<AuthorDto, Author>(Context) },
+                { typeof(Genre), new Repository<GenreDto, Genre>(Context) }
             };
         }
 
         public IRepository<T> GetRepository<T>()
-            where T: Dto
+            where T: BaseContract
         {
             if (_repositoryDictionary.TryGetValue(typeof(T), out var repository))
                 return (IRepository<T>)repository;

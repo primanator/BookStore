@@ -5,9 +5,9 @@
 
     internal class ContentSerializerFactory : ISerializerFactory
     {
-        public IGenericContentSerializer<T> GetEntitySerializer<T>()
+        public IGenericContentSerializer<T> GetContractSerializer<T>()
         {
-            return new DtoSerializer<T>();
+            return new ContractSerializer<T>();
         }
 
         public IGenericContentSerializer<T> GetXlsxSerializer<T>()

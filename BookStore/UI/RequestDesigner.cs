@@ -4,7 +4,7 @@
     using System;
     using System.Text;
     using UI.Factory.Requests;
-    using DTO.Entities;
+    using Contracts.Models;
 
     internal class RequestDesigner
     {
@@ -25,19 +25,19 @@
                     Generic($"{_commandSaver.ToString()}\ncreate/read/update/delete:", new Dictionary<string, Action>
                     {
                         { "create", () => { SetUpSingleAndMultipleRequestActions(
-                            () => _requestFactory.PostRequest<BookDto>().Send(),
-                            () => _requestFactory.PostWithXlsx<BookDto>().Send());
+                            () => _requestFactory.PostRequest<Book>().Send(),
+                            () => _requestFactory.PostWithXlsx<Book>().Send());
                         }},
                         { "read", () => { SetUpSingleAndMultipleRequestActions(
-                            () => _requestFactory.GetRequest<BookDto>().Send(),
-                            () => _requestFactory.GetRequest<BookDto>().Send());
+                            () => _requestFactory.GetRequest<Book>().Send(),
+                            () => _requestFactory.GetRequest<Book>().Send());
                         }},
                         { "update", () => { SetUpSingleAndMultipleRequestActions(
-                            () => _requestFactory.PutRequest<BookDto>().Send(),
+                            () => _requestFactory.PutRequest<Book>().Send(),
                             () => _requestFactory.PostWithXlsx<string>().Send());
                         }},
                         { "delete", () => { SetUpSingleAndMultipleRequestActions(
-                            () => _requestFactory.DeleteRequest<BookDto>().Send(),
+                            () => _requestFactory.DeleteRequest<Book>().Send(),
                             null);
                         }}
                     });

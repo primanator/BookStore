@@ -37,9 +37,6 @@
     <Reference Include="DTO">
       <HintPath>..\DTO\bin\Debug\DTO.dll</HintPath>
     </Reference>
-    <Reference Include="DTO_EF">
-      <HintPath>..\DTO_EF\bin\Debug\DTO_EF.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -102,6 +99,12 @@
     <EmbeddedResource Include="Migrations\201804041256371_ChangeBookWrittenInType.resx">
       <DependentUpon>201804041256371_ChangeBookWrittenInType.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj">
+      <Project>{1825B9AD-0738-421E-83B0-F41F630CD0D7}</Project>
+      <Name>Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,7 +4,7 @@
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
 
-    internal class DtoSerializer<T> : IGenericContentSerializer<T>
+    internal class ContractSerializer<T> : IGenericContentSerializer<T>
     {
         public byte[] ToBytes(T target)
         {

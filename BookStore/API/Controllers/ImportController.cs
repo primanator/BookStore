@@ -9,7 +9,7 @@
     using System.Web;
     using System.Web.Http;
     using BLL.Factory.Interfaces;
-    using DTO.Utils;
+    using Contracts.Utils;
     using Ninject;
 
     public class ImportController : ApiController

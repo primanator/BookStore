@@ -1,6 +1,6 @@
 ﻿namespace UI.Factory.Requests
 {
-    using DTO.Entities;
+    using Contracts.Models;
     using System;
     using UI.Factories.ContentProviders;
     using UI.Factory.Serializers;
@@ -18,31 +18,31 @@
             _contentExtractorFactory = contentExtractorFactory ?? throw new ArgumentNullException($"Empty {nameof(contentExtractorFactory)} was passed to the {nameof(IRequestFactory)}");
         }
 
-        public IRequest DeleteRequest<T>() where T : Dto, new()
+        public IRequest DeleteRequest<T>() where T : BaseContract, new()
         {
-            var dtoSerializer = _serializerFactory.GetEntitySerializer<T>();
-            var contentExtractor = _contentExtractorFactory.GetDtoContentProvider<T>();
+            var dtoSerializer = _serializerFactory.GetContractSerializer<T>();
+            var contentExtractor = _contentExtractorFactory.GetContractContentProvider<T>();
             return new Delete<T>(dtoSerializer, contentExtractor);
         }
 
-        public IRequest GetRequest<T>() where T : Dto, new()
+        public IRequest GetRequest<T>() where T : BaseContract, new()
         {
-            var dtoSerializer = _serializerFactory.GetEntitySerializer<T>();
-            var contentExtractor = _contentExtractorFactory.GetDtoContentProvider<T>();
+            var dtoSerializer = _serializerFactory.GetContractSerializer<T>();
+            var contentExtractor = _contentExtractorFactory.GetContractContentProvider<T>();
             return new Get<T>(dtoSerializer, contentExtractor);
         }
 
-        public IRequest PostRequest<T>() where T : Dto, new()
+        public IRequest PostRequest<T>() where T : BaseContract, new()
         {
-            var dtoSerializer = _serializerFactory.GetEntitySerializer<T>();
-            var contentExtractor = _contentExtractorFactory.GetDtoContentProvider<T>();
+            var dtoSerializer = _serializerFactory.GetContractSerializer<T>();
+            var contentExtractor = _contentExtractorFactory.GetContractContentProvider<T>();
             return new Post<T>(dtoSerializer, contentExtractor);
         }
 
-        public IRequest PutRequest<T>() where T : Dto, new()
+        public IRequest PutRequest<T>() where T : BaseContract, new()
         {
-            var dtoSerializer = _serializerFactory.GetEntitySerializer<T>();
-            var contentExtractor = _contentExtractorFactory.GetDtoContentProvider<T>();
+            var dtoSerializer = _serializerFactory.GetContractSerializer<T>();
+            var contentExtractor = _contentExtractorFactory.GetContractContentProvider<T>();
             return new Put<T>(dtoSerializer, contentExtractor);
         }
 

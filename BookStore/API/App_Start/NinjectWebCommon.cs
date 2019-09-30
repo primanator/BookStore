@@ -1,4 +1,5 @@
 ﻿using API.App_Start;
+using DependencyResolver;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Modules;
@@ -6,7 +7,6 @@ using Ninject.Web.Common;
 using Ninject.Web.Common.WebHost;
 using System;
 using System.Web;
-using DependencyResolver;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]

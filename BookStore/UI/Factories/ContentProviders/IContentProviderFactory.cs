@@ -1,11 +1,11 @@
 ﻿namespace UI.Factories.ContentProviders
 {
-    using DTO.Entities;
+    using Contracts.Models;
     using UI.ContentProviders.Interfaces;
 
     public interface IContentProviderFactory
     {
-        IContentProvider<T> GetDtoContentProvider<T>() where T: Dto, new();
+        IContentProvider<T> GetContractContentProvider<T>() where T: BaseContract, new();
 
         IContentProvider<T> GetFileContentProvider<T>();
     }

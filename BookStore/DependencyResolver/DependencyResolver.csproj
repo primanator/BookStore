@@ -34,12 +34,6 @@
     <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="BLL">
-      <HintPath>..\BLL\bin\Debug\BLL.dll</HintPath>
-    </Reference>
-    <Reference Include="DAL">
-      <HintPath>..\DAL\bin\Debug\DAL.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -73,11 +67,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{2636707F-7473-436C-9195-3589A7B9F754}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{5BFA3DE5-5D7B-4357-9978-0FE2452601FE}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DTO\DTO.csproj">
       <Project>{1825B9AD-0738-421E-83B0-F41F630CD0D7}</Project>
       <Name>DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DTO_EF\DTO_EF.csproj">
+    <ProjectReference Include="..\DTO\DTO.csproj">
       <Project>{257E34B8-8B90-4B61-B896-9E1DF9C1A6D6}</Project>
       <Name>DTO_EF</Name>
     </ProjectReference>

@@ -8,9 +8,9 @@
     using BLL.Services.Implementation;
     using BLL.Services.Interfaces;
     using BLL.Factory.Interfaces;
-    using DTO.QueryBuilders;
-    using DTO.Entities;
     using BLL.Factory.Implementation.Excel;
+    using Contracts.QueryBuilders;
+    using Contracts.Models;
 
     public class InjectModule : NinjectModule
     {
@@ -18,7 +18,7 @@
         {
             Bind<DbContext>().To<BookStoreContext>();
             Bind<IUnitOfWork>().To<UnitOfWork>();
-            Bind<DtoFilterBuilder<BookDto>>().To<BookDtoFilterBuilder>();
+            Bind<ContractFilterBuilder<Book>>().To<BookFilterBuilder>();
             Bind<IBookService>().To<BookService>();
             Bind<IImportServiceFactory>().To<ExcelImportServiceFactory>().Named("Excel");
         }

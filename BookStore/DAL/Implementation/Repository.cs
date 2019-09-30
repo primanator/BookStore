@@ -1,8 +1,6 @@
 ﻿namespace DAL.Implementation
 {
     using AutoMapper;
-    using DTO.Entities;
-    using DTO_EF.Entities;
     using System;
     using EF;
     using System.Collections.Generic;
@@ -10,10 +8,12 @@
     using System.Linq;
     using System.Data.Entity;
     using Interfaces;
+    using Contracts.Models;
+    using DTO.Models;
 
-    public class Repository<TEntity, TDto> : IRepository<TDto>
-        where TEntity : Entity
+    public class Repository<TDto, TContract> : IRepository<TContract>
         where TDto : Dto
+        where TContract : BaseContract
     {
         public Repository(BookStoreContext context)
         {
@@ -22,34 +22,34 @@
 
         protected BookStoreContext Db { get; }
 
-        public List<TDto> FindBy(Expression<Func<TDto, bool>> dtoExpression)
+        public List<TContract> FindBy(Expression<Func<TContract, bool>> dtoExpression)
         {
             return
-                Mapper.Map<IEnumerable<TDto>>(Db.Set<TEntity>().AsNoTracking())
+                Mapper.Map<IEnumerable<TContract>>(Db.Set<TDto>().AsNoTracking())
                    .Where(dtoExpression.Compile())
                     .ToList();
         }
 
-        public void Insert(TDto entity)
+        public void Insert(TContract entity)
         {
-            Db.Set<TEntity>().Add(Mapper.Map<TEntity>(entity));
+            Db.Set<TDto>().Add(Mapper.Map<TDto>(entity));
         }
 
-        public void InsertMultiple(TDto[] entities)
+        public void InsertMultiple(TContract[] entities)
         {
-            Db.Set<TEntity>().AddRange(Mapper.Map<TEntity[]>(entities));
+            Db.Set<TDto>().AddRange(Mapper.Map<TDto[]>(entities));
         }
 
-        public void Update(TDto entity)
+        public void Update(TContract entity)
         {
-            var mappedEntity = Mapper.Map<TEntity>(entity);
-            Db.Set<TEntity>().Attach(mappedEntity);
+            var mappedEntity = Mapper.Map<TDto>(entity);
+            Db.Set<TDto>().Attach(mappedEntity);
             Db.Entry(mappedEntity).State = EntityState.Modified;
         }
 
-        public void Delete(TDto entity)
+        public void Delete(TContract entity)
         {
-            var mappedEntity = Mapper.Map<TEntity>(entity);
+            var mappedEntity = Mapper.Map<TDto>(entity);
             Db.Entry(mappedEntity).State = EntityState.Deleted;
         }
     }

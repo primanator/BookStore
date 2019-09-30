@@ -54,8 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factory\Implementation\Excel\Books\BookDtoExcelExtractor.cs" />
-    <Compile Include="Factory\Implementation\Excel\Books\BookDtoImporter.cs" />
+    <Compile Include="Factory\Implementation\Excel\Books\BookExcelExtractor.cs" />
+    <Compile Include="Factory\Implementation\Excel\Books\BookImporter.cs" />
     <Compile Include="Factory\Interfaces\IImporter.cs" />
     <Compile Include="Models\ExtractionEventArgs.cs" />
     <Compile Include="Models\ValidationEventArgs.cs" />
@@ -68,7 +68,7 @@
     <Compile Include="Services\Implementation\BookService.cs" />
     <Compile Include="Services\Implementation\ImportService.cs" />
     <Compile Include="Factory\Implementation\Excel\ExcelImportServiceFactory.cs" />
-    <Compile Include="Factory\Implementation\Excel\Books\BookDtoExcelValidator.cs" />
+    <Compile Include="Factory\Implementation\Excel\Books\BookExcelValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

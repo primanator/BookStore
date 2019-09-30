@@ -2,7 +2,7 @@
 {
     using System.Web.Http;
     using BLL.Services.Interfaces;
-    using DTO.Entities;
+    using Contracts.Models;
 
     public class BooksController : ApiController
     {
@@ -13,7 +13,7 @@
             _bookService = service;
         }
 
-        public IHttpActionResult PostCreateBook(BookDto newBook)
+        public IHttpActionResult PostCreateBook(Book newBook)
         {
             if (!ModelState.IsValid || newBook == null)
                 return BadRequest("Invalid model state");
@@ -40,7 +40,7 @@
             return Ok(book);
         }
 
-        public IHttpActionResult PutUpdateBook(BookDto freshBook)
+        public IHttpActionResult PutUpdateBook(Book freshBook)
         {
             if (!ModelState.IsValid || freshBook == null)
                 return BadRequest("Invalid model state");

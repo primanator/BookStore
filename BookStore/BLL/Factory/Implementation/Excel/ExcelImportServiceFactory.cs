@@ -7,7 +7,7 @@
     using BLL.Factory.Implementation.Excel.Books;
     using System.Collections.Generic;
     using System;
-    using DTO.Entities;
+    using Contracts.Models;
 
     public class ExcelImportServiceFactory : IImportServiceFactory
     {
@@ -22,12 +22,12 @@
 
         public IImportService GetBookImportService()
         {
-            var serviceType = typeof(BookDto);
+            var serviceType = typeof(Book);
 
             if (_servicesDictionary.TryGetValue(serviceType, out var importService))
                 return importService;
 
-            importService = new ImportService(new BookDtoExcelValidator(), new BookDtoExcelExtractor(_unitOfWork), new BookDtoImporter(_unitOfWork));
+            importService = new ImportService(new BookExcelValidator(), new BookExcelExtractor(_unitOfWork), new BookImporter(_unitOfWork));
             _servicesDictionary.Add(serviceType, importService);
 
             return importService;
