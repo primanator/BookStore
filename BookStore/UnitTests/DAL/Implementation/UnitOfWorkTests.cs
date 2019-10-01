@@ -1,11 +1,11 @@
-﻿using DAL.EF;
+﻿using Contracts.Models;
+using DAL.EF;
 using DAL.Implementation;
 using DAL.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Data.Entity;
-using DTO.Entities;
 
 namespace UnitTests.DAL.Implementation
 {
@@ -37,10 +37,10 @@ namespace UnitTests.DAL.Implementation
             var contextFake = Substitute.For<BookStoreContext>();
             var unitOfWork = new UnitOfWork(contextFake);
 
-            var result = unitOfWork.GetRepository<BookDto>();
+            var result = unitOfWork.GetRepository<Book>();
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf<IRepository<BookDto>>(result);
+            Assert.IsInstanceOf<IRepository<Book>>(result);
         }
 
         [Test]
