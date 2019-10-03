@@ -84,6 +84,10 @@
     <Compile Include="Migrations\201804041256371_ChangeBookWrittenInType.Designer.cs">
       <DependentUpon>201804041256371_ChangeBookWrittenInType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910031932221_DtoToContractMigration.cs" />
+    <Compile Include="Migrations\201910031932221_DtoToContractMigration.Designer.cs">
+      <DependentUpon>201910031932221_DtoToContractMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -103,6 +107,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804041256371_ChangeBookWrittenInType.resx">
       <DependentUpon>201804041256371_ChangeBookWrittenInType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910031932221_DtoToContractMigration.resx">
+      <DependentUpon>201910031932221_DtoToContractMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
