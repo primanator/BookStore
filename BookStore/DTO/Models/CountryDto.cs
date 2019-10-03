@@ -1,7 +1,9 @@
 ﻿namespace DTO.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
 
+    [Table("Country")]
     public class CountryDto : Dto
     {
         public CountryDto()
@@ -10,8 +12,10 @@
             Users = new HashSet<UserDto>();
         }
 
+        [ForeignKey("Id")]
         public virtual ICollection<UserDto> Users { get; set; }
 
+        [ForeignKey("Id")]
         public virtual ICollection<AuthorDto> Authors { get; set; }
     }
 }

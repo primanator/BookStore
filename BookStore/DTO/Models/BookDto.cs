@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
 
+    [Table("Book")]
     public class BookDto : Dto
     {
         public BookDto()
@@ -17,10 +19,13 @@
         public DateTime WrittenIn { get; set; }
 
         public int LibraryId { get; set; }
+        [ForeignKey("LibraryId")]
         public virtual LibraryDto Library { get; set; }
 
+        [ForeignKey("Id")]
         public virtual ICollection<AuthorDto> Authors { get; set; }
 
+        [ForeignKey("Id")]
         public virtual ICollection<GenreDto> Genres { get; set; }
     }
 }

@@ -1,5 +1,8 @@
 ﻿namespace DTO.Models
 {
+    using System.ComponentModel.DataAnnotations.Schema;
+    
+    [Table("User")]
     public class UserDto : Dto
     {
         public string Nickname { get; set; }
@@ -8,9 +11,11 @@
         public int Age { get; set; }
 
         public int CountryId { get; set; }
+        [ForeignKey("CountryId")]
         public virtual CountryDto Country { get; set; }
 
         public int LibraryId { get; set; }
+        [ForeignKey("LibraryId")]
         public virtual LibraryDto Library { get; set; }
     }
 }
