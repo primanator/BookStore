@@ -11,7 +11,7 @@
         public Post(IGenericContentSerializer<T> contentSerializer, IContentProvider<T> contentProvider)
             : base(contentSerializer)
         {
-            WebRequest = WebRequest.Create($"{BaseUri}/{contentProvider.GetName()}");
+            WebRequest = WebRequest.Create($"{BaseUri}/{contentProvider.GetContentPluralName()}");
             WebRequest.Headers = contentProvider.GetHeaders();
             WebRequest.Method = "POST";
             WebRequest.ContentType = "application/x-www-form-urlencoded";

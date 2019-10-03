@@ -10,16 +10,20 @@
         {
             throw new NotImplementedException();
         }
+        public WebHeaderCollection GetHeaders()
+        {
+            return new WebHeaderCollection();
+        }
 
-        public string GetName()
+        public string GetRequiredItemName()
         {
             Console.WriteLine("\nEnter path to the file you want to import: ");
             return Console.ReadLine();
         }
 
-        public WebHeaderCollection GetHeaders()
+        public string GetContentPluralName()
         {
-            return new WebHeaderCollection();
+            return "import";
         }
     }
 }

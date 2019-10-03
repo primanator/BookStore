@@ -6,8 +6,10 @@
     {
         T GetContent();
 
-        string GetName();
-
         WebHeaderCollection GetHeaders();
+
+        string GetRequiredItemName();
+
+        string GetContentPluralName();
     }
 }
