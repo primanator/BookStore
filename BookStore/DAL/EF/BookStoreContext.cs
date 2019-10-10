@@ -1,6 +1,7 @@
 ﻿namespace DAL.EF
 {
     using DTO.Models;
+    using System.Configuration;
     using System.Data.Entity;
     using System.Data.Entity.ModelConfiguration.Conventions;
 

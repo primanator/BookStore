@@ -12,10 +12,10 @@
         private readonly ISerializerFactory _serializerFactory;
         private readonly IContentProviderFactory _contentExtractorFactory;
 
-        public WebRequestFactory(ISerializerFactory serializerFactory, IContentProviderFactory contentExtractorFactory)
+        public WebRequestFactory(ISerializerFactory serializerFactory, IContentProviderFactory contentProviderFactory)
         {
             _serializerFactory = serializerFactory ?? throw new ArgumentNullException($"Empty {nameof(serializerFactory)} was passed to the {nameof(IRequestFactory)}");
-            _contentExtractorFactory = contentExtractorFactory ?? throw new ArgumentNullException($"Empty {nameof(contentExtractorFactory)} was passed to the {nameof(IRequestFactory)}");
+            _contentExtractorFactory = contentProviderFactory ?? throw new ArgumentNullException($"Empty {nameof(contentProviderFactory)} was passed to the {nameof(IRequestFactory)}");
         }
 
         public IRequest DeleteRequest<T>() where T : BaseContract, new()
