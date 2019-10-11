@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("Country")]
     public class CountryDto : Dto
     {
         public CountryDto()

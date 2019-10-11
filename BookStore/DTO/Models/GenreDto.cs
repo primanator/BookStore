@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("Genre")]
     public class GenreDto : Dto
     {
         public GenreDto()

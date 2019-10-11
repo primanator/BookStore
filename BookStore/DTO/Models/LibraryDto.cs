@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("Library")]
     public class LibraryDto : Dto
     {
         public LibraryDto()

@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("Book")]
     public class BookDto : Dto
     {
         public BookDto()

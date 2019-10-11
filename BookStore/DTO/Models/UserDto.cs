@@ -2,7 +2,6 @@
 {
     using System.ComponentModel.DataAnnotations.Schema;
     
-    [Table("User")]
     public class UserDto : Dto
     {
         public string Nickname { get; set; }

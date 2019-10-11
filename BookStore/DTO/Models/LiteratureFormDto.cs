@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("LiteratureForm")]
     public class LiteratureFormDto : Dto
     {
         public LiteratureFormDto()
