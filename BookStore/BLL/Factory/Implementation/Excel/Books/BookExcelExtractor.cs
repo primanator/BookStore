@@ -34,11 +34,11 @@
                         Name = GetSimple<string>(worksheet.Cells[row, argsIn.SourceMap["name"]].Value),
                         Isbn = GetSimple<string>(worksheet.Cells[row, argsIn.SourceMap["isbn"]].Value),
                         Pages = GetSimple<int>(worksheet.Cells[row, argsIn.SourceMap["pages"]].Value),
-                        LimitedEdition = GetSimple<bool>(worksheet.Cells[row, argsIn.SourceMap["limitededition"]].Value),
-                        WrittenIn = GetSimple<DateTime>(worksheet.Cells[row, argsIn.SourceMap["writtenin"]].Text),
-                        Library = GetContract<Library>(dto => dto.Id == 1), // only one library is present for now (newItem.Library.Id)
-                        Authors = GetCollection<Author>(worksheet.Cells[row, argsIn.SourceMap["authors"]].Value),
-                        Genres = GetCollection<Genre>(worksheet.Cells[row, argsIn.SourceMap["genres"]].Value)
+                        LimitedEdition = GetSimple<bool>(worksheet.Cells[row, argsIn.SourceMap["limitededition"]].Value)//,
+                        //WrittenIn = GetSimple<DateTime>(worksheet.Cells[row, argsIn.SourceMap["writtenin"]].Text),
+                        //Library = GetContract<Library>(dto => dto.Id == 1), // only one library is present for now (newItem.Library.Id)
+                        //Authors = GetCollection<Author>(worksheet.Cells[row, argsIn.SourceMap["authors"]].Value),
+                        //Genres = GetCollection<Genre>(worksheet.Cells[row, argsIn.SourceMap["genres"]].Value)
                     });
                 }
             }

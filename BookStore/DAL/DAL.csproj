@@ -69,25 +69,9 @@
     <Compile Include="Implementation\UnitOfWork.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
-    <Compile Include="Migrations\201803171146369_BookStore-v1.cs" />
-    <Compile Include="Migrations\201803171146369_BookStore-v1.Designer.cs">
-      <DependentUpon>201803171146369_BookStore-v1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803171220318_BookStore-v1.1.cs" />
-    <Compile Include="Migrations\201803171220318_BookStore-v1.1.Designer.cs">
-      <DependentUpon>201803171220318_BookStore-v1.1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803222247203_NewColumn-Name.cs" />
-    <Compile Include="Migrations\201803222247203_NewColumn-Name.Designer.cs">
-      <DependentUpon>201803222247203_NewColumn-Name.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804041256371_ChangeBookWrittenInType.cs" />
-    <Compile Include="Migrations\201804041256371_ChangeBookWrittenInType.Designer.cs">
-      <DependentUpon>201804041256371_ChangeBookWrittenInType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910031932221_DtoToContractMigration.cs" />
-    <Compile Include="Migrations\201910031932221_DtoToContractMigration.Designer.cs">
-      <DependentUpon>201910031932221_DtoToContractMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201911080924182_Initial.cs" />
+    <Compile Include="Migrations\201911080924182_Initial.Designer.cs">
+      <DependentUpon>201911080924182_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,20 +81,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803171146369_BookStore-v1.resx">
-      <DependentUpon>201803171146369_BookStore-v1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803171220318_BookStore-v1.1.resx">
-      <DependentUpon>201803171220318_BookStore-v1.1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803222247203_NewColumn-Name.resx">
-      <DependentUpon>201803222247203_NewColumn-Name.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804041256371_ChangeBookWrittenInType.resx">
-      <DependentUpon>201804041256371_ChangeBookWrittenInType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910031932221_DtoToContractMigration.resx">
-      <DependentUpon>201910031932221_DtoToContractMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201911080924182_Initial.resx">
+      <DependentUpon>201911080924182_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

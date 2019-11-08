@@ -24,7 +24,7 @@
             if (data == null)
                 return default(T);
 
-            using (var memoryStream = new MemoryStream())
+            using (var memoryStream = new MemoryStream(data))
             {
                 var binaryFormatter = new BinaryFormatter();
                 var deserializedObj = binaryFormatter.Deserialize(memoryStream);

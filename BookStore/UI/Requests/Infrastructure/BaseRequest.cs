@@ -29,10 +29,13 @@
         {
             try
             {
-                WebResponse = WebRequest.GetResponse();
-                var responseBytes = ReadBytesFromResponse();
-                var response = _contentSerializer.FromBytes(responseBytes);
-                Console.WriteLine(response);
+                using (var responseStream = new StreamReader(WebRequest.GetResponse().GetResponseStream()))
+                {
+                    var response = responseStream.ReadToEnd();
+                    Console.WriteLine(response);
+                }
+                //var response = ReadBytesFromResponse();
+                //var response = _contentSerializer.FromBytes(responseBytes);
             }
             catch (WebException ex)
             {
@@ -50,13 +53,14 @@
             requestStream.Close();
         }
 
-        private byte[] ReadBytesFromResponse()
-        {
-            using (var binaryReader = new BinaryReader(WebResponse.GetResponseStream()))
-            {
-                return binaryReader.ReadBytes((int)WebResponse.ContentLength);
-            }
-        }
+        //private byte[] ReadBytesFromResponse()
+        //{
+        //    using (var responseStream = WebResponse.GetResponseStream())
+        //    {
+        //        var html = new StreamReader(resp.GetResponseStream()).ReadToEnd();
+        //        return binaryReader.ReadBytes((int)WebResponse.ContentLength);
+        //    }
+        //}
 
         public void Dispose()
         {
